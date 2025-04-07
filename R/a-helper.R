@@ -1,3 +1,14 @@
+#' Find distinct values for a given variable
+#' 
+extract_distinct_values <- function(data, var_name){
+  data |> 
+    dplyr::distinct({{var_name}}) |> 
+    dplyr::filter(!is.na({{var_name}})) |> 
+    dplyr::arrange({{var_name}}) |> 
+    dplyr::collect() |> 
+    dplyr::pull()
+}
+
 #' Format relational database for display
 #'
 #' @param database traits.build object

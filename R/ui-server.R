@@ -13,13 +13,13 @@ austraits_ui <- function(){
     # Create a sidebar for the app
     sidebar = sidebar(
       # Filter by taxonomic information
-      h5("Taxonomic information"),
+      h5("Taxonomy"),
       
       radioButtons("user_taxon_rank", 
-                   label = "Filter by which taxon name:",
-                   choices = c('Taxon name' = "taxon_name",
+                   label = "Filter by which taxon rank:",
+                   choices = c('Family' = "family",
                                'Genus' = "genus", 
-                               'Family' = "family"
+                               'Taxon name' = "taxon_name"
                    )
       ),
       
@@ -53,6 +53,43 @@ austraits_ui <- function(){
                        multiple = TRUE
         )
       ),
+      # Filter by location information
+      h5("Location"),
+      
+      radioButtons("user_location_filter", 
+                   label = "Filter by which location filter:",
+                   choices = c('Enter coordinates' = "entered_coordinates",
+                               'Recorded state/territory ' = "state", 
+                               'APC state/territory' = "APC_state"
+                   )
+      ),
+      
+      ## TODO: Conditional logical for location
+      
+      # Filter by trait information
+      h5("Trait"),
+      ## By trait name
+      selectizeInput("user_trait_name",
+                     label = "Trait name:",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
+      h5("Other"),
+      ## By BoR
+      selectizeInput("user_bor",
+                     label = "Basis of Record:",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
+      ## By lifestage
+      selectizeInput("user_lifestage",
+                     label = "Lifestage:",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
       
       br(),
       actionButton("clear_filters", "Clear Filters", 
@@ -81,6 +118,9 @@ austraits_ui <- function(){
 #' @param session Session id for Shiny interaction
 
 austraits_server <- function(input, output, session) {
+  # Reactive value to store the filtered data later
+  filtered_database <- reactiveVal(NULL)
+  
   # Initialize dropdown choices
   taxon_name_choices <- reactive({ all_taxon_names })
   genus_choices <- reactive({ all_genus })
@@ -118,8 +158,10 @@ austraits_server <- function(input, output, session) {
     }
   })
   
-  # Reactive value to store the filtered data later
-  filtered_database <- reactiveVal(NULL)
+  # Server-side selectizeInput update for other options that are not conditional
+  updateSelectizeInput(session, 'user_trait_name', choices = all_traits, server = TRUE)
+  updateSelectizeInput(session, 'user_bor', choices = all_bor, server = TRUE)
+  updateSelectizeInput(session, 'user_lifestage', choices = all_age, server = TRUE)
   
   # Filter data by taxonomic information
   # Watch for changes in user_taxon_name
@@ -196,8 +238,13 @@ austraits_server <- function(input, output, session) {
         choices = family_choices(),
         selected = NULL,
         server = TRUE
-      )
+      ) 
     }
+    
+    # Clear the other filters that are not conditional
+    updateSelectizeInput(session, 'user_trait_name', choices = all_traits, server = TRUE)
+    updateSelectizeInput(session, 'user_bor', choices = all_bor, server = TRUE)
+    updateSelectizeInput(session, 'user_lifestage', choices = all_age, server = TRUE)
     
     # Store nothing in filtered_data()
     filtered_database(NULL)
