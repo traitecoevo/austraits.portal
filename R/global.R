@@ -20,9 +20,14 @@ all_taxon_names <- austraits |>
 extract_distinct_values(taxon_name)
 
 ## Location
-# TODO: Not yet implemented. Need APCalign? 
-# all_locations <- austraits |>
-#   extract_distinct_values(taxon_distribution)
+# TODO: Not yet implemented. 
+### Coordinates - circle/bbox around coordinates?
+
+### States by location properties
+
+
+### APC distribution - Need APCalign::create_species_state_origin_matrix()
+
 
 ## Traits
 ### Unique values of taxon_name

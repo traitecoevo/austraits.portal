@@ -1,5 +1,29 @@
+#' Apply filters
+
+apply_filters <- function(data = austraits, list = input){
+  # Convert to workable list
+  input_list <- reactiveValuesToList(input)
+  
+  # Drop empty lists and clear_filter
+  active_inputs <- input_list |> 
+    purrr::discard(is.null) |> 
+    purrr::discard_at("clear_filters")
+  
+  # Clean up input names
+  stringr::str_remove(names(active_inputs), "user_")
+    
+  
+  for(i in seq_along(active_inputs)) {
+    df_filtered <- austraits |> 
+    dplyr::filter(.data[[input[[i]]]] %in% list[[i]]$value)
+}
+
+}
+
+
+
 #' Find distinct values for a given variable
-#' 
+#' @keywords internal
 extract_distinct_values <- function(data, var_name){
   data |> 
     dplyr::distinct({{var_name}}) |> 
