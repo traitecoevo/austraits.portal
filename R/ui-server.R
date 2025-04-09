@@ -15,7 +15,7 @@ austraits_ui <- function(){
       # Filter by taxonomic information
       h5("Taxonomy"),
       
-      radioButtons("user_taxon_rank", 
+      radioButtons("taxon_rank", 
                    label = "Filter by which taxon rank:",
                    choices = c('Family' = "family",
                                'Genus' = "genus", 
@@ -25,9 +25,9 @@ austraits_ui <- function(){
       
       # Only show this panel if Taxon name is selected
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "taxon_name"',
+        condition = 'input.taxon_rank == "taxon_name"',
         ## By taxon_name
-        selectizeInput("user_taxon_name",
+        selectizeInput("taxon_name",
                        label = "Taxon name:",
                        choices = NULL,
                        multiple = TRUE)
@@ -35,9 +35,9 @@ austraits_ui <- function(){
       
       # Only show this panel if Genus is selected
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "genus"',
+        condition = 'input.taxon_rank == "genus"',
         ## By genus
-        selectizeInput("user_genus",
+        selectizeInput("genus",
                        label = "Genus:",
                        choices = NULL,
                        multiple = TRUE
@@ -45,9 +45,9 @@ austraits_ui <- function(){
       ),
       # Only show this panel if family is selected  
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "family"',
+        condition = 'input.taxon_rank == "family"',
         ## By family
-        selectizeInput("user_family",
+        selectizeInput("family",
                        label = "Family:",
                        choices = NULL,
                        multiple = TRUE
@@ -56,17 +56,16 @@ austraits_ui <- function(){
       # Filter by location information
       h5("Location"),
       
-      radioButtons("user_location_filter", 
+      radioButtons("location", 
                    label = "Filter by which location filter:",
                    choices = c('Enter coordinates' = "enter_coordinates",
                                'Recorded state/territory' = "state", 
                                'APC distribution' = "APC_state"
                    )
       ),
-      ## TODO: Conditional logical for location
       # User chooses to input coordinates
       conditionalPanel(
-        condition = 'input.user_location_filter == "enter_coordinates"',
+        condition = 'input.location == "enter_coordinates"',
         ## Input coordinates
         textInput("user_coordinates",
                        label = "Coordinates:",
@@ -76,7 +75,7 @@ austraits_ui <- function(){
       
       # State in Location Property
       conditionalPanel(
-        condition = 'input.user_location_filter == "APC_state"',
+        condition = 'input.location == "APC_distribution"',
         ## By State by APC
         selectizeInput("user_APC_state",
                        label = "State/territory:",
@@ -87,7 +86,7 @@ austraits_ui <- function(){
       
       # State by APC
       conditionalPanel(
-        condition = 'input.user_location_filter == "state"',
+        condition = 'input.location == "state"',
         ## By State in Location Property
         selectizeInput("user_state",
                        label = "State/territory:",
@@ -100,7 +99,7 @@ austraits_ui <- function(){
       # Filter by trait information
       h5("Trait"),
       ## By trait name
-      selectizeInput("user_trait_name",
+      selectizeInput("trait_name",
                      label = "Trait name:",
                      choices = NULL,
                      multiple = TRUE
@@ -109,7 +108,7 @@ austraits_ui <- function(){
       h5("Additional"),
       ## By BoR
       # TODO: Hard code some options e.g field to select all field values
-      selectizeInput("user_basis_of_record",
+      selectizeInput("basis_of_record",
                      label = "Basis of Record:",
                      choices = NULL,
                      multiple = TRUE
@@ -117,7 +116,7 @@ austraits_ui <- function(){
       
       ## By lifestage
       # TODO: Hard code some options e.g saplings to select all saplings
-      selectizeInput("user_lifestage",
+      selectizeInput("life_stage",
                      label = "Life stage:",
                      choices = NULL,
                      multiple = TRUE
@@ -159,31 +158,38 @@ austraits_server <- function(input, output, session) {
   genus_choices <- reactive({ all_genus })
   family_choices <- reactive({ all_family })
   
+  # Add a browser() call to inspect inputs
+  observe({
+    browser()  # This will pause execution and open an interactive console
+    # You can inspect all input values here
+    # Just typing "input" will show you the entire input list
+  })
+  
   # Update the appropriate selectizeInput when radio button changes
-  observeEvent(input$user_taxon_rank, {
+  observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
     
-    if(input$user_taxon_rank == "taxon_name") {
+    if(input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
-        "user_taxon_name",
+        "taxon_name",
         choices = taxon_name_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "genus") {
+    } else if(input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
-        "user_genus",
+        "genus",
         choices = genus_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "family") {
+    } else if(input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
-        "user_family",
+        "family",
         choices = family_choices(),
         selected = NULL,
         server = TRUE
@@ -192,17 +198,17 @@ austraits_server <- function(input, output, session) {
   })
   
   # Server-side selectizeInput update for other options that are not conditional
-  updateSelectizeInput(session, 'user_trait_name', choices = all_traits, server = TRUE)
-  updateSelectizeInput(session, 'user_basis_of_record', choices = all_bor, server = TRUE)
-  updateSelectizeInput(session, 'user_lifestage', choices = all_age, server = TRUE)
+  updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
+  updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
+  updateSelectizeInput(session, 'life_stage', choices = all_age, server = TRUE)
   
   # Apply Filter
   observeEvent(list(
-    input$user_family,
-    input$user_genus,
-    input$user_taxon_name, 
-    input$user_basis_of_record,
-    input$user_lifestage
+    input$family,
+    input$genus,
+    input$taxon_name, 
+    input$basis_of_record,
+    input$life_stage
     ),{
           
      austraits   
@@ -212,26 +218,26 @@ austraits_server <- function(input, output, session) {
   # Clear filters button action
   observeEvent(input$clear_filters, {
     # Based on which filter is currently active
-    if(input$user_taxon_rank == "taxon_name") {
+    if(input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
-        "user_taxon_name",
+        "taxon_name",
         choices = taxon_name_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "genus") {
+    } else if(input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
-        "user_genus",
+        "genus",
         choices = genus_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "family") {
+    } else if(input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
-        "user_family",
+        "family",
         choices = family_choices(),
         selected = NULL,
         server = TRUE
@@ -239,7 +245,7 @@ austraits_server <- function(input, output, session) {
     }
     
     # Clear the other filters that are not conditional
-    updateSelectizeInput(session, 'user_trait_name', choices = all_traits, server = TRUE)
+    updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
     updateSelectizeInput(session, 'user_basis_of_record', choices = all_bor, server = TRUE)
     updateSelectizeInput(session, 'user_lifestage', choices = all_age, server = TRUE)
     

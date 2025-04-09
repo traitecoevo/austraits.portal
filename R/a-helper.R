@@ -4,20 +4,21 @@ apply_filters <- function(data = austraits, list = input){
   # Convert to workable list
   input_list <- reactiveValuesToList(input)
   
-  # Drop empty lists and clear_filter
-  active_inputs <- input_list |> 
-    purrr::discard(is.null) |> 
-    purrr::discard_at("clear_filters")
+  # Construct filter conditions dynamically
+  filter_conditions <- purrr::map(names(test_input), function(i) {
+    value <- input_list[[i]]
+    if (!is.null(value)) {
+      expr(.data[[i]] %in% !!value)  # Dynamically create filter expressions
+    } else {
+      NULL
+    }
+  }) |> purrr::compact()  # Remove NULL conditions
   
-  # Clean up input names
-  stringr::str_remove(names(active_inputs), "user_")
-    
+  # Combine all filter conditions into a single filter call
+  filtered_parquet <- austraits |> 
+    filter(!!!filter_conditions)  # Unquote and splice the conditions
   
-  for(i in seq_along(active_inputs)) {
-    df_filtered <- austraits |> 
-    dplyr::filter(.data[[input[[i]]]] %in% list[[i]]$value)
-}
-
+  return(filtered_parquet)
 }
 
 
