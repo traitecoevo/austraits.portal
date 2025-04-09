@@ -6,7 +6,6 @@ has_input_value <- function(input, input_name) {
 
 #' Apply filters
 apply_filters <- function(data = austraits, input){
-  browser()
   
   # Exclude user inputs that we can't filter on
   # TODO function to id these

@@ -159,13 +159,6 @@ austraits_server <- function(input, output, session) {
   genus_choices <- reactive({ all_genus })
   family_choices <- reactive({ all_family })
   
-  # Add a browser() call to inspect inputs
-  observe({
-    #browser()  # This will pause execution and open an interactive console
-    # You can inspect all input values here
-    # Just typing "input" will show you the entire input list
-  })
-  
   # Update the appropriate selectizeInput when radio button changes
   observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
@@ -216,8 +209,6 @@ austraits_server <- function(input, output, session) {
                              c("clear_filters", "taxon_rank", "location", "coordinates", "state", "APC_state")
     )
     
-    browser()
-    
     # Check if any filter has values using our helper function
     has_filters <- any(sapply(valid_filters, function(name) {
       has_input_value(input, name)
@@ -231,8 +222,6 @@ austraits_server <- function(input, output, session) {
       filtered_data <- austraits |> 
         apply_filters(input_values) |> 
         dplyr::collect()
-      
-      browser()
       
       # Store filtered data into reactive value
       filtered_database(filtered_data)
@@ -291,8 +280,6 @@ austraits_server <- function(input, output, session) {
     # Get the current filtered database
     filtered_db <- filtered_database()
     
-    # browser()
-    
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
       return(NULL)
@@ -311,6 +298,8 @@ austraits_server <- function(input, output, session) {
     if (is.null(filtered_db)) {
       return(NULL)
     }
+    
+    filtered_db
   })
   
   # Render user selected data table output
@@ -338,7 +327,7 @@ austraits_server <- function(input, output, session) {
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
-      paste("austraits-6.0.0-", Sys.Date(), ".csv", sep = "")
+      paste("austraits-", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       # Get the current download data
