@@ -160,7 +160,7 @@ austraits_server <- function(input, output, session) {
   
   # Add a browser() call to inspect inputs
   observe({
-    browser()  # This will pause execution and open an interactive console
+    #browser()  # This will pause execution and open an interactive console
     # You can inspect all input values here
     # Just typing "input" will show you the entire input list
   })
@@ -209,11 +209,34 @@ austraits_server <- function(input, output, session) {
     input$taxon_name, 
     input$basis_of_record,
     input$life_stage
-    ),{
-          
-     austraits   
-      }
-        )
+  ), {
+    # At start up, we want filters set to false
+    valid_filters <- setdiff(names(input), 
+                             c("clear_filters", "taxon_rank", "location", "user_coordinates", "user_state", "user_APC_state")
+    )
+    
+    # Check if any filter has values using our helper function
+    has_filters <- any(sapply(valid_filters, function(name) {
+      has_input_value(input, name)
+    }))
+    
+    if(has_filters){
+      # Convert input to a regular list first
+      input_values <- reactiveValuesToList(input)
+      
+      # Apply filters with the input values
+      filtered_data <- austraits |> 
+        apply_filters(input_values) |> 
+        dplyr::collect()
+      
+      # Store filtered data
+      filtered_database(filtered_data)
+    } else {
+      # No filters selected
+      filtered_database(NULL)
+    }
+  }
+  )
   
   # Clear filters button action
   observeEvent(input$clear_filters, {
@@ -246,8 +269,8 @@ austraits_server <- function(input, output, session) {
     
     # Clear the other filters that are not conditional
     updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
-    updateSelectizeInput(session, 'user_basis_of_record', choices = all_bor, server = TRUE)
-    updateSelectizeInput(session, 'user_lifestage', choices = all_age, server = TRUE)
+    updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
+    updateSelectizeInput(session, 'lifestage', choices = all_age, server = TRUE)
     
     # Store nothing in filtered_data()
     filtered_database(NULL)
@@ -262,6 +285,8 @@ austraits_server <- function(input, output, session) {
   display_data_table <- reactive({
     # Get the current filtered database
     filtered_db <- filtered_database()
+    
+    browser()
     
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
@@ -281,9 +306,6 @@ austraits_server <- function(input, output, session) {
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
-    # Format the database for download
-    format_database_for_download(filtered_db)
   })
   
   # Render user selected data table output
