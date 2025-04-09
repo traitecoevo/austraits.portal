@@ -2,7 +2,8 @@
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo,
 ## For now will use the R package and store in Github Releases see data-raw/create-flat-austraits.R
 austraits <-
-  arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet") 
+  # arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet") 
+  arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet") 
 
 # Set up possible values for selectize menus
 

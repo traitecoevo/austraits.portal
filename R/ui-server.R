@@ -67,7 +67,7 @@ austraits_ui <- function(){
       conditionalPanel(
         condition = 'input.location == "enter_coordinates"',
         ## Input coordinates
-        textInput("user_coordinates",
+        textInput("coordinates",
                        label = "Coordinates:",
                        value = "-33.92, 151.24", # UNSW Kensington from Google Maps
                        placeholder = "Paste coordinates from Google Maps")
@@ -77,7 +77,7 @@ austraits_ui <- function(){
       conditionalPanel(
         condition = 'input.location == "APC_distribution"',
         ## By State by APC
-        selectizeInput("user_APC_state",
+        selectizeInput("APC_state",
                        label = "State/territory:",
                        choices = NULL,
                        multiple = TRUE
@@ -88,7 +88,7 @@ austraits_ui <- function(){
       conditionalPanel(
         condition = 'input.location == "state"',
         ## By State in Location Property
-        selectizeInput("user_state",
+        selectizeInput("state",
                        label = "State/territory:",
                        choices = NULL,
                        multiple = TRUE
@@ -132,6 +132,7 @@ austraits_ui <- function(){
     ),
     
     # Data display
+    # TODO: Multiple tabs, info tab, graphs? data
     card(
       card_header("Data Preview"),
       card_body(
@@ -212,8 +213,10 @@ austraits_server <- function(input, output, session) {
   ), {
     # At start up, we want filters set to false
     valid_filters <- setdiff(names(input), 
-                             c("clear_filters", "taxon_rank", "location", "user_coordinates", "user_state", "user_APC_state")
+                             c("clear_filters", "taxon_rank", "location", "coordinates", "state", "APC_state")
     )
+    
+    browser()
     
     # Check if any filter has values using our helper function
     has_filters <- any(sapply(valid_filters, function(name) {
@@ -229,7 +232,9 @@ austraits_server <- function(input, output, session) {
         apply_filters(input_values) |> 
         dplyr::collect()
       
-      # Store filtered data
+      browser()
+      
+      # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
       # No filters selected
@@ -286,7 +291,7 @@ austraits_server <- function(input, output, session) {
     # Get the current filtered database
     filtered_db <- filtered_database()
     
-    browser()
+    # browser()
     
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {

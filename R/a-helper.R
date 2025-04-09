@@ -6,17 +6,20 @@ has_input_value <- function(input, input_name) {
 
 #' Apply filters
 apply_filters <- function(data = austraits, input){
+  browser()
+  
   # Exclude user inputs that we can't filter on
+  # TODO function to id these
   valid_filters <- setdiff(names(input), 
-                           c("clear_filters", "taxon_rank", "location", "user_coordinates", "user_state", "user_APC_state")
+                           c("clear_filters", "taxon_rank", "location", "user_coordinates", "user_state", "user_APC_state", "coordinates")
                            )
   
   
   # Construct filter conditions dynamically
-  filter_conditions <- purrr::map(names(valid_filters), function(i) {
-    value <- input[[i]]
+  filter_conditions <- purrr::map(valid_filters, function(v) {
+    value <- input[[v]]
     if (!is.null(value)) {
-      expr(.data[[i]] %in% !!value)  # Dynamically create filter expressions
+      expr(.data[[v]] %in% !!value)  # Dynamically create filter expressions
     } else {
       NULL
     }
@@ -26,7 +29,7 @@ apply_filters <- function(data = austraits, input){
 
   # Combine all filter conditions into a single filter call
   filtered_parquet <- data |> 
-    filter(!!!filter_conditions)  # Unquote and splice the conditions
+    dplyr::filter(!!!filter_conditions)  # Unquote and splice the conditions
   
   return(filtered_parquet)
 }
