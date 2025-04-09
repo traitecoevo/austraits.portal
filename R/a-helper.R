@@ -47,26 +47,28 @@ extract_distinct_values <- function(data, var_name){
 #' Format relational database for display
 #'
 #' @param database traits.build object
+#' @importFrom tidyselect ends_with starts_with
 
 format_database_for_display <- function(database){
   
-  browser()
-  
-  dplyr::select(
-    -dplyr::ends_with("_id"),
-    -dplyr::starts_with("source"),
-    -c("methods",
-       "description", 
-       "assistants", 
-       "dataset_curators", 
-       "aligned_name",
-       "binomial", 
-       "trinomial", 
-       "taxon_name_alternatives", 
-       "sampling_strategy"),
-    "dataset_id", 
-    "source_primary_citation"
-  ) |> 
+#  browser()
+
+  database |> 
+    dplyr::select(
+      -c(ends_with("_id")),
+      -starts_with("source"),
+      -c("methods",
+         "description", 
+         "assistants", 
+         "dataset_curators", 
+         "aligned_name",
+         "binomial", 
+         "trinomial", 
+         "taxon_name_alternatives", 
+         "sampling_strategy"),
+      "dataset_id", 
+      "source_primary_citation"
+    ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
     dplyr::relocate("source_primary_citation", .after = "method_context_properties") |> 
     dplyr::relocate(c("genus", "family"), .after = "taxon_name") 
