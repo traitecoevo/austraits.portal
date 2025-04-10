@@ -26,15 +26,16 @@ RoxygenNote: 7.3.2
 Depends:
   R (>= 3.5.0)
 Imports: 
-    shiny,
-    austraits,
-    arrow,
-    bslib,
-    dplyr,
-    DT,
-    utils,
-    purrr,
-    stringr
+  shiny,
+  austraits,
+  arrow,
+  bslib,
+  dplyr,
+  DT,
+  purrr,
+  stringr,
+  tidyselect,
+  utils
 Remotes:
   traitecoevo/austraits
 Suggests: 
