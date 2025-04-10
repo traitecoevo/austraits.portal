@@ -53,6 +53,15 @@ austraits_ui <- function(){
                        multiple = TRUE
         )
       ),
+      # Filter by trait information
+      h5("Trait"),
+      ## By trait name
+      selectizeInput("trait_name",
+                     label = "Trait name(s):",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
       # Filter by location information
       h5("Location"),
       
@@ -69,8 +78,8 @@ austraits_ui <- function(){
         ## Input coordinates
         textInput("coordinates",
                        label = "Coordinates:",
-                       value = "-33.92, 151.24", # UNSW Kensington from Google Maps
-                       placeholder = "Paste coordinates from Google Maps")
+                       # value = "-33.92, 151.24", # UNSW Kensington from Google Maps
+                       placeholder = "-33.92, 151.24")
       ),
       
       # State in Location Property
@@ -94,16 +103,7 @@ austraits_ui <- function(){
                        multiple = TRUE
         )
       ),
-     
-      
-      # Filter by trait information
-      h5("Trait"),
-      ## By trait name
-      selectizeInput("trait_name",
-                     label = "Trait name:",
-                     choices = NULL,
-                     multiple = TRUE
-      ),
+    
       
       h5("Additional"),
       ## By BoR
@@ -201,6 +201,7 @@ austraits_server <- function(input, output, session) {
     input$family,
     input$genus,
     input$taxon_name, 
+    input$trait_name, 
     input$basis_of_record,
     input$life_stage
   ), {

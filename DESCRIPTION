@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
         c(person(given = "Daniel",
              family = "Falster",
-             role = "aut",
+             role = c("aut", "cre"),
              email = "daniel.falster@unsw.edu.au",
              comment = c(ORCID = "0000-0002-9814-092X")),
       person(given = "Elizabeth", 
@@ -14,7 +14,7 @@ Authors@R:
             comment = c(ORCID = "0000-0001-5640-5910")),
       person(given = "Fonti",
              family = "Kar",
-             role = c("aut", "cre"),
+             role = "aut",
              email = "f.kar@unsw.edu.au",
              comment = c(ORCID = "0000-0002-2760-3974"))
              )

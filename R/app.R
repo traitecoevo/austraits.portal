@@ -1,5 +1,5 @@
 #' Open AusTraits Data Portal Locally
-#'
+#' @export
 #' @param ... arguments passed to ShinyApp()
 
 open_data_portal <- function(...){
