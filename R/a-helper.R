@@ -20,6 +20,7 @@ valid_filters <- function(input, exclude_taxon_rank = TRUE){
 }
 
 #' Apply filters
+#' @keywords internal
 apply_filters <- function(data = austraits, input){
   
   # Exclude user inputs that we can't filter on
