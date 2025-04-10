@@ -205,9 +205,9 @@ austraits_server <- function(input, output, session) {
     input$life_stage
   ), {
     # At start up, we want filters set to false
-    valid_filters <- setdiff(names(input), 
-                             c("clear_filters", "taxon_rank", "location", "coordinates", "state", "APC_state")
-    )
+    valid_filters <- valid_filters(input)
+    
+    # browser()
     
     # Check if any filter has values using our helper function
     has_filters <- any(sapply(valid_filters, function(name) {

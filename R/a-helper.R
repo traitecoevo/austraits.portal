@@ -4,14 +4,25 @@ has_input_value <- function(input, input_name) {
   !is.null(input[[input_name]]) && length(input[[input_name]]) > 0
 }
 
+#' Determine valid filters in the input list
+
+valid_filters <- function(input, exclude_taxon_rank = TRUE){
+  valid_vars <- c(names(austraits))
+  
+  if(exclude_taxon_rank){
+    valid_vars <- valid_vars[valid_vars != "taxon_rank"]
+    stringr::str_subset(names(input), paste(valid_vars, collapse = "|"))
+  } else
+  stringr::str_subset(names(input), paste(valid_vars, collapse = "|"))
+}
+
 #' Apply filters
 apply_filters <- function(data = austraits, input){
   
   # Exclude user inputs that we can't filter on
   # TODO function to id these
-  valid_filters <- setdiff(names(input), 
-                           c("clear_filters", "taxon_rank", "location", "user_coordinates", "user_state", "user_APC_state", "coordinates")
-                           )
+  # TODO need to exclude data_table_ prefixes might be better to 
+  valid_filters <- valid_filters(input)
   
   
   # Construct filter conditions dynamically
@@ -32,6 +43,7 @@ apply_filters <- function(data = austraits, input){
   
   return(filtered_parquet)
 }
+
 
 
 
