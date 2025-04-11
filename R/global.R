@@ -4,10 +4,25 @@
 
 # Download data
 retrieve_github_release_parquet(version_tag = "6.0.0", 
-                                 output_dir = system.file("extdata/austraits", package = "austraits.portal")) 
+                                 output_dir = file.path(system.file("extdata/austraits", package = "austraits.portal"))) 
+
+# Determine what files are in folder
+files <- file.path(system.file("extdata/austraits", package = "austraits.portal")) |> list.files()
+
+# Determine latest version of Austraits
+latest_version <- files[grepl("[0-9]+\\.[0-9]+\\.[0-9]+", files)] |>
+  sort(decreasing = TRUE) 
+
+dataset_path <- file.path(system.file("extdata/austraits", package = "austraits.portal"), latest_version[1])
+message("Dataset path: ", dataset_path)
+
+if (!file.exists(dataset_path)) {
+  stop("Dataset file not found at: ", dataset_path)
+}
 
 austraits <-
-   arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+   arrow::open_dataset(paste(file.path(system.file("extdata/austraits", package = "austraits.portal")), latest_version[1], sep = "/")) 
+  # arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet") 
   # arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet") 
 
 # Set up possible values for selectize menus
