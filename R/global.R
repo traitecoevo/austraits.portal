@@ -2,28 +2,36 @@
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo,
 ## For now will use the R package and store in Github Releases see data-raw/create-flat-austraits.R
 
-# Download data
-retrieve_github_release_parquet(version_tag = "6.0.0", 
-                                 output_dir = file.path(system.file("extdata/austraits", package = "austraits.portal"))) 
+load_parquet <- function(dir = system.file("extdata/austraits", package = "austraits.portal")) {
+  # Check if the directory exists
+  if (!dir.exists(dir)) {
+    stop("Directory does not exist: ", dir)
+  } 
 
-# Determine what files are in folder
-files <- file.path(system.file("extdata/austraits", package = "austraits.portal")) |> list.files()
+  # Get latest version
+ get_latest_version <- function(dir = system.file("extdata/austraits", package = "austraits.portal")){ 
+  if(length(list.files(dir)) == 0){
+    stop("No files found in the directory: ", dir)
+  }
 
-# Determine latest version of Austraits
-latest_version <- files[grepl("[0-9]+\\.[0-9]+\\.[0-9]+", files)] |>
-  sort(decreasing = TRUE) 
+  grep("[0-9]+\\.[0-9]+\\.[0-9]+", list.files(dir), value = TRUE) |>
+    gsub(pattern = "austraits-|\\-flatten.parquet", replacement = "")  |> 
+    numeric_version() |>
+    sort(decreasing = TRUE)  |> 
+    dplyr::first()  |> 
+    as.character()
+  }
 
-dataset_path <- file.path(system.file("extdata/austraits", package = "austraits.portal"), latest_version[1])
-message("Dataset path: ", dataset_path)
-
-if (!file.exists(dataset_path)) {
-  stop("Dataset file not found at: ", dataset_path)
+  # Load the first parquet file
+  dataset <- arrow::open_dataset(paste0(dir, "/austraits-", get_latest_version(dir), "-flatten.parquet"))
+          # arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet") 
+          # arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet") 
+  
+  return(dataset)
 }
 
-austraits <-
-   arrow::open_dataset(paste(file.path(system.file("extdata/austraits", package = "austraits.portal")), latest_version[1], sep = "/")) 
-  # arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet") 
-  # arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet") 
+# Load the austraits dataset
+austraits <- load_parquet()
 
 # Set up possible values for selectize menus
 
