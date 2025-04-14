@@ -24,21 +24,20 @@ valid_filters <- function(input, exclude_taxon_rank = TRUE){
 apply_filters <- function(data = austraits, input){
   
   # Exclude user inputs that we can't filter on
-  # TODO function to id these
-  # TODO need to exclude data_table_ prefixes might be better to 
+  # TODO need to exclude data_table_ prefixes too if column filters enabled
   valid_filters <- valid_filters(input)
   
   # Construct filter conditions dynamically
   filter_conditions <- purrr::map(valid_filters, function(v) {
     value <- input[[v]]
     if (!is.null(value)) {
-      expr(.data[[v]] %in% !!value)  # Dynamically create filter expressions
+      expr(stringr::str_detect(.data[[v]], !!value))  # Dynamically create filter expressions
     } else {
       NULL
     }
   }) |> purrr::compact()  # Remove NULL conditions
   
-  # browser()
+   browser()
 
   # Combine all filter conditions into a single filter call
   filtered_parquet <- data |> 

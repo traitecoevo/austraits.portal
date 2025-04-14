@@ -59,7 +59,10 @@ austraits_ui <- function(){
       selectizeInput("trait_name",
                      label = "Trait name(s):",
                      choices = NULL,
-                     multiple = TRUE
+                     multiple = TRUE,
+                     options = list(
+                       create = TRUE
+                     )
       ),
       
       # Filter by location information
