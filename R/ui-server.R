@@ -136,14 +136,32 @@ austraits_ui <- function(){
     
     # Data display
     # TODO: Multiple tabs, info tab, graphs? data
-    card(
-      card_header("Data Preview"),
-      card_body(
+    navset_card_tab(
+      id = "main_tabs",
+      nav_panel(
+      title = "Data Preview",
+      card(
+        card_body(
         fillable = TRUE,
         DT::DTOutput("data_table")
+        )
+      )
+      ),
+      nav_panel(
+      title = "App Information",
+      card(
+        card_header("How to Use the App"),
+        card_body(
+        fillable = TRUE,
+        p("This application allows users to filter and explore the AusTraits dataset."),
+        p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
+        p("Filtered data will be displayed in the 'Data Preview' tab."),
+        p("You can download the filtered data using the 'Download displayed data' button.")
+        )
+      )
       )
     )
-  )
+    )
 }
 
 

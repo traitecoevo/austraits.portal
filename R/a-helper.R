@@ -36,8 +36,6 @@ apply_filters <- function(data = austraits, input){
       NULL
     }
   }) |> purrr::compact()  # Remove NULL conditions
-  
-   browser()
 
   # Combine all filter conditions into a single filter call
   filtered_parquet <- data |> 
