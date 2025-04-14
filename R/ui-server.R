@@ -13,21 +13,21 @@ austraits_ui <- function(){
     # Create a sidebar for the app
     sidebar = sidebar(
       # Filter by taxonomic information
-      h5("Taxonomic information"),
+      h5("Taxonomy"),
       
-      radioButtons("user_taxon_rank", 
-                   label = "Filter by which taxon name:",
-                   choices = c('Taxon name' = "taxon_name",
+      radioButtons("taxon_rank", 
+                   label = "Filter by which taxon rank:",
+                   choices = c('Family' = "family",
                                'Genus' = "genus", 
-                               'Family' = "family"
+                               'Taxon name' = "taxon_name"
                    )
       ),
       
       # Only show this panel if Taxon name is selected
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "taxon_name"',
+        condition = 'input.taxon_rank == "taxon_name"',
         ## By taxon_name
-        selectizeInput("user_taxon_name",
+        selectizeInput("taxon_name",
                        label = "Taxon name:",
                        choices = NULL,
                        multiple = TRUE)
@@ -35,9 +35,9 @@ austraits_ui <- function(){
       
       # Only show this panel if Genus is selected
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "genus"',
+        condition = 'input.taxon_rank == "genus"',
         ## By genus
-        selectizeInput("user_genus",
+        selectizeInput("genus",
                        label = "Genus:",
                        choices = NULL,
                        multiple = TRUE
@@ -45,14 +45,83 @@ austraits_ui <- function(){
       ),
       # Only show this panel if family is selected  
       conditionalPanel(
-        condition = 'input.user_taxon_rank == "family"',
+        condition = 'input.taxon_rank == "family"',
         ## By family
-        selectizeInput("user_family",
+        selectizeInput("family",
                        label = "Family:",
                        choices = NULL,
                        multiple = TRUE
         )
       ),
+      # Filter by trait information
+      h5("Trait"),
+      ## By trait name
+      selectizeInput("trait_name",
+                     label = "Trait name(s):",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
+      # Filter by location information
+      h5("Location"),
+      
+      radioButtons("location", 
+                   label = "Filter by which location filter:",
+                   choices = c('Enter coordinates' = "enter_coordinates",
+                               'Recorded state/territory' = "state", 
+                               'APC distribution' = "APC_state"
+                   )
+      ),
+      # User chooses to input coordinates
+      conditionalPanel(
+        condition = 'input.location == "enter_coordinates"',
+        ## Input coordinates
+        textInput("coordinates",
+                       label = "Coordinates:",
+                       # value = "-33.92, 151.24", # UNSW Kensington from Google Maps
+                       placeholder = "-33.92, 151.24")
+      ),
+      
+      # State in Location Property
+      conditionalPanel(
+        condition = 'input.location == "APC_distribution"',
+        ## By State by APC
+        selectizeInput("APC_state",
+                       label = "State/territory:",
+                       choices = NULL,
+                       multiple = TRUE
+        )
+      ),
+      
+      # State by APC
+      conditionalPanel(
+        condition = 'input.location == "state"',
+        ## By State in Location Property
+        selectizeInput("state",
+                       label = "State/territory:",
+                       choices = NULL,
+                       multiple = TRUE
+        )
+      ),
+    
+      
+      h5("Additional"),
+      ## By BoR
+      # TODO: Hard code some options e.g field to select all field values
+      selectizeInput("basis_of_record",
+                     label = "Basis of Record:",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
+      ## By lifestage
+      # TODO: Hard code some options e.g saplings to select all saplings
+      selectizeInput("life_stage",
+                     label = "Life stage:",
+                     choices = NULL,
+                     multiple = TRUE
+      ),
+      
       
       br(),
       actionButton("clear_filters", "Clear Filters", 
@@ -63,6 +132,7 @@ austraits_ui <- function(){
     ),
     
     # Data display
+    # TODO: Multiple tabs, info tab, graphs? data
     card(
       card_header("Data Preview"),
       card_body(
@@ -81,36 +151,39 @@ austraits_ui <- function(){
 #' @param session Session id for Shiny interaction
 
 austraits_server <- function(input, output, session) {
+  # Reactive value to store the filtered data later
+  filtered_database <- reactiveVal(NULL)
+  
   # Initialize dropdown choices
   taxon_name_choices <- reactive({ all_taxon_names })
   genus_choices <- reactive({ all_genus })
   family_choices <- reactive({ all_family })
   
   # Update the appropriate selectizeInput when radio button changes
-  observeEvent(input$user_taxon_rank, {
+  observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
     
-    if(input$user_taxon_rank == "taxon_name") {
+    if(input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
-        "user_taxon_name",
+        "taxon_name",
         choices = taxon_name_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "genus") {
+    } else if(input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
-        "user_genus",
+        "genus",
         choices = genus_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "family") {
+    } else if(input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
-        "user_family",
+        "family",
         choices = family_choices(),
         selected = NULL,
         server = TRUE
@@ -118,86 +191,81 @@ austraits_server <- function(input, output, session) {
     }
   })
   
-  # Reactive value to store the filtered data later
-  filtered_database <- reactiveVal(NULL)
+  # Server-side selectizeInput update for other options that are not conditional
+  updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
+  updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
+  updateSelectizeInput(session, 'life_stage', choices = all_age, server = TRUE)
   
-  # Filter data by taxonomic information
-  # Watch for changes in user_taxon_name
-  observeEvent(input$user_taxon_name, {
-    # Skip if empty
-    if(length(input$user_taxon_name) == 0) {
+  # Apply Filter
+  observeEvent(list(
+    input$family,
+    input$genus,
+    input$taxon_name, 
+    input$trait_name, 
+    input$basis_of_record,
+    input$life_stage
+  ), {
+    # At start up, we want filters set to false
+    valid_filters <- valid_filters(input)
+    
+    # browser()
+    
+    # Check if any filter has values using our helper function
+    has_filters <- any(sapply(valid_filters, function(name) {
+      has_input_value(input, name)
+    }))
+    
+    if(has_filters){
+      # Convert input to a regular list first
+      input_values <- reactiveValuesToList(input)
+      
+      # Apply filters with the input values
+      filtered_data <- austraits |> 
+        apply_filters(input_values) |> 
+        dplyr::collect()
+      
+      # Store filtered data into reactive value
+      filtered_database(filtered_data)
+    } else {
+      # No filters selected
       filtered_database(NULL)
-      return()
     }
-    
-    # Filter by taxonomic info
-    filtered_by_taxonomy <- austraits |> 
-      extract_taxa(taxon_name = input$user_taxon_name)
-    
-    # Store in reactive
-    filtered_database(filtered_by_taxonomy)
-  })
-  
-  # Watch for changes in user-genus
-  observeEvent(input$user_genus, {
-    # Skip if empty
-    if(length(input$user_genus) == 0) {
-      filtered_database(NULL)
-      return()
-    }
-    
-    # Filter by taxonomic info
-    filtered_by_taxonomy <- austraits |> 
-      extract_taxa(genus = input$user_genus)
-    
-    # Store in reactive
-    filtered_database(filtered_by_taxonomy)
-  })
-  
-  # Watch for changes in user-family
-  observeEvent(input$user_family, {
-    # Skip if empty
-    if(length(input$user_family) == 0) {
-      filtered_database(NULL)
-      return()
-    }
-    
-    # Filter by taxonomic info
-    filtered_by_taxonomy <- austraits |> 
-      extract_taxa(family = input$user_family)
-    
-    # Store in reactive
-    filtered_database(filtered_by_taxonomy)
-  })
+  }
+  )
   
   # Clear filters button action
   observeEvent(input$clear_filters, {
     # Based on which filter is currently active
-    if(input$user_taxon_rank == "taxon_name") {
+    if(input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
-        "user_taxon_name",
+        "taxon_name",
         choices = taxon_name_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "genus") {
+    } else if(input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
-        "user_genus",
+        "genus",
         choices = genus_choices(),
         selected = NULL,
         server = TRUE
       )
-    } else if(input$user_taxon_rank == "family") {
+    } else if(input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
-        "user_family",
+        "family",
         choices = family_choices(),
         selected = NULL,
         server = TRUE
-      )
+      ) 
     }
+    
+    # Clear the other filters that are not conditional
+    updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
+    updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
+    updateSelectizeInput(session, 'lifestage', choices = all_age, server = TRUE)
     
     # Store nothing in filtered_data()
     filtered_database(NULL)
@@ -232,8 +300,7 @@ austraits_server <- function(input, output, session) {
       return(NULL)
     }
     
-    # Format the database for download
-    format_database_for_download(filtered_db)
+    filtered_db
   })
   
   # Render user selected data table output
@@ -261,7 +328,7 @@ austraits_server <- function(input, output, session) {
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
-      paste("austraits-6.0.0-", Sys.Date(), ".csv", sep = "")
+      paste("austraits-", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       # Get the current download data

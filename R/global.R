@@ -1,17 +1,45 @@
 # Load data
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo,
-## For now will use the R package and store in Github Releases see data-raw/create-flat-austraits.R
-austraits <-
-  load_austraits(version = "6.0.0", path = "inst/extdata/austraits/") |> 
-  join_taxa()
+## For now will use the R package and store in Github Releases see branch data-load
 
-## Set up possible values for selectize
-# Unique values of taxon_name
-all_taxon_names <- austraits$traits$taxon_name |> unique() |> sort()
+# Load the austraits dataset
+austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet")
 
-# Unique values of genus
-all_genus <- austraits$traits$genus |> unique() |> sort()
+# Set up possible values for selectize menus
 
-## Set up possible family
-# Unique values of genus
-all_family <- austraits$traits$family |> unique() |> sort()
+## Taxonomy
+### Unique values of family
+all_family <- austraits |> 
+  extract_distinct_values(family)
+
+### Unique values of genus
+all_genus <- austraits |> 
+  extract_distinct_values(genus)
+
+## Unique values of taxon_name
+all_taxon_names <- austraits |>
+extract_distinct_values(taxon_name)
+
+## Location
+# TODO: Not yet implemented. 
+### Coordinates - circle/bbox around coordinates?
+
+### States by location properties
+
+
+### APC distribution - Need APCalign::create_species_state_origin_matrix()
+
+
+## Traits
+### Unique values of taxon_name
+all_traits <- austraits |>
+  extract_distinct_values(trait_name)
+
+## Other sidebar values
+### Unique values of BoR
+all_bor <- austraits |>
+  extract_distinct_values(basis_of_record)
+
+## Unique values of age/lifestage
+all_age <- austraits |>
+  extract_distinct_values(life_stage)
