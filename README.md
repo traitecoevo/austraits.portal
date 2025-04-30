@@ -16,7 +16,7 @@ You can install the development version of austraits.portal from
 
 ``` r
 # install.packages("pak")
-pak::pak("traitecoevo/austraits-portal")
+pak::pak("traitecoevo/austraits.portal")
 ```
 
 ## To open the data portal locally
