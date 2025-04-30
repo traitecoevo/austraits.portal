@@ -1,143 +1,171 @@
 #' User interface (UI) for AusTraits Data Portal
 
-austraits_ui <- function(){
-  
-  ui <- page_sidebar(
-    
+austraits_ui <- function() {
+  ui <- page_navbar(
+
     # Set the overall theme of the app
     theme = bs_theme(preset = "flatly"),
-    
+
     # Title of the portal
     title = "AusTraits Data Portal",
-    
+
+    footer =  tags$footer(
+      "Powered by ",
+      tags$a(href = "https://www.unsw.edu.au/science", "UNSW Faculty of Science"), 
+      align = "right", style = "padding: 30px",
+      
+      div("Created by AusTraits Team",  
+          target)
+      ),
+
     # Create a sidebar for the app
     sidebar = sidebar(
       # Filter by taxonomic information
       h5("Taxonomy"),
-      
-      radioButtons("taxon_rank", 
-                   label = "Filter by which taxon rank:",
-                   choices = c('Family' = "family",
-                               'Genus' = "genus", 
-                               'Taxon name' = "taxon_name"
-                   )
+      radioButtons("taxon_rank",
+        label = "Filter by which taxon rank:",
+        choices = c(
+          "Family" = "family",
+          "Genus" = "genus",
+          "Taxon name" = "taxon_name"
+        )
       ),
-      
+
       # Only show this panel if Taxon name is selected
       conditionalPanel(
         condition = 'input.taxon_rank == "taxon_name"',
         ## By taxon_name
         selectizeInput("taxon_name",
-                       label = "Taxon name:",
-                       choices = NULL,
-                       multiple = TRUE)
+          label = "Taxon name:",
+          choices = NULL,
+          multiple = TRUE
+        )
       ),
-      
+
       # Only show this panel if Genus is selected
       conditionalPanel(
         condition = 'input.taxon_rank == "genus"',
         ## By genus
         selectizeInput("genus",
-                       label = "Genus:",
-                       choices = NULL,
-                       multiple = TRUE
+          label = "Genus:",
+          choices = NULL,
+          multiple = TRUE
         )
       ),
-      # Only show this panel if family is selected  
+      # Only show this panel if family is selected
       conditionalPanel(
         condition = 'input.taxon_rank == "family"',
         ## By family
         selectizeInput("family",
-                       label = "Family:",
-                       choices = NULL,
-                       multiple = TRUE
+          label = "Family:",
+          choices = NULL,
+          multiple = TRUE
         )
       ),
       # Filter by trait information
       h5("Trait"),
       ## By trait name
       selectizeInput("trait_name",
-                     label = "Trait name(s):",
-                     choices = NULL,
-                     multiple = TRUE
+        label = "Trait name(s):",
+        choices = NULL,
+        multiple = TRUE,
+        options = list(
+          create = TRUE
+        )
       ),
-      
+
       # Filter by location information
       h5("Location"),
-      
-      radioButtons("location", 
-                   label = "Filter by which location filter:",
-                   choices = c('Enter coordinates' = "enter_coordinates",
-                               'Recorded state/territory' = "state", 
-                               'APC distribution' = "APC_state"
-                   )
+      radioButtons("location",
+        label = "Filter by which location filter:",
+        choices = c(
+          "Enter coordinates" = "enter_coordinates",
+          "Recorded state/territory" = "state",
+          "APC distribution" = "APC_state"
+        )
       ),
       # User chooses to input coordinates
       conditionalPanel(
         condition = 'input.location == "enter_coordinates"',
         ## Input coordinates
         textInput("coordinates",
-                       label = "Coordinates:",
-                       # value = "-33.92, 151.24", # UNSW Kensington from Google Maps
-                       placeholder = "-33.92, 151.24")
+          label = "Coordinates:",
+          # value = "-33.92, 151.24", # UNSW Kensington from Google Maps
+          placeholder = "-33.92, 151.24"
+        )
       ),
-      
+
       # State in Location Property
       conditionalPanel(
         condition = 'input.location == "APC_distribution"',
         ## By State by APC
         selectizeInput("APC_state",
-                       label = "State/territory:",
-                       choices = NULL,
-                       multiple = TRUE
+          label = "State/territory:",
+          choices = NULL,
+          multiple = TRUE
         )
       ),
-      
+
       # State by APC
       conditionalPanel(
         condition = 'input.location == "state"',
         ## By State in Location Property
         selectizeInput("state",
-                       label = "State/territory:",
-                       choices = NULL,
-                       multiple = TRUE
+          label = "State/territory:",
+          choices = NULL,
+          multiple = TRUE
         )
       ),
-    
-      
       h5("Additional"),
       ## By BoR
       # TODO: Hard code some options e.g field to select all field values
       selectizeInput("basis_of_record",
-                     label = "Basis of Record:",
-                     choices = NULL,
-                     multiple = TRUE
+        label = "Basis of Record:",
+        choices = NULL,
+        multiple = TRUE
       ),
-      
+
       ## By lifestage
       # TODO: Hard code some options e.g saplings to select all saplings
       selectizeInput("life_stage",
-                     label = "Life stage:",
-                     choices = NULL,
-                     multiple = TRUE
+        label = "Life stage:",
+        choices = NULL,
+        multiple = TRUE
       ),
-      
-      
       br(),
-      actionButton("clear_filters", "Clear Filters", 
-                   class = "btn-warning w-100"),
-      
+      actionButton("clear_filters", "Clear Filters",
+        class = "btn-warning w-100"
+      ),
+
       # Download button
       downloadButton("download_data", "Download displayed data")
     ),
-    
+
     # Data display
     # TODO: Multiple tabs, info tab, graphs? data
-    card(
-      card_header("Data Preview"),
-      card_body(
-        fillable = TRUE,
-        DT::DTOutput("data_table")
+    navset_card_tab(
+      id = "main_tabs",
+      nav_panel(
+        title = "Data Preview",
+        card(
+          card_body(
+            fillable = TRUE,
+            DT::DTOutput("data_table")
+          )
+        )
+      ),
+      nav_panel(
+        title = "App Information",
+        card(
+          card_header("How to Use the App"),
+          card_body(
+            fillable = TRUE,
+            p("This application allows users to filter and explore the AusTraits dataset."),
+            p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
+            p("Filtered data will be displayed in the 'Data Preview' tab."),
+            p("You can download the filtered data using the 'Download displayed data' button."),
+          )
+        )
       )
     )
   )
@@ -153,18 +181,24 @@ austraits_ui <- function(){
 austraits_server <- function(input, output, session) {
   # Reactive value to store the filtered data later
   filtered_database <- reactiveVal(NULL)
-  
+
   # Initialize dropdown choices
-  taxon_name_choices <- reactive({ all_taxon_names })
-  genus_choices <- reactive({ all_genus })
-  family_choices <- reactive({ all_family })
-  
+  taxon_name_choices <- reactive({
+    all_taxon_names
+  })
+  genus_choices <- reactive({
+    all_genus
+  })
+  family_choices <- reactive({
+    all_family
+  })
+
   # Update the appropriate selectizeInput when radio button changes
   observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
-    
-    if(input$taxon_rank == "taxon_name") {
+
+    if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
         "taxon_name",
@@ -172,7 +206,7 @@ austraits_server <- function(input, output, session) {
         selected = NULL,
         server = TRUE
       )
-    } else if(input$taxon_rank == "genus") {
+    } else if (input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
         "genus",
@@ -180,7 +214,7 @@ austraits_server <- function(input, output, session) {
         selected = NULL,
         server = TRUE
       )
-    } else if(input$taxon_rank == "family") {
+    } else if (input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
         "family",
@@ -190,53 +224,52 @@ austraits_server <- function(input, output, session) {
       )
     }
   })
-  
+
   # Server-side selectizeInput update for other options that are not conditional
-  updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
-  updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
-  updateSelectizeInput(session, 'life_stage', choices = all_age, server = TRUE)
-  
+  updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
+  updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
+  updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
+
   # Apply Filter
   observeEvent(list(
     input$family,
     input$genus,
-    input$taxon_name, 
-    input$trait_name, 
+    input$taxon_name,
+    input$trait_name,
     input$basis_of_record,
     input$life_stage
   ), {
     # At start up, we want filters set to false
     valid_filters <- valid_filters(input)
-    
+
     # browser()
-    
+
     # Check if any filter has values using our helper function
     has_filters <- any(sapply(valid_filters, function(name) {
       has_input_value(input, name)
     }))
-    
-    if(has_filters){
+
+    if (has_filters) {
       # Convert input to a regular list first
       input_values <- reactiveValuesToList(input)
-      
+
       # Apply filters with the input values
-      filtered_data <- austraits |> 
-        apply_filters(input_values) |> 
+      filtered_data <- austraits |>
+        apply_filters(input_values) |>
         dplyr::collect()
-      
+
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
       # No filters selected
       filtered_database(NULL)
     }
-  }
-  )
-  
+  })
+
   # Clear filters button action
   observeEvent(input$clear_filters, {
     # Based on which filter is currently active
-    if(input$taxon_rank == "taxon_name") {
+    if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
         "taxon_name",
@@ -244,7 +277,7 @@ austraits_server <- function(input, output, session) {
         selected = NULL,
         server = TRUE
       )
-    } else if(input$taxon_rank == "genus") {
+    } else if (input$taxon_rank == "genus") {
       updateSelectizeInput(
         session,
         "genus",
@@ -252,67 +285,68 @@ austraits_server <- function(input, output, session) {
         selected = NULL,
         server = TRUE
       )
-    } else if(input$taxon_rank == "family") {
+    } else if (input$taxon_rank == "family") {
       updateSelectizeInput(
         session,
         "family",
         choices = family_choices(),
         selected = NULL,
         server = TRUE
-      ) 
+      )
     }
-    
+
     # Clear the other filters that are not conditional
-    updateSelectizeInput(session, 'trait_name', choices = all_traits, server = TRUE)
-    updateSelectizeInput(session, 'basis_of_record', choices = all_bor, server = TRUE)
-    updateSelectizeInput(session, 'lifestage', choices = all_age, server = TRUE)
-    
+    updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
+    updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
+    updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
+
     # Store nothing in filtered_data()
     filtered_database(NULL)
-    
+
     # Show notification
-    showNotification("Filters have been cleared", 
-                     type = "message", 
-                     duration = 3)
+    showNotification("Filters have been cleared",
+      type = "message",
+      duration = 3
+    )
   })
-  
+
   # Set up display data as reactive expression
   display_data_table <- reactive({
     # Get the current filtered database
     filtered_db <- filtered_database()
-    
+
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
+
     # Format the database for display
     format_database_for_display(filtered_db)
   })
-  
-  # Set up download data as reactive expression  
+
+  # Set up download data as reactive expression
   download_data_table <- reactive({
     # Get the current filtered database
     filtered_db <- filtered_database()
-    
+
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
+
     filtered_db
   })
-  
+
   # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
     display_data <- display_data_table()
-    
+
     # Return NULL or empty table if no data
     if (is.null(display_data)) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
-    
+
     datatable(
       data = display_data,
       options = list(
@@ -320,11 +354,11 @@ austraits_server <- function(input, output, session) {
         scrollX = TRUE
       ),
       rownames = FALSE,
-      filter = 'none',
-      class = 'cell-border stripe'
+      filter = "none",
+      class = "cell-border stripe"
     )
   })
-  
+
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
@@ -333,12 +367,12 @@ austraits_server <- function(input, output, session) {
     content = function(file) {
       # Get the current download data
       data_to_download <- download_data_table()
-      
+
       # Handle NULL or empty data case
       if (is.null(data_to_download) || nrow(data_to_download) == 0) {
         data_to_download <- data.frame(message = "No data selected")
       }
-      
+
       utils::write.csv(data_to_download, file, row.names = FALSE)
     }
   )

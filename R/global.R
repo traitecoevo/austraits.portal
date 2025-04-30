@@ -9,19 +9,19 @@ austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite.parquet"
 
 ## Taxonomy
 ### Unique values of family
-all_family <- austraits |> 
+all_family <- austraits |>
   extract_distinct_values(family)
 
 ### Unique values of genus
-all_genus <- austraits |> 
+all_genus <- austraits |>
   extract_distinct_values(genus)
 
 ## Unique values of taxon_name
 all_taxon_names <- austraits |>
-extract_distinct_values(taxon_name)
+  extract_distinct_values(taxon_name)
 
 ## Location
-# TODO: Not yet implemented. 
+# TODO: Not yet implemented.
 ### Coordinates - circle/bbox around coordinates?
 
 ### States by location properties
@@ -43,3 +43,7 @@ all_bor <- austraits |>
 ## Unique values of age/lifestage
 all_age <- austraits |>
   extract_distinct_values(life_stage)
+
+# Custom Github hyperlink icon
+target <- bsplus::shiny_iconlink(name = "github")
+target$attribs$href <- "https://github.com/traitecoevo/austraits.portal"

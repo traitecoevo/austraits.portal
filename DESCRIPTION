@@ -30,6 +30,7 @@ Imports:
     austraits,
     arrow,
     bslib,
+    bsplus,
     dplyr,
     DT,
     purrr,
