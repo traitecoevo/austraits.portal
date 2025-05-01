@@ -80,6 +80,13 @@ format_database_for_display <- function(database){
          "trinomial", 
          "taxon_name_alternatives", 
          "sampling_strategy"),
+      -c("taxon_id_genus",
+         "taxon_id_family",
+         "taxonomic_resolution",
+         "aligned_name_taxonomic_status",
+         "taxonomic_status",
+         "scientific_name",
+         "taxonomic_dataset"),
       "dataset_id", 
       "source_primary_citation"
     ) |> 
