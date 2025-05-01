@@ -368,7 +368,9 @@ austraits_server <- function(input, output, session) {
       options = list(
         pageLength = 10,
         scrollX = TRUE,
-        columnDefs = list(list(searchable = TRUE, targets = "_all"))
+        columnDefs = list(list(searchable = FALSE, 
+                               targets = c(1,6,7)-1) # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+                          ) 
       ),
       rownames = FALSE,
       filter = "top",
