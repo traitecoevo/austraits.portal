@@ -351,10 +351,11 @@ austraits_server <- function(input, output, session) {
       data = display_data,
       options = list(
         pageLength = 10,
-        scrollX = TRUE
+        scrollX = TRUE,
+        columnDefs = list(list(searchable = TRUE, targets = "_all"))
       ),
       rownames = FALSE,
-      filter = "none",
+      filter = "top",
       class = "cell-border stripe"
     )
   })
