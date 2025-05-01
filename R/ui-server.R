@@ -338,17 +338,33 @@ austraits_server <- function(input, output, session) {
   })
 
   # Render user selected data table output
+  # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
     display_data <- display_data_table()
-
+    
     # Return NULL or empty table if no data
     if (is.null(display_data)) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
-
+    
+    # Truncate text columns to 20 characters
+    display_data_truncated <- display_data
+    text_columns <- sapply(display_data, is.character)
+    
+    for (col in names(display_data)[text_columns]) {
+      display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
+        if (is.na(x) || is.null(x)) return(x)
+        if (nchar(x) > 20) {
+          paste0(substr(x, 1, 20), "...")
+        } else {
+          x
+        }
+      })
+    }
+    
     datatable(
-      data = display_data,
+      data = display_data_truncated,
       options = list(
         pageLength = 10,
         scrollX = TRUE
