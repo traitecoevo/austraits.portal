@@ -138,6 +138,7 @@ austraits_ui <- function() {
       ),
 
       # Download button
+      uiOutput("rows_info"),
       downloadButton("download_data", "Download displayed data")
     ),
 
@@ -181,7 +182,10 @@ austraits_ui <- function() {
 austraits_server <- function(input, output, session) {
   # Reactive value to store the filtered data later
   filtered_database <- reactiveVal(NULL)
-
+  
+  # New reactive value to store datatable filter state
+  dt_proxy <- reactiveVal(NULL)
+  
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
     all_taxon_names
@@ -192,12 +196,12 @@ austraits_server <- function(input, output, session) {
   family_choices <- reactive({
     all_family
   })
-
+  
   # Update the appropriate selectizeInput when radio button changes
   observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
-
+    
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
@@ -224,12 +228,12 @@ austraits_server <- function(input, output, session) {
       )
     }
   })
-
+  
   # Server-side selectizeInput update for other options that are not conditional
   updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
   updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
-
+  
   # Apply Filter
   observeEvent(list(
     input$family,
@@ -241,23 +245,21 @@ austraits_server <- function(input, output, session) {
   ), {
     # At start up, we want filters set to false
     valid_filters <- valid_filters(input)
-
-    # browser()
-
+    
     # Check if any filter has values using our helper function
     has_filters <- any(sapply(valid_filters, function(name) {
       has_input_value(input, name)
     }))
-
+    
     if (has_filters) {
       # Convert input to a regular list first
       input_values <- reactiveValuesToList(input)
-
+      
       # Apply filters with the input values
       filtered_data <- austraits |>
         apply_filters(input_values) |>
         dplyr::collect()
-
+      
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
@@ -265,7 +267,7 @@ austraits_server <- function(input, output, session) {
       filtered_database(NULL)
     }
   })
-
+  
   # Clear filters button action
   observeEvent(input$clear_filters, {
     # Based on which filter is currently active
@@ -294,50 +296,69 @@ austraits_server <- function(input, output, session) {
         server = TRUE
       )
     }
-
+    
     # Clear the other filters that are not conditional
     updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
     updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
     updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
-
+    
     # Store nothing in filtered_data()
     filtered_database(NULL)
-
+    
+    # Reset datatable filters
+    if (!is.null(dt_proxy())) {
+      DT::replaceData(dt_proxy(), display_data_table())
+    }
+    
     # Show notification
     showNotification("Filters have been cleared",
-      type = "message",
-      duration = 3
+                     type = "message",
+                     duration = 3
     )
   })
-
+  
   # Set up display data as reactive expression
   display_data_table <- reactive({
     # Get the current filtered database
     filtered_db <- filtered_database()
-
+    
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
       return(NULL)
     }
-
+    
     # Format the database for display
     format_database_for_display(filtered_db)
   })
-
+  
   # Set up download data as reactive expression
   download_data_table <- reactive({
     # Get the current filtered database
     filtered_db <- filtered_database()
-
+    display_db <- display_data_table()
+    
     # Check if it's NULL and return appropriate value
     if (is.null(filtered_db)) {
       return(NULL)
     }
-
-    filtered_db
+    
+    # Get the row indices from the DT table that are currently visible
+    # after filtering in the datatable
+    if (!is.null(input$data_table_rows_all)) {
+      # Get all visible row indices after filtering
+      visible_rows <- input$data_table_rows_all
+      
+      # Subset the display data with the visible row indices
+      display_db_filtered <- display_db[visible_rows, , drop = FALSE]
+      
+      # Join back up to full dataset to get all columns for only the visible rows
+      return(filtered_db |> semi_join(display_db_filtered, by = "row_id"))
+    }
+    
+    # Default: Join back up to full dataset to get all columns
+    filtered_db |> semi_join(display_db, by = "row_id")
   })
-
-  # Render user selected data table output
+  
   # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
@@ -366,36 +387,59 @@ austraits_server <- function(input, output, session) {
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     
-    datatable(
+    dt <- datatable(
       data = display_data_truncated,
       options = list(
         pageLength = 10,
         scrollX = TRUE,
         columnDefs = list(list(searchable = FALSE, 
                                targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
-                          )
         )
+        ),
+        # Add server-side processing for better filtering performance
+        serverSide = FALSE # Keep this as FALSE for client-side filtering to access filtered rows
       ),
       rownames = FALSE,
       filter = "top",
       class = "cell-border stripe"
+      # Removed selection = 'multiple' option
     )
+    
+    # Store the DT proxy for later use
+    dt_proxy(DT::dataTableProxy("data_table"))
+    
+    return(dt)
   })
-
+  
+  # Update info message about visible rows
+  output$rows_info <- renderUI({
+    # Get the number of rows currently displayed after filtering
+    if (!is.null(input$data_table_rows_all)) {
+      total_visible <- length(input$data_table_rows_all)
+      return(HTML(paste0("<span> Download will include ", total_visible, " observsations.</span>")))
+    }
+    return(NULL)
+  })
+  
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
       paste("austraits-", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
-      # Get the current download data
+      # Get the current download data with datatable filtering applied
       data_to_download <- download_data_table()
-
+      
       # Handle NULL or empty data case
       if (is.null(data_to_download) || nrow(data_to_download) == 0) {
         data_to_download <- data.frame(message = "No data selected")
       }
-
+      
+      # Show notification
+      showNotification("Downloading filtered data...",
+                       type = "message",
+                       duration = 3)
+      
       utils::write.csv(data_to_download, file, row.names = FALSE)
     }
   )
