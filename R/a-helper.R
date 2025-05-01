@@ -88,7 +88,8 @@ format_database_for_display <- function(database){
          "scientific_name",
          "taxonomic_dataset"),
       "dataset_id", 
-      "source_primary_citation"
+      "source_primary_citation", 
+      "row_id"
     ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
     dplyr::relocate("source_primary_citation", .after = "method_context_properties") |> 
