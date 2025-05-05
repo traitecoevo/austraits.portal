@@ -10,13 +10,19 @@ has_input_value <- function(input, input_name) {
 
 
 valid_filters <- function(input, exclude_taxon_rank = TRUE){
-  valid_vars <- c(names(austraits))
   
-  if(exclude_taxon_rank){
-    valid_vars <- valid_vars[valid_vars != "taxon_rank"]
-    stringr::str_subset(names(input), paste(valid_vars, collapse = "|"))
-  } else
-  stringr::str_subset(names(input), paste(valid_vars, collapse = "|"))
+  # Get the names of the input variables
+  v <- names(input)
+  # Limit to values in the database
+  v <- v[v %in% names(austraits)]
+  # remove null values
+  v <- v[purrr::map_lgl(v, ~ !is.null(input[[.x]]))]
+  # remove taxon rank if requested
+  if (exclude_taxon_rank) {
+    v <- v[v != "taxon_rank"]
+  }
+
+  v
 }
 
 #' Apply filters
