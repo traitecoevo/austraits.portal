@@ -102,7 +102,7 @@ format_database_for_display <- function(database){
 format_hyperlinks_for_display <- function(database){
   database |> 
   dplyr::mutate(
-    source_primary_citation_URL = str_match(source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
+    source_primary_citation_URL = stringr::str_match(source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
     source_primary_citation = gsub("\\[([^]]+)\\]\\([^)]+\\)", "\\1", source_primary_citation), # Remove DOI MD link structure
     source_primary_citation = gsub("_([^_]+)_", "<i>\\1</i>", source_primary_citation), # Replace MD italics with HTML italics
     source_primary_citation = paste0('<a href="', source_primary_citation_URL, '" target="_blank">', source_primary_citation, '</a>') # Replaces the original source_primary_citation with an HTML version
