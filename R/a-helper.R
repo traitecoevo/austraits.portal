@@ -29,20 +29,19 @@ valid_filters <- function(input, exclude_taxon_rank = TRUE){
 #' @keywords internal
 apply_filters <- function(data = austraits, input){
   
-  # Exclude user inputs that we can't filter on
+  # Generate a list of filter conditions based on the input
   # TODO need to exclude data_table_ prefixes too if column filters enabled
-  valid_filters <- valid_filters(input)
+  filter_conditions <-
+    input |>
+    valid_filters() |>
+    # Construct filter conditions dynamically
+    purrr::map(function(v) {
+      # paste in case value contains more than one item
+      value <- input[[v]] |> paste(collapse = "|") 
+      # formulate the filter condition as an expression
+      expr(stringr::str_detect(.data[[v]], !!value))
+    })
   
-  # Construct filter conditions dynamically
-  filter_conditions <- purrr::map(valid_filters, function(v) {
-    value <- input[[v]] |> paste(collapse = "|")   # paste in case value contains more than one item
-    if (!is.null(value)) {
-      expr(stringr::str_detect(.data[[v]], !!value))  # Dynamically create filter expressions
-    } else {
-      NULL
-    }
-  }) |> purrr::compact()  # Remove NULL conditions
-
   # Combine all filter conditions into a single filter call
   filtered_parquet <- data |> 
     dplyr::filter(!!!filter_conditions)  # Unquote and splice the conditions
