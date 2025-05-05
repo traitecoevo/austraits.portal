@@ -45,8 +45,6 @@ apply_filters <- function(data = austraits, input){
 }
 
 
-
-
 #' Find distinct values for a given variable
 #' @keywords internal
 extract_distinct_values <- function(data, var_name){
@@ -58,9 +56,9 @@ extract_distinct_values <- function(data, var_name){
     dplyr::pull()
 }
 
-#' Format relational database for display
+#' Format flattened database for display
 #' @keywords internal 
-#' @param database traits.build object
+#' @param database flattened traits.build object
 #' @importFrom tidyselect ends_with starts_with
 
 format_database_for_display <- function(database){
@@ -93,8 +91,27 @@ format_database_for_display <- function(database){
     ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
     dplyr::relocate("source_primary_citation", .after = "method_context_properties") |> 
-    dplyr::relocate(c("genus", "family"), .after = "taxon_name") 
+    dplyr::relocate(c("genus", "family"), .after = "taxon_name")
 }
+
+#' Format hyperlinks in flattened database for display
+#' @keywords internal 
+#' @param database flattened traits.build object
+#' @importFrom tidyselect ends_with starts_with
+
+format_hyperlinks_for_display <- function(database){
+  database |> 
+  dplyr::mutate(
+    source_primary_citation_URL = str_match(source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
+    source_primary_citation = gsub("\\[([^]]+)\\]\\([^)]+\\)", "\\1", source_primary_citation), # Remove DOI MD link structure
+    source_primary_citation = gsub("_([^_]+)_", "<i>\\1</i>", source_primary_citation), # Replace MD italics with HTML italics
+    source_primary_citation = paste0('<a href="', source_primary_citation_URL, '" target="_blank">', source_primary_citation, '</a>') # Replaces the original source_primary_citation with an HTML version
+  ) |>
+  dplyr::select(
+    -source_primary_citation_URL
+  ) 
+}
+
 #' Retrieve all assets from a GitHub Release
 #'
 #' @param version_tag The version tag of the GitHub release (e.g., "6.0.0")
