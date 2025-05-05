@@ -28,7 +28,8 @@ austraits_ui <- function() {
           "Family" = "family",
           "Genus" = "genus",
           "Taxon name" = "taxon_name"
-        )
+        ),
+        selected = "family" 
       ),
 
       # Only show this panel if Taxon name is selected
@@ -59,7 +60,8 @@ austraits_ui <- function() {
         selectizeInput("family",
           label = "Family:",
           choices = NULL,
-          multiple = TRUE
+          multiple = TRUE, 
+          selected = "Fabaceae",
         )
       ),
       # Filter by trait information
@@ -223,7 +225,7 @@ austraits_server <- function(input, output, session) {
         session,
         "family",
         choices = family_choices(),
-        selected = NULL,
+        selected = "Fabaceae",
         server = TRUE
       )
     }
