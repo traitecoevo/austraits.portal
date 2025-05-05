@@ -327,8 +327,12 @@ austraits_server <- function(input, output, session) {
       return(NULL)
     }
     
+    
+    # browser()
+    
     # Format the database for display
-    format_database_for_display(filtered_db)
+    format_database_for_display(filtered_db) |> 
+      format_hyperlinks_for_display()
   })
   
   # Set up download data as reactive expression
@@ -352,11 +356,11 @@ austraits_server <- function(input, output, session) {
       display_db_filtered <- display_db[visible_rows, , drop = FALSE]
       
       # Join back up to full dataset to get all columns for only the visible rows
-      return(filtered_db |> semi_join(display_db_filtered, by = "row_id"))
+      return(filtered_db |> dplyr::semi_join(display_db_filtered, by = "row_id"))
     }
     
     # Default: Join back up to full dataset to get all columns
-    filtered_db |> semi_join(display_db, by = "row_id")
+    filtered_db |> dplyr::semi_join(display_db, by = "row_id")
   })
   
   # Render user selected data table output
@@ -369,11 +373,15 @@ austraits_server <- function(input, output, session) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
     
-    # Truncate text columns to 20 characters
+    # Truncate text columns to 20 characters except for source_primary_citation
     display_data_truncated <- display_data
     text_columns <- sapply(display_data, is.character)
+    columns_to_exclude <- c("source_primary_citation")  # Exclude the hyperlink column from truncation
     
     for (col in names(display_data)[text_columns]) {
+      # Skip the source_primary_citation column
+      if (col %in% columns_to_exclude) next
+      
       display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
         if (is.na(x) || is.null(x)) return(x)
         if (nchar(x) > 20) {
@@ -383,12 +391,12 @@ austraits_server <- function(input, output, session) {
         }
       })
     }
-    
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     
     dt <- datatable(
       data = display_data_truncated,
+      escape = FALSE,
       options = list(
         pageLength = 10,
         scrollX = TRUE,
