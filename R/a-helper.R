@@ -29,7 +29,7 @@ apply_filters <- function(data = austraits, input){
   
   # Construct filter conditions dynamically
   filter_conditions <- purrr::map(valid_filters, function(v) {
-    value <- input[[v]]
+    value <- input[[v]] |> paste(collapse = "|")   # paste in case value contains more than one item
     if (!is.null(value)) {
       expr(stringr::str_detect(.data[[v]], !!value))  # Dynamically create filter expressions
     } else {
