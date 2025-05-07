@@ -84,7 +84,8 @@ austraits_server <- function(input, output, session) {
 
       # Apply filters with the input values
       filtered_data <- austraits |>
-        apply_filters(input_values) |>
+        apply_filters_categorical(input_values) |>
+        apply_filters_location(input_values) |> 
         dplyr::collect()
       
       # Store filtered data into reactive value
