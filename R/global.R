@@ -27,8 +27,17 @@ all_taxon_names <- austraits |>
 ### States by location properties
 
 
-### APC distribution - Need APCalign::create_species_state_origin_matrix()
-
+### APC distribution - May need APCalign::create_species_state_origin_matrix()
+all_states_territories <- austraits  |> 
+  extract_distinct_values(taxon_distribution) |> 
+  paste(collapse = ", ")  |> 
+  stringr::str_split(",")  |> 
+  purrr::map(~trimws(.x))  |> 
+  purrr::list_c() |>
+  unique()  |> 
+  stringr::word(1)  |> 
+  unique()  |> 
+  sort()
 
 ## Traits
 ### Unique values of taxon_name

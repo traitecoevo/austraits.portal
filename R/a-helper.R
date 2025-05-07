@@ -43,7 +43,7 @@ apply_filters <- function(data = austraits, input){
 
   # Combine all filter conditions into a single filter call
   filtered_parquet <-   data |>
-    location_filter(input) |>  # Apply spatial filters if they any
+    location_filter(input) |>  # Apply spatial filters if any
     # Apply the filter conditions to the data
     dplyr::filter(!!!filter_conditions)  # Unquote and splice the conditions
   
@@ -59,12 +59,26 @@ location_filter <- function(data = austraits, input){
   if (is.null(input$location)) { # If not, do nothing, return data as is
     return(data)
   }
-      
+    
   # Apply the location filter for georeferenced data
   if (input$location == "georeferenced") {
     data |> 
       dplyr::filter(
         !is.na(.data$`latitude (deg)`) & !is.na(.data$`longitude (deg)`)
+      )
+  }
+  # Apply APC state/territory filter
+  if(input$location == "apc" && is.null(input$apc_taxon_distribution)){
+    return(data)
+  } 
+  
+  if (input$location == "apc" && !is.null(input$apc_taxon_distribution)) { 
+    # TODO: str_detect and collapse OR is a common action we are doing, can we abstract this? 
+    apc_states_selected <- paste(input$apc_taxon_distribution, collapse = "|")
+
+    data |> 
+      dplyr::filter(
+        stringr::str_detect(.data$taxon_distribution, apc_states_selected)
       )
   }
 }

@@ -67,7 +67,8 @@ austraits_server <- function(input, output, session) {
     input$trait_name,
     input$basis_of_record,
     input$life_stage,
-    input$location
+    input$location,
+    input$apc_taxon_distribution
   ), {
     # At start up, we want filters set to false
     valid_filters <- valid_filters(input)
@@ -80,7 +81,7 @@ austraits_server <- function(input, output, session) {
     if (has_filters) {
       # Convert input to a regular list first
       input_values <- reactiveValuesToList(input)
-      
+
       # Apply filters with the input values
       filtered_data <- austraits |>
         apply_filters(input_values) |>
@@ -127,6 +128,7 @@ austraits_server <- function(input, output, session) {
     updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
     updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
     updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
+    updateSelectizeInput(session, "apc_taxon_distribution", choices = all_states_territories, server = TRUE)
     
     # Store nothing in filtered_data()
     filtered_database(NULL)
