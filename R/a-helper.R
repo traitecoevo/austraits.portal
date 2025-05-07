@@ -221,4 +221,4 @@ retrieve_github_release_parquet <- function(version_tag = "6.0.0", output_dir = 
     writeBin(httr2::resp_body_raw(asset_response), output_path)
     message("Asset downloaded successfully: ", output_path)
     return(output_path)
-  }
+}
