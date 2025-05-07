@@ -84,9 +84,9 @@ austraits_ui <- function() {
           "Georeferenced records" = "georeferenced",
           "Enter coordinates" = "enter_coordinates",
           "Recorded state/territory" = "state",
-          "APC distribution" = "APC_state"
+          "APC taxon distribution" = "apc"
         ),
-        selected = character(0)
+        selected = character(0) # No default selection
       ),
       # User chooses to input coordinates
       conditionalPanel(
@@ -99,18 +99,18 @@ austraits_ui <- function() {
         )
       ),
 
-      # State in Location Property
+      # State in APC
       conditionalPanel(
-        condition = 'input.location == "APC_distribution"',
+        condition = 'input.location == "apc"',
         ## By State by APC
-        selectizeInput("APC_state",
+        selectizeInput("apc_taxon_distribution",
           label = "State/territory:",
-          choices = NULL,
+          choices = all_states_territories,
           multiple = TRUE
         )
       ),
 
-      # State by APC
+      # State by state in location property
       conditionalPanel(
         condition = 'input.location == "state"',
         ## By State in Location Property

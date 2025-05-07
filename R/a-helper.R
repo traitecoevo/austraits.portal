@@ -27,7 +27,7 @@ valid_filters <- function(input, exclude_taxon_rank = TRUE){
 
 #' Apply filters
 #' @keywords internal
-apply_filters <- function(data = austraits, input){
+apply_filters_categorical <- function(data = austraits, input){
   
   # Generate a list of filter conditions based on the input
   filter_conditions <-
@@ -42,31 +42,44 @@ apply_filters <- function(data = austraits, input){
     })
 
   # Combine all filter conditions into a single filter call
-  filtered_parquet <-   data |>
-    location_filter(input) |>  # Apply spatial filters if they any
+  data <- data |>
     # Apply the filter conditions to the data
     dplyr::filter(!!!filter_conditions)  # Unquote and splice the conditions
   
-  return(filtered_parquet)
+  return(data)
 }
 
 #' Apply location filters
+#' @param data The data to filter
+#' @param input The input list containing filter values
+#' @return The filtered data. By default, the entire database is returned.
 #' @keywords internal
 #' @noRd 
-
-location_filter <- function(data = austraits, input){
-  # Check if the input has a location filter
-  if (is.null(input$location)) { # If not, do nothing, return data as is
+apply_filters_location <- function(data = austraits, input){
+  
+  if(is.null(input$location)) {
     return(data)
   }
-      
-  # Apply the location filter for georeferenced data
+
+  # georeferenced data: retrieve rows with valid latitude and longitude
   if (input$location == "georeferenced") {
-    data |> 
+    data <- data |> 
       dplyr::filter(
         !is.na(.data$`latitude (deg)`) & !is.na(.data$`longitude (deg)`)
       )
+  } 
+
+  # Taxon distribution: filter for any of the selected states
+  if (input$location == "apc" && !is.null(input$apc_taxon_distribution)) {  
+    apc_states_selected <- paste(input$apc_taxon_distribution, collapse = "|")
+
+    data <- data |> 
+      dplyr::filter(
+        stringr::str_detect(.data$taxon_distribution, apc_states_selected)
+      )
   }
+
+  return(data)
 }
 
 
@@ -208,4 +221,4 @@ retrieve_github_release_parquet <- function(version_tag = "6.0.0", output_dir = 
     writeBin(httr2::resp_body_raw(asset_response), output_path)
     message("Asset downloaded successfully: ", output_path)
     return(output_path)
-  }
+}
