@@ -30,7 +30,6 @@ valid_filters <- function(input, exclude_taxon_rank = TRUE){
 apply_filters <- function(data = austraits, input){
   
   # Generate a list of filter conditions based on the input
-  # TODO need to exclude data_table_ prefixes too if column filters enabled
   filter_conditions <-
     input |>
     valid_filters() |>
@@ -41,12 +40,33 @@ apply_filters <- function(data = austraits, input){
       # formulate the filter condition as an expression
       expr(stringr::str_detect(.data[[v]], !!value))
     })
-  
+
   # Combine all filter conditions into a single filter call
-  filtered_parquet <- data |> 
+  filtered_parquet <-   data |>
+    location_filter(input) |>  # Apply spatial filters if they any
+    # Apply the filter conditions to the data
     dplyr::filter(!!!filter_conditions)  # Unquote and splice the conditions
   
   return(filtered_parquet)
+}
+
+#' Apply location filters
+#' @keywords internal
+#' @noRd 
+
+location_filter <- function(data = austraits, input){
+  # Check if the input has a location filter
+  if (is.null(input$location)) { # If not, do nothing, return data as is
+    return(data)
+  }
+      
+  # Apply the location filter for georeferenced data
+  if (input$location == "georeferenced") {
+    data |> 
+      dplyr::filter(
+        !is.na(.data$`latitude (deg)`) & !is.na(.data$`longitude (deg)`)
+      )
+  }
 }
 
 
@@ -63,13 +83,12 @@ extract_distinct_values <- function(data, var_name){
 
 #' Format flattened database for display
 #' @keywords internal 
+#' @noRd 
 #' @param database flattened traits.build object
 #' @importFrom tidyselect ends_with starts_with
 
 format_database_for_display <- function(database){
   
-#  browser()
-
   database |> 
     dplyr::select(
       -c(ends_with("_id")),
@@ -101,19 +120,19 @@ format_database_for_display <- function(database){
 
 #' Format hyperlinks in flattened database for display
 #' @keywords internal 
+#' @noRd
 #' @param database flattened traits.build object
-#' @importFrom tidyselect ends_with starts_with
 
 format_hyperlinks_for_display <- function(database){
   database |> 
   dplyr::mutate(
-    source_primary_citation_URL = stringr::str_match(source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
-    source_primary_citation = gsub("\\[([^]]+)\\]\\([^)]+\\)", "\\1", source_primary_citation), # Remove DOI MD link structure
-    source_primary_citation = gsub("_([^_]+)_", "<i>\\1</i>", source_primary_citation), # Replace MD italics with HTML italics
-    source_primary_citation = paste0('<a href="', source_primary_citation_URL, '" target="_blank">', source_primary_citation, '</a>') # Replaces the original source_primary_citation with an HTML version
+    source_primary_citation_URL = stringr::str_match(.data$source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
+    source_primary_citation = gsub("\\[([^]]+)\\]\\([^)]+\\)", "\\1", .data$source_primary_citation), # Remove DOI MD link structure
+    source_primary_citation = gsub("_([^_]+)_", "<i>\\1</i>", .data$source_primary_citation), # Replace MD italics with HTML italics
+    source_primary_citation = paste0('<a href="', .data$source_primary_citation_URL, '" target="_blank">', .data$source_primary_citation, '</a>') # Replaces the original source_primary_citation with an HTML version
   ) |>
   dplyr::select(
-    -source_primary_citation_URL
+    -"source_primary_citation_URL"
   ) 
 }
 
