@@ -128,16 +128,21 @@ austraits_server <- function(input, output, session) {
     # Clear the other filters that are not conditional
     updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
     updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
-    updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
+    updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
     updateSelectizeInput(session, "apc_taxon_distribution", choices = all_states_territories, server = TRUE)
     
     # Clear the radio button selection
     updateRadioButtons(session, "location", selected = character(0))
     updateRadioButtons(session, "taxon_rank", selected = character(0))
 
-    # Store nothing in filtered_data()
+    # Set the filtered database to the full austraits dataset
     filtered_database(NULL)
-    
+
+    # Reset the download data to NULL
+  download_data_table <- reactive({
+    NULL
+  })
+ 
     # Reset datatable filters
     if (!is.null(dt_proxy())) {
       DT::replaceData(dt_proxy(), display_data_table())
@@ -159,9 +164,6 @@ austraits_server <- function(input, output, session) {
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
-    
-    # browser()
     
     # Format the database for display
     format_database_for_display(filtered_db) |> 
