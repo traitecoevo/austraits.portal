@@ -1,7 +1,7 @@
 #' User interface (UI) for AusTraits Data Portal
 
 austraits_ui <- function() {
-  ui <- page_navbar(
+  ui <- page_sidebar(
 
     # Set the overall theme of the app
     theme = bs_theme(preset = "flatly"),
@@ -148,8 +148,9 @@ austraits_ui <- function() {
 
     # Data display
     # TODO: Multiple tabs, info tab, graphs? data
-    navset_card_tab(
+    navset_bar(
       id = "main_tabs",
+
       nav_panel(
         title = "Data Preview",
         card(
@@ -169,6 +170,17 @@ austraits_ui <- function() {
             p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
             p("Filtered data will be displayed in the 'Data Preview' tab."),
             p("You can download the filtered data using the 'Download displayed data' button."),
+            tags$a(href = "https://www.austraits.org.au", "AusTraits Website")
+          )
+        )
+      ),
+      nav_panel(
+        title = "Trait View",
+        card(
+          card_header("Information about selected trait"),
+          card_body(
+            fillable = TRUE
+            
           )
         )
       )
