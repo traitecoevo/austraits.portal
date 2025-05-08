@@ -90,14 +90,32 @@ austraits_server <- function(input, output, session) {
       
       # Store filtered data into reactive value
       filtered_database(filtered_data)
-    } else {
+    } 
+    else {
       # No filters selected
-      filtered_database(NULL)
+      filtered_database()
     }
   })
   
   # Clear filters button action
   observeEvent(input$clear_filters, {
+    
+  # Check if any filters are currently applied
+  filters_applied <- !is.null(input$taxon_rank) || 
+                     !is.null(input$trait_name) || 
+                     !is.null(input$basis_of_record) || 
+                     !is.null(input$life_stage) || 
+                     !is.null(input$apc_taxon_distribution) || 
+                     !is.null(input$location)
+  
+  if (!filters_applied) {
+    # Show a notification if no filters are applied
+    showNotification("No filters are currently applied",
+                     type = "warning",
+                     duration = 3)
+    return() # Exit the observer early
+  }
+
     # Based on which filter is currently active
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
@@ -136,7 +154,8 @@ austraits_server <- function(input, output, session) {
     updateRadioButtons(session, "taxon_rank", selected = character(0))
 
     # Set the filtered database to the full austraits dataset
-    filtered_database(NULL)
+    full_database <- austraits |> dplyr::collect()
+    filtered_database(full_database)
 
     # Reset the download data to NULL
   download_data_table <- reactive({
