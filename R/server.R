@@ -131,6 +131,10 @@ austraits_server <- function(input, output, session) {
     updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
     updateSelectizeInput(session, "apc_taxon_distribution", choices = all_states_territories, server = TRUE)
     
+    # Clear the radio button selection
+    updateRadioButtons(session, "location", selected = character(0))
+    updateRadioButtons(session, "taxon_rank", selected = character(0))
+
     # Store nothing in filtered_data()
     filtered_database(NULL)
     

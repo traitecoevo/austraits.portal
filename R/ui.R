@@ -82,8 +82,8 @@ austraits_ui <- function() {
         label = "Filter by which location filter:",
         choices = c(
           "Georeferenced records" = "georeferenced",
-          "Enter coordinates" = "enter_coordinates",
-          "Recorded state/territory" = "state",
+          # "Enter coordinates" = "enter_coordinates",
+          # "Recorded state/territory" = "state",
           "APC taxon distribution" = "apc"
         ),
         selected = character(0) # No default selection
