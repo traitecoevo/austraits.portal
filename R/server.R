@@ -60,7 +60,7 @@ austraits_server <- function(input, output, session) {
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
   
   # Apply Filter
-  observeEvent(list(
+observeEvent(list(
     input$family,
     input$genus,
     input$taxon_name,
@@ -90,13 +90,28 @@ austraits_server <- function(input, output, session) {
       
       # Store filtered data into reactive value
       filtered_database(filtered_data)
-    } 
-    else {
+    } else {
       # No filters selected
-      filtered_database()
+      filtered_database(NULL)
     }
   })
-  
+    
+# Display all data when all taxa are selected
+  observeEvent(
+    input$taxon_rank, {
+    if(input$taxon_rank == "all") {
+      # If not taxonomic rank is selected, show full database
+      full_database <- austraits |> dplyr::collect()
+      filtered_database(full_database)
+    } 
+    else {
+      if (is.null(filtered_database())) {
+        return()
+      }
+    }
+  }
+) 
+
   # Clear filters button action
   observeEvent(input$clear_filters, {
     
@@ -153,14 +168,13 @@ austraits_server <- function(input, output, session) {
     updateRadioButtons(session, "location", selected = character(0))
     updateRadioButtons(session, "taxon_rank", selected = character(0))
 
-    # Set the filtered database to the full austraits dataset
-    full_database <- austraits |> dplyr::collect()
-    filtered_database(full_database)
+    # Set the filtered database to NULL
+    filtered_database(NULL)
 
     # Reset the download data to NULL
-  download_data_table <- reactive({
-    NULL
-  })
+    download_data_table <- reactive({
+      NULL
+    })
  
     # Reset datatable filters
     if (!is.null(dt_proxy())) {

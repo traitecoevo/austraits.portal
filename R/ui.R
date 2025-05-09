@@ -25,6 +25,7 @@ austraits_ui <- function() {
       radioButtons("taxon_rank",
         label = "Filter by which taxon rank:",
         choices = c(
+          "All taxa" = "all",
           "Family" = "family",
           "Genus" = "genus",
           "Taxon name" = "taxon_name"
