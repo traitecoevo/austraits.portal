@@ -60,7 +60,7 @@ austraits_server <- function(input, output, session) {
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
   
   # Apply Filter
-  observeEvent(list(
+observeEvent(list(
     input$family,
     input$genus,
     input$taxon_name,
@@ -95,9 +95,42 @@ austraits_server <- function(input, output, session) {
       filtered_database(NULL)
     }
   })
-  
+    
+# Display all data when all taxa are selected
+  observeEvent(
+    input$taxon_rank, {
+    if(input$taxon_rank == "all") {
+      # If not taxonomic rank is selected, show full database
+      full_database <- austraits |> dplyr::collect()
+      filtered_database(full_database)
+    } 
+    else {
+      if (is.null(filtered_database())) {
+        return()
+      }
+    }
+  }
+) 
+
   # Clear filters button action
   observeEvent(input$clear_filters, {
+    
+  # Check if any filters are currently applied
+  filters_applied <- !is.null(input$taxon_rank) || 
+                     !is.null(input$trait_name) || 
+                     !is.null(input$basis_of_record) || 
+                     !is.null(input$life_stage) || 
+                     !is.null(input$apc_taxon_distribution) || 
+                     !is.null(input$location)
+  
+  if (!filters_applied) {
+    # Show a notification if no filters are applied
+    showNotification("No filters are currently applied",
+                     type = "warning",
+                     duration = 3)
+    return() # Exit the observer early
+  }
+
     # Based on which filter is currently active
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
@@ -128,12 +161,21 @@ austraits_server <- function(input, output, session) {
     # Clear the other filters that are not conditional
     updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
     updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
-    updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
+    updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
     updateSelectizeInput(session, "apc_taxon_distribution", choices = all_states_territories, server = TRUE)
     
-    # Store nothing in filtered_data()
+    # Clear the radio button selection
+    updateRadioButtons(session, "location", selected = character(0))
+    updateRadioButtons(session, "taxon_rank", selected = character(0))
+
+    # Set the filtered database to NULL
     filtered_database(NULL)
-    
+
+    # Reset the download data to NULL
+    download_data_table <- reactive({
+      NULL
+    })
+ 
     # Reset datatable filters
     if (!is.null(dt_proxy())) {
       DT::replaceData(dt_proxy(), display_data_table())
@@ -155,9 +197,6 @@ austraits_server <- function(input, output, session) {
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
-    
-    # browser()
     
     # Format the database for display
     format_database_for_display(filtered_db) |> 
