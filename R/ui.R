@@ -25,6 +25,7 @@ austraits_ui <- function() {
       radioButtons("taxon_rank",
         label = "Filter by which taxon rank:",
         choices = c(
+          "All taxa" = "all",
           "Family" = "family",
           "Genus" = "genus",
           "Taxon name" = "taxon_name"
@@ -82,8 +83,8 @@ austraits_ui <- function() {
         label = "Filter by which location filter:",
         choices = c(
           "Georeferenced records" = "georeferenced",
-          "Enter coordinates" = "enter_coordinates",
-          "Recorded state/territory" = "state",
+          # "Enter coordinates" = "enter_coordinates",
+          # "Recorded state/territory" = "state",
           "APC taxon distribution" = "apc"
         ),
         selected = character(0) # No default selection
