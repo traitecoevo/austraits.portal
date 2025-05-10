@@ -261,7 +261,8 @@ observeEvent(list(
     }
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
-    citation_col <- which(names(display_data_truncated) %in% c("source_primary_citation"))
+    # Hide the row_id column
+    hide_cols <- which(names(display_data_truncated) %in% c("row_id"))
     dt <- datatable(
       data = display_data_truncated,
       escape = FALSE,
@@ -272,7 +273,11 @@ observeEvent(list(
         columnDefs = list(
           list(
             searchable = FALSE, 
-            targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+            targets = no_filter_cols - 1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+          ),
+          list(
+            visible = FALSE,
+            targets = hide_cols - 1 # hide these columns from table view
           )
         ),
         # Add server-side processing for better filtering performance
