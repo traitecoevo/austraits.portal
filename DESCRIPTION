@@ -16,7 +16,12 @@ Authors@R:
              family = "Kar",
              role = "aut",
              email = "f.kar@unsw.edu.au",
-             comment = c(ORCID = "0000-0002-2760-3974"))
+             comment = c(ORCID = "0000-0002-2760-3974")),
+      person(given = "Eve",
+             family = "Miles",
+             role = "aut",
+             email = "e.miles@unsw.edu.au",
+             comment = c(ORCID = "0009-0008-4168-8645"))
              )
 Description: Shiny R package to the AusTraits Plant Traits database.
 License: CC BY 4.0 + file LICENSE
