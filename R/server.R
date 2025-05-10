@@ -241,13 +241,13 @@ observeEvent(list(
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
     
-    # Truncate text columns to 20 characters except for source_primary_citation
+    # Truncate text columns to 20 characters except for column names listed below
     display_data_truncated <- display_data
     text_columns <- sapply(display_data, is.character)
-    columns_to_exclude <- c("source_primary_citation")  # Exclude the hyperlink column from truncation
+    columns_to_exclude <- c("taxon_name", "trait_name", "genus", "family", "source_primary_citation")  # Exclude the hyperlink column from truncation
     
     for (col in names(display_data)[text_columns]) {
-      # Skip the source_primary_citation column
+      # Skip the excluded columns
       if (col %in% columns_to_exclude) next
       
       display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
@@ -261,7 +261,7 @@ observeEvent(list(
     }
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
-    
+    citation_col <- which(names(display_data_truncated) %in% c("source_primary_citation"))
     dt <- datatable(
       data = display_data_truncated,
       escape = FALSE,
@@ -269,16 +269,18 @@ observeEvent(list(
         pageLength = 10,
         scrollX = TRUE,
         searching = FALSE,
-        columnDefs = list(list(searchable = FALSE, 
-                               targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
-        )
+        columnDefs = list(
+          list(
+            searchable = FALSE, 
+            targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+          )
         ),
         # Add server-side processing for better filtering performance
         serverSide = FALSE # Keep this as FALSE for client-side filtering to access filtered rows
       ),
       rownames = FALSE,
       filter = "top",
-      class = "cell-border stripe",
+      class = "cell-border stripe nowrap",
       # Removed selection = 'multiple' option
     )
     
