@@ -268,6 +268,7 @@ observeEvent(list(
       options = list(
         pageLength = 10,
         scrollX = TRUE,
+        searching = FALSE,
         columnDefs = list(list(searchable = FALSE, 
                                targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
         )
@@ -277,7 +278,7 @@ observeEvent(list(
       ),
       rownames = FALSE,
       filter = "top",
-      class = "cell-border stripe"
+      class = "cell-border stripe",
       # Removed selection = 'multiple' option
     )
     
