@@ -37,7 +37,8 @@ Imports:
     stringr,
     tidyselect,
     utils,
-    httr2
+    httr2,
+    commonmark
 Remotes:
   traitecoevo/austraits
 Suggests: 

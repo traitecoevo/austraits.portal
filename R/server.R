@@ -89,8 +89,8 @@ austraits_server <- function(input, output, session) {
         dplyr::collect()
 
       # Generate text on usage and citations
-      # TODO - where is this to go?
       usage_text <- generate_usage_and_citations_text(filtered_data)
+      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text))})
       
       # Export bibtex from the filtered data
       # TODO - this is a placeholder for now. Only needed for the download, Move to correct spot

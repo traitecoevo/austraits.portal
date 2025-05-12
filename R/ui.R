@@ -164,11 +164,19 @@ austraits_ui <- function() {
         card(
           card_header("How to Use the App"),
           card_body(
-            fillable = TRUE,
             p("This application allows users to filter and explore the AusTraits dataset."),
             p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
             p("Filtered data will be displayed in the 'Data Preview' tab."),
             p("You can download the filtered data using the 'Download displayed data' button."),
+          )
+        )
+      ),
+      nav_panel(
+        title = "Citations",
+        card(
+          card_header("Referencing your filtered data"),
+          card_body(
+            htmlOutput("usage_text")
           )
         )
       )
