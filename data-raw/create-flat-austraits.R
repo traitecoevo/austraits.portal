@@ -20,18 +20,5 @@ write_parquet(austraits:::austraits_5.0.0_lite |> flatten_database(), "data/aust
 
 austraits <- arrow::read_parquet("inst/extdata/austraits/austraits-lite.parquet")
 
-# Numeric traits
-traits <- c("leaf_length", "leaf_area", "leaf_mass_per_area", "leaf_nitrogen_content", "leaf_phosphorus_content", "leaf_carbon_content", "leaf_silicon_content", "leaf_stable_isotope_ratio")
-
-x <- estimate_species_trait_means_numerical(austraits, traits)
-
-estimate_species_trait_means_locations(austraits, traits)
-estimate_species_trait_means_floras(austraits, traits)
-
-# Categorical traits
-traits <- c("serotiny", "dispersal_syndrome", "clonal_spread_mechanism", "bud_bank_location")
-
-
-categorical_trait_summary(austraits, traits)
-
-categorical_trait_value_summary(austraits, traits)
+devtools::load_all()
+x <- estimate_species_trait_means(austraits)
