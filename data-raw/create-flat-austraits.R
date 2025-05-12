@@ -15,3 +15,6 @@ write_parquet(flatten_austraits, "data/austraits/austraits-6.0.0-flatten.parquet
 
 ## Save lite version as a parquet
 write_parquet(austraits:::austraits_5.0.0_lite |> flatten_database(), "data/austraits/austraits-lite.parquet")
+
+## Save the bib file
+RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")

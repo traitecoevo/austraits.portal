@@ -92,6 +92,11 @@ austraits_server <- function(input, output, session) {
       # TODO - where is this to go?
       usage_text <- generate_usage_and_citations_text(filtered_data)
       
+      # Export bibtex from the filtered data
+      # TODO - this is a placeholder for now. Only needed for the download, Move to correct spot
+      #keys <- filtered_data$source_primary_key |> unique()
+      #export_bibtex_for_data(keys, filename = "sources.bib")
+
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {

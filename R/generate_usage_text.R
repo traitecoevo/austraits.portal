@@ -35,3 +35,23 @@ References
 
   usage_text
 }
+
+export_bibtex_for_data <- function(keys, filename) {
+
+  refs <- RefManageR::ReadBib(
+    file = "inst/extdata/austraits/sources.bib",
+    check = FALSE,
+    .Encoding = "UTF-8",
+  )
+
+  # Get the bibtex for the keys
+  refs <- refs[keys]
+
+  # Write the bibtex to a file
+  RefManageR::WriteBib(
+    refs,
+    file = filename,
+    .Encoding = "UTF-8",
+    check = FALSE
+  )
+}
