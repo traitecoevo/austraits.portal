@@ -87,6 +87,10 @@ austraits_server <- function(input, output, session) {
         apply_filters_categorical(input_values) |>
         apply_filters_location(input_values) |> 
         dplyr::collect()
+
+      # Generate text on usage and citations
+      # TODO - where is this to go?
+      usage_text <- generate_usage_and_citations_text(filtered_data)
       
       # Store filtered data into reactive value
       filtered_database(filtered_data)
