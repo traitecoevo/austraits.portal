@@ -148,7 +148,6 @@ austraits_ui <- function() {
     ),
 
     # Data display
-    # TODO: Multiple tabs, info tab, graphs? data
     navset_bar(
       id = "main_tabs",
 
@@ -176,17 +175,29 @@ austraits_ui <- function() {
         )
       ),
       nav_panel(
+        title = "Taxon View",
+        card(
+          card_header("Information about selected Taxon"),
+          card_body(
+            fillable = TRUE,
+            p("This panel displays information about the selected taxon."),
+            p("You can view the taxon name, family, and other relevant details."),
+            p("Use the sidebar to filter the data based on different criteria."),
+          )
+        )
+      ),
+      nav_panel(
         title = "Trait View",
         card(
           card_header("Information about selected trait"),
           card_body(
-            fillable = TRUE
-            
+            fillable = TRUE,
+            p("This panel displays information about the selected trait."),
+            p("You can explore the trait data and its distribution across different taxa."),
+            p("Use the sidebar to filter the data based on different criteria."),
           )
         )
       )
     )
   )
 }
-
-
