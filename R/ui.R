@@ -170,7 +170,7 @@ austraits_ui <- function() {
             p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
             p("Filtered data will be displayed in the 'Data Preview' tab."),
             p("You can download the filtered data using the 'Download displayed data' button."),
-            tags$a(href = "https://www.austraits.org.au", "AusTraits Website")
+            tags$a(href = "https://www.austraits.org", "AusTraits Website")
           )
         )
       ),
