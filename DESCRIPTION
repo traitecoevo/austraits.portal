@@ -45,7 +45,9 @@ Imports:
     httr2,
     commonmark,
     zip,
-    htmltools
+    htmltools,
+    jsonlite,
+    RefManageR
 Remotes:
   traitecoevo/austraits
 Suggests: 
