@@ -42,7 +42,12 @@ Imports:
     stringr,
     tidyselect,
     utils,
-    httr2
+    httr2,
+    commonmark,
+    zip,
+    htmltools,
+    jsonlite,
+    RefManageR
 Remotes:
   traitecoevo/austraits
 Suggests: 
