@@ -38,7 +38,9 @@ Imports:
     tidyselect,
     utils,
     httr2,
-    commonmark
+    commonmark,
+    zip,
+    htmltools
 Remotes:
   traitecoevo/austraits
 Suggests: 

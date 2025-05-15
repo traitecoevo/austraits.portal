@@ -10,6 +10,9 @@ austraits_server <- function(input, output, session) {
   
   # New reactive value to store datatable filter state
   dt_proxy <- reactiveVal(NULL)
+
+  # Contains the data usage text 
+  usage_text <- reactiveVal(NULL)
   
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
@@ -88,14 +91,8 @@ austraits_server <- function(input, output, session) {
         apply_filters_location(input_values) |> 
         dplyr::collect()
 
-      # Generate text on usage and citations
-      usage_text <- generate_usage_and_citations_text(filtered_data)
-      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text))})
-      
-      # Export bibtex from the filtered data
-      # TODO - this is a placeholder for now. Only needed for the download, Move to correct spot
-      #keys <- filtered_data$source_primary_key |> unique()
-      #export_bibtex_for_data(keys, filename = "sources.bib")
+      usage_text(generate_usage_and_citations_text(filtered_data))
+      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
 
       # Store filtered data into reactive value
       filtered_database(filtered_data)
@@ -262,7 +259,7 @@ austraits_server <- function(input, output, session) {
     # Get the number of rows currently displayed after filtering
     if (!is.null(input$data_table_rows_all)) {
       total_visible <- length(input$data_table_rows_all)
-      return(HTML(paste0("<span> Download will include ", total_visible, " observsations.</span>")))
+      return(HTML(paste0("<span> Download will include ", total_visible, " observations.</span>")))
     }
     return(NULL)
   })
@@ -270,23 +267,53 @@ austraits_server <- function(input, output, session) {
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
-      paste("austraits-", Sys.Date(), ".csv", sep = "")
+      paste("austraits-", Sys.Date(), ".zip", sep = "")
     },
     content = function(file) {
+      # Create a temporary directory that will hold the zip file contents
+      # A new temp directory is made since the one returned by tempdir() is in use
+      # by other libraries
+      tmpdir = tempfile(pattern="tempdir", fileext = ".dir")
+      dir.create(tmpdir)
+      csv_file <- file.path(tmpdir, "austraits-data.csv")
+      bib_file <- file.path(tmpdir, "sources.bib")
+      html_file <- file.path(tmpdir, "usage.html")
+
       # Get the current download data with datatable filtering applied
       data_to_download <- download_data_table()
-      
+
       # Handle NULL or empty data case
       if (is.null(data_to_download) || nrow(data_to_download) == 0) {
         data_to_download <- data.frame(message = "No data selected")
       }
-      
+
+      # Download austraits data
+      utils::write.csv(data_to_download, csv_file, row.names = FALSE)
+
+      # Export bibtex from the filtered data
+      keys <- data_to_download$source_primary_key |> unique()
+      export_bibtex_for_data(keys, filename = bib_file)
+
+      # Update the usage text and convert to html
+      usage_text(generate_usage_and_citations_text(data_to_download))
+      html_usage <- HTML(commonmark::markdown_html(usage_text()))
+      htmltools::save_html(html_usage, html_file)
+
       # Show notification
       showNotification("Downloading filtered data...",
                        type = "message",
                        duration = 3)
-      
-      utils::write.csv(data_to_download, file, row.names = FALSE)
-    }
+
+
+      zip::zip(
+        zipfile = file, 
+        files = list.files(tmpdir, full.names = TRUE), 
+        mode = "cherry-pick"
+      )
+
+      # Clean up temporary directory
+      unlink(tmpdir, recursive = TRUE)
+    },
+    contentType = "application/zip"
   )
 }
