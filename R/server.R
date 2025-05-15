@@ -63,7 +63,7 @@ austraits_server <- function(input, output, session) {
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
   
   # Apply Filter
-  observeEvent(list(
+observeEvent(list(
     input$family,
     input$genus,
     input$taxon_name,
@@ -101,9 +101,42 @@ austraits_server <- function(input, output, session) {
       filtered_database(NULL)
     }
   })
-  
+    
+# Display all data when all taxa are selected
+  observeEvent(
+    input$taxon_rank, {
+    if(input$taxon_rank == "all") {
+      # If not taxonomic rank is selected, show full database
+      full_database <- austraits |> dplyr::collect()
+      filtered_database(full_database)
+    } 
+    else {
+      if (is.null(filtered_database())) {
+        return()
+      }
+    }
+  }
+) 
+
   # Clear filters button action
   observeEvent(input$clear_filters, {
+    
+  # Check if any filters are currently applied
+  filters_applied <- !is.null(input$taxon_rank) || 
+                     !is.null(input$trait_name) || 
+                     !is.null(input$basis_of_record) || 
+                     !is.null(input$life_stage) || 
+                     !is.null(input$apc_taxon_distribution) || 
+                     !is.null(input$location)
+  
+  if (!filters_applied) {
+    # Show a notification if no filters are applied
+    showNotification("No filters are currently applied",
+                     type = "warning",
+                     duration = 3)
+    return() # Exit the observer early
+  }
+
     # Based on which filter is currently active
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
@@ -134,12 +167,21 @@ austraits_server <- function(input, output, session) {
     # Clear the other filters that are not conditional
     updateSelectizeInput(session, "trait_name", choices = all_traits, server = TRUE)
     updateSelectizeInput(session, "basis_of_record", choices = all_bor, server = TRUE)
-    updateSelectizeInput(session, "lifestage", choices = all_age, server = TRUE)
+    updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
     updateSelectizeInput(session, "apc_taxon_distribution", choices = all_states_territories, server = TRUE)
     
-    # Store nothing in filtered_data()
+    # Clear the radio button selection
+    updateRadioButtons(session, "location", selected = character(0))
+    updateRadioButtons(session, "taxon_rank", selected = character(0))
+
+    # Set the filtered database to NULL
     filtered_database(NULL)
-    
+
+    # Reset the download data to NULL
+    download_data_table <- reactive({
+      NULL
+    })
+ 
     # Reset datatable filters
     if (!is.null(dt_proxy())) {
       DT::replaceData(dt_proxy(), display_data_table())
@@ -161,9 +203,6 @@ austraits_server <- function(input, output, session) {
     if (is.null(filtered_db)) {
       return(NULL)
     }
-    
-    
-    # browser()
     
     # Format the database for display
     format_database_for_display(filtered_db) |> 
@@ -208,13 +247,13 @@ austraits_server <- function(input, output, session) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
     
-    # Truncate text columns to 20 characters except for source_primary_citation
+    # Truncate text columns to 20 characters except for column names listed below
     display_data_truncated <- display_data
     text_columns <- sapply(display_data, is.character)
-    columns_to_exclude <- c("source_primary_citation")  # Exclude the hyperlink column from truncation
+    columns_to_exclude <- c("taxon_name", "trait_name", "genus", "family", "source_primary_citation")  # Exclude the hyperlink column from truncation
     
     for (col in names(display_data)[text_columns]) {
-      # Skip the source_primary_citation column
+      # Skip the excluded columns
       if (col %in% columns_to_exclude) next
       
       display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
@@ -228,23 +267,31 @@ austraits_server <- function(input, output, session) {
     }
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
-    
+    # Hide the row_id column
+    hide_cols <- which(names(display_data_truncated) %in% c("row_id"))
     dt <- datatable(
       data = display_data_truncated,
       escape = FALSE,
       options = list(
         pageLength = 10,
         scrollX = TRUE,
-        columnDefs = list(list(searchable = FALSE, 
-                               targets = no_filter_cols-1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
-        )
+        searching = FALSE,
+        columnDefs = list(
+          list(
+            searchable = FALSE, 
+            targets = no_filter_cols - 1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+          ),
+          list(
+            visible = FALSE,
+            targets = hide_cols - 1 # hide these columns from table view
+          )
         ),
         # Add server-side processing for better filtering performance
         serverSide = FALSE # Keep this as FALSE for client-side filtering to access filtered rows
       ),
       rownames = FALSE,
       filter = "top",
-      class = "cell-border stripe"
+      class = "cell-border stripe nowrap",
       # Removed selection = 'multiple' option
     )
     
