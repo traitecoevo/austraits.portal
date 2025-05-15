@@ -17,5 +17,10 @@ Authors:
   \item Fonti Kar \email{f.kar@unsw.edu.au} (\href{https://orcid.org/0000-0002-2760-3974}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Eve Miles \email{e.miles@unsw.edu.au} (\href{https://orcid.org/0009-0008-4168-8645}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}

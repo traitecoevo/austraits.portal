@@ -1,4 +1,18 @@
 
+#' Generate Usage and Citations Text
+#'
+#' Generates formatted text for usage instructions and citation information based on the selected data
+#'
+#' @param data A data object containing from which references are sourced, needed to generate usage and citation text.
+#'
+#' @return A character string with formatted usage and citation details.
+#'
+#' @examples
+#' \dontrun{
+#'   usage_text <- generate_usage_and_citations_text(my_data)
+#'   cat(usage_text)
+#' }
+#' @export
 generate_usage_and_citations_text <- function(data) {
 
   # Extract the version of the package
@@ -36,14 +50,27 @@ References
   usage_text
 }
 
-export_bibtex_for_data <- function(keys, filename) {
-
-  refs <- RefManageR::ReadBib(
-    file = "inst/extdata/austraits/sources.bib",
-    check = FALSE,
-    .Encoding = "UTF-8",
-  )
-
+#' Export BibTeX Entries for Data
+#'
+#' Exports BibTeX entries corresponding to the provided keys to a specified file.
+#'
+#' @param keys A character vector of BibTeX entry keys to export.
+#' @param filename A string specifying the path to the output file where the BibTeX entries will be saved.
+#' @param refs A BibTeX object containing the references. This is typically read from a file.
+#' @return Invisibly returns \code{NULL}. The function is called for its side effect of writing to a file.
+#'
+#' @examples
+#' \dontrun{
+#' export_bibtex_for_data(c("key1", "key2"), "output.bib")
+#' }
+#'
+#' @export
+export_bibtex_for_data <- function(keys, filename, 
+    refs = 
+        RefManageR::ReadBib(
+        file = "inst/extdata/austraits/sources.bib",
+        check = FALSE, .Encoding = "UTF-8")
+) {
   # Get the bibtex for the keys
   refs <- refs[keys]
 
