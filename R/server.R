@@ -186,6 +186,9 @@ observeEvent(list(
     if (!is.null(dt_proxy())) {
       DT::replaceData(dt_proxy(), display_data_table())
     }
+
+    # Reset the usage text
+    usage_text(NULL)
     
     # Show notification
     showNotification("Filters have been cleared",
