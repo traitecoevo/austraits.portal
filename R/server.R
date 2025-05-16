@@ -138,11 +138,9 @@ observeEvent(list(
                     input$taxon_rank,
                     input$taxon_name
   ), {
-    # Hold the filtered data    
-    data <- filtered_database()
-
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
+
       # Check if taxon_rank is "taxon_name"
       if (!input$taxon_rank == "taxon_name") {
           showNotification(
@@ -168,8 +166,26 @@ observeEvent(list(
           duration = 5
         )
       }
-    # Generate Taxon View text    
-     else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1 && nrow(data) > 0) {
+
+# Generate Taxon View text if passes all checks
+    else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
+      
+      # Get the filtered data    
+      data <- filtered_database()
+      
+      # Check if data is NULL or if user has manually cleared filters
+      if (is.null(data)) {
+        # Apply a filter just for this taxon to generate the taxon view
+        data <- austraits |>
+          apply_filters_categorical(input) |>
+          dplyr::collect()
+        
+        # Update the filtered_database reactive
+        filtered_database(data)
+      }
+      
+      # Now we can use the data (whether it was already filtered or we just created it)
+      if (nrow(data) > 0) {
         # Generate the taxon text
         taxon_text(generate_taxon_text(data, input$taxon_name))
         output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
@@ -182,6 +198,7 @@ observeEvent(list(
         )
       }
     }
+  }
 }, ignoreInit = TRUE)
 
   # Clear filters button action
