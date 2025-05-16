@@ -2,7 +2,7 @@
 
 generate_taxon_text <- function(data, taxon) {
 
-  portal_links <- generate_taxon_portal_links(taxon_name)
+#  data <- austraits 
 
   data_taxon <- data |>
     dplyr::filter(taxon_name == taxon)
@@ -10,6 +10,8 @@ generate_taxon_text <- function(data, taxon) {
   taxon_info <- data_taxon |>
     dplyr::select(taxon_name, taxon_distribution, taxon_rank:aligned_name_taxonomic_status) |>
     dplyr::slice(1) |> as.list()
+
+  portal_links <- generate_taxon_portal_links(taxon_info)
 
   taxon_description <- 
     sprintf(
@@ -72,16 +74,16 @@ Download: [full data (csv)](%s), [summary table (csv)](%s)
 
 # ▶ Stems
 
-generate_taxon_portal_links <- function(taxon_name) {
+generate_taxon_portal_links <- function(taxon_info) {
   # Generate links to other portals
   dplyr::tribble(
     ~source, ~url,
     "APC", taxon_info$taxon_id,
-    "NSW Flora", sprintf("https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?page=nswfl&lvl=sp&name=%s", gsub(" ", "~", taxon_name)),
+    "NSW Flora", sprintf("https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?page=nswfl&lvl=sp&name=%s", gsub(" ", "~", taxon_info$taxon_name)),
     "Vic Flora", "https://vicflora.rbg.vic.gov.au/flora/taxon/",
-    "Flora of Australia", sprintf("https://profiles.ala.org.au/opus/foa/profile/%s", gsub(" ", "%20", taxon_name)),
+    "Flora of Australia", sprintf("https://profiles.ala.org.au/opus/foa/profile/%s", gsub(" ", "%20", taxon_info$taxon_name)),
     "ALA", sprintf("https://bie.ala.org.au/species/%s", taxon_info$taxon_id),
-    "iNaturalist", sprintf("https://www.inaturalist.org/taxa/search?q=%s", gsub(" ", "-", taxon_name))
+    "iNaturalist", sprintf("https://www.inaturalist.org/taxa/search?q=%s", gsub(" ", "-", taxon_info$taxon_name))
   )
 }
 
