@@ -126,6 +126,44 @@ observeEvent(list(
   }
 ) 
 
+  # Check the taxon_name selection (input$taxon_name) when switching to "Taxon View" tab
+  observeEvent(list(
+                    input$main_tabs,
+                    input$taxon_rank,
+                    input$taxon_name
+  ), {
+    # browser()
+
+    # Check if the current tab is "Taxon View"
+    if (input$main_tabs == "Taxon View") {
+      # Check if taxon_rank is "taxon_name"
+      if (!input$taxon_rank == "taxon_name") {
+          showNotification(
+            "Only a single taxon name can be used for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+      
+      # Check if taxon_name is NULL (nothing selected)
+      else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+        showNotification(
+          "Please select a single taxon name for Taxon View",
+          type = "warning",
+          duration = 5
+        )
+      }
+      # Check if multiple taxa are selected
+      else if (length(input$taxon_name) > 1) {
+        showNotification(
+          "Please select only one taxon for Taxon View",
+          type = "warning",
+          duration = 5
+        )
+      }
+    }
+  }, ignoreInit = TRUE)
+
   # Clear filters button action
   observeEvent(input$clear_filters, {
     

@@ -18,7 +18,6 @@ write_parquet(austraits:::austraits_5.0.0_lite |> flatten_database(), "data/aust
 
 ## Save the bib file
 RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")
-
 ## Create species means
 austraits <- arrow::read_parquet("inst/extdata/austraits/austraits-lite.parquet")
 
