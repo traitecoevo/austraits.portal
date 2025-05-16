@@ -176,6 +176,7 @@ austraits_ui <- function() {
       nav_panel(
         title = "Taxon View",
         card(
+          card_header("AusTraits trait profile"),
           card_body(
             htmlOutput("taxon_text"),
           )

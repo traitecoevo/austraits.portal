@@ -1,9 +1,19 @@
 
-
+#' Generate Text Summary for a Taxon
+#'
+#' Creates a textual summary for a specified taxon based on the provided data.
+#'
+#' @param data A data frame or tibble containing taxonomic and trait information.
+#' @param taxon A character string specifying the name of the taxon to summarize.
+#'
+#' @return A character string containing the generated summary for the specified taxon.
+#'
+#' @examples
+#' \dontrun{
+#' generate_taxon_text(austraits_data, "Eucalyptus globulus")
+#' }
 generate_taxon_text <- function(data, taxon) {
 
-#  data <- austraits
-  
   data_taxon <- data |>
     dplyr::filter(taxon_name == taxon)
 
@@ -12,10 +22,13 @@ generate_taxon_text <- function(data, taxon) {
     dplyr::slice(1) |>
     as.list()
 
+  # Generate links to other portals
   portal_links <- generate_taxon_portal_links(taxon_info)
 
+  # Calculate trait means for the taxon
   data_taxon_trait_means <- suppressWarnings(estimate_species_trait_means(data_taxon))
 
+  # Load trait links and merge with trait means
   trait_info_all <- 
     readr::read_csv(
     "inst/extdata/austraits/trait_groups_for_portal.csv",
@@ -28,13 +41,14 @@ generate_taxon_text <- function(data, taxon) {
 
   trait_info_na <- trait_info_all |> dplyr::filter(!data_available)
   
+  # Generate the trait information for display, for those with data
   trait_info_have_data <- 
     trait_info_all |> 
     dplyr::filter(data_available) |> 
     dplyr::mutate(text = 
       ifelse(type == "categorical", 
-        sprintf("- [%s](%s): %s [%s]", trait_name, Entity, value_count, dataset_id),
-        sprintf("- [%s](%s): %s (%s-%s)[%s]", trait_name, Entity, value_mean, value_min, value_max, dataset_id)
+        sprintf("- [%s](%s) (categorical): %s  [sources: %s]", trait_name, Entity, value_count, dataset_id),
+        sprintf("- [%s](%s) (numerical): %s (%s-%s)  [sources: %s]", trait_name, Entity, value_mean, value_min, value_max, dataset_id)
       )) |>
     dplyr::group_by(trait_group_for_portal, core_trait) |>
     dplyr::summarise(
@@ -62,10 +76,10 @@ generate_taxon_text <- function(data, taxon) {
     dplyr::relocate(reference, .after = text) |>
     dplyr::arrange(desc(n_records))
 
-
+  # Generate the taxon description for display
   taxon_description <- 
     sprintf(
-"## %s AusTraits trait profile 
+"## %s
 
 **FAMILY** %s
 
@@ -83,6 +97,9 @@ generate_taxon_text <- function(data, taxon) {
 **Summary**: AusTraits contains %s traits from %s records in %s datasets.<br>
 
 **Traits by category** (click to expand):<br>
+
+- For categorical traits, the number of records for each value is shown. For numerical traits, the mean and range are shown.<br>
+
 %s
 
 ## Sources 
@@ -105,15 +122,17 @@ generate_taxon_text <- function(data, taxon) {
   sources <- 
     data_taxon_summary_dataset |>
     dplyr::mutate(
+      # convert reference column to html
       reference = purrr::map_chr(reference,     
           ~commonmark::markdown_html(.x) )
     ) |>
     dplyr::select(-text) |>
+    # convert to html
     kableExtra::kable(format = "html") |>
     kableExtra::kable_styling("striped", full_width = F) |>
     kableExtra::column_spec(1, width = "10em") |>
     kableExtra::column_spec(2, width = "5em") |>
-    # 
+    # Clean up html
     stringr::str_remove_all("<p>") |> 
     stringr::str_remove_all("</p>") |>
     stringr::str_replace_all("&lt;", "<") |>
@@ -122,7 +141,9 @@ generate_taxon_text <- function(data, taxon) {
   c(taxon_description, sources)
 }
 
-
+#' Generate Portal Links for a Taxon
+#' @keywords internal
+#' @noRd 
 generate_taxon_portal_links <- function(taxon_info) {
   # Generate links to other portals
   dplyr::tribble(
