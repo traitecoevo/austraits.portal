@@ -26,11 +26,11 @@ library(knitr)
 library(kableExtra)
 library(tidyverse)
 
-austraits <- readRDS("C:/Users/z3524079/Documents/GitHub/austraits.portal/ignore/austraits.rds")
+austraits <- readRDS("C:/Users/Lizzy/Documents/GitHub/austraits.portal/ignore/austraits.rds")
 
 my_kable_styling <- util_kable_styling_html
 
-trait <- "photosynthetic_pathway"
+trait <- "leaf_area"
 trait_data <- extract_trait(austraits, trait, partial_matches_allowed = F)
 trait_data_flat <- austraits::flatten_database(trait_data)
 trait_definition <- austraits$definitions[[trait]]
@@ -60,28 +60,21 @@ Some additional information about this trait:
 
 - **additional comments**: `r trait_definition$comments`
 
-
-
 ```{r, echo=FALSE, message=FALSE}
 if(isTRUE(traits_numeric == trait)) {
   
-  writeLines(
-    sprintf("- **units**: %s", trait_definition$units)
-  )
+  writeLines(sprintf("- **units**: %s", trait_definition$units))
   
-  writeLines(
-    sprintf("- **allowable range**: %s -  %s %s", trait_definition$allowed_values_min, trait_definition$allowed_values_max, trait_definition$units)
-  )
+  writeLines(sprintf("- **allowable range**: %s -  %s %s\n", trait_definition$allowed_values_min, trait_definition$allowed_values_max, trait_definition$units))
 
 }
 ```
-  
   
 - **categorical trait values**:
 
 ```{r, echo=FALSE, message=FALSE}
 if(isTRUE(traits_categorical == trait)) {
-
+  
 trait_definition$allowed_values_levels %>% 
   traits.build::convert_list_to_df1() %>% 
   rename(description = value, value = key) %>%
@@ -93,7 +86,7 @@ trait_definition$allowed_values_levels %>%
 
 See the AusTraits Plant Dictionary (`r trait_definition$entity_URI`) for additional information about this trait.
 
-Visualising data records across families indicates the taxonomic breadth of information for this trait.
+Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait.
 
 ```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE, fig.height=10, fig.width=6, eval=TRUE}
 if(isTRUE(traits_numeric == trait)) {
@@ -117,12 +110,22 @@ if(isTRUE(traits_categorical == trait)) {
     group_by(family, taxon_name, value) %>%
     mutate(counts = n()) %>%
     ungroup() %>%
-    distinct(family, taxon_name, value, counts)
+    distinct(family, taxon_name, value, counts) %>%
+    tidyr::pivot_wider(names_from = value, values_from = counts)
+  
+  trait_data_tmp <- trait_data_tmp %>%
+    mutate(
+      across(where(is.numeric), ~replace_na(., 0)),
+      total = (rowSums(across(3:length(trait_data_tmp)), na.rm = TRUE)),
+      across(3:length(trait_data_tmp), ~.x/total)
+    ) %>%
+    select(-total) %>%
+    tidyr::pivot_longer(cols = 3:length(trait_data_tmp))
   
   most_common_families <- trait_data_tmp %>%
     select(-taxon_name) %>%
     group_by(family) %>%
-    mutate(counts_per_value = sum(counts)) %>%
+    mutate(counts_per_value = sum(value)) %>%
     ungroup() %>%
     distinct(family, counts_per_value) %>%
     arrange(-counts_per_value) %>%
@@ -131,20 +134,18 @@ if(isTRUE(traits_categorical == trait)) {
   plotdata1 <- trait_data_tmp %>%
     select(-taxon_name) %>%
     filter(family %in% most_common_families$family) %>%
-    group_by(family, value) %>%
-    mutate(counts_per_value = sum(counts)) %>%
+    group_by(family, name) %>%
+    mutate(counts_per_value = sum(value)) %>%
     ungroup() %>%
-    distinct(family, value, counts_per_value) %>%
-    tidyr::pivot_wider(names_from = value, values_from = counts_per_value)
+    distinct(family, name, counts_per_value) %>%
+    tidyr::pivot_wider(names_from = name, values_from = counts_per_value)
   
   plotdata1 <- plotdata1 %>%
     mutate(
       across(where(is.numeric), ~replace_na(., 0)),
-      total = (rowSums(across(2:length(plotdata1)), na.rm = TRUE)),
-      prop = .[[2]]/total
+      total = (rowSums(across(2:length(plotdata1)), na.rm = TRUE))
       ) %>%
-    select(-prop) %>%
-    select(total, everything()) 
+    select(family, total, everything())
   
   plotdata2 <- plotdata1 %>%
     tidyr::pivot_longer(cols=3:length(plotdata1)) %>%
@@ -182,7 +183,11 @@ if(isTRUE(traits_categorical == trait)) {
   theme_minimal() +
     theme(
       axis.line.y = element_blank(),
-      axis.text.x = element_text(angle = 45, hjust = 1)
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.y = element_line(size = 0.05)
     )
 }
 ```
