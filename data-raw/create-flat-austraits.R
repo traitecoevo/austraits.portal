@@ -22,3 +22,7 @@ austraits <- arrow::read_parquet("inst/extdata/austraits/austraits-lite.parquet"
 
 devtools::load_all()
 x <- estimate_species_trait_means(austraits)
+
+## Save the bib file
+RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")
+
