@@ -178,10 +178,7 @@ austraits_ui <- function() {
         card(
           card_header("Information about selected Taxon"),
           card_body(
-            fillable = TRUE,
-            p("This panel displays information about the selected taxon."),
-            p("You can view the taxon name, family, and other relevant details."),
-            p("Use the sidebar to filter the data based on different criteria."),
+            htmlOutput("taxon_text"),
           )
         )
       ),

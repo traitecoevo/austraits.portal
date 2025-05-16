@@ -14,6 +14,9 @@ austraits_server <- function(input, output, session) {
   # Contains the data usage text 
   usage_text <- reactiveVal(NULL)
   
+  # Contains the taxon text
+  taxon_text <- reactiveVal(NULL)
+
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
     all_taxon_names
@@ -93,6 +96,11 @@ observeEvent(list(
 
       usage_text(generate_usage_and_citations_text(filtered_data))
       output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
+
+      taxon_text(generate_taxon_text(filtered_data, filtered_data$taxon_name[1]))
+      output$taxon_text <- renderUI({
+        HTML(commonmark::markdown_html(taxon_text()))
+      })
 
       # Store filtered data into reactive value
       filtered_database(filtered_data)
