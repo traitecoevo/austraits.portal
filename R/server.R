@@ -33,6 +33,17 @@ austraits_server <- function(input, output, session) {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
     
+    # First, clear the Fabaceae selection from family if switching to another rank
+    if (input$taxon_rank != "family") {
+      updateSelectizeInput(
+        session,
+        "family",
+        choices = family_choices(),
+        selected = NULL,
+        server = TRUE
+      )
+    }
+    # Then update the appropriate input based on selected rank
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
