@@ -1,7 +1,7 @@
 #' User interface (UI) for AusTraits Data Portal
 
 austraits_ui <- function() {
-  ui <- page_navbar(
+  ui <- page_sidebar(
 
     # Set the overall theme of the app
     theme = bs_theme(preset = "flatly"),
@@ -148,9 +148,9 @@ austraits_ui <- function() {
     ),
 
     # Data display
-    # TODO: Multiple tabs, info tab, graphs? data
-    navset_card_tab(
+    navset_bar(
       id = "main_tabs",
+
       nav_panel(
         title = "Data Preview",
         card(
@@ -165,16 +165,44 @@ austraits_ui <- function() {
         card(
           card_header("How to Use the App"),
           card_body(
-            fillable = TRUE,
             p("This application allows users to filter and explore the AusTraits dataset."),
             p("Use the sidebar to apply filters based on taxonomy, traits, location, and additional criteria."),
             p("Filtered data will be displayed in the 'Data Preview' tab."),
             p("You can download the filtered data using the 'Download displayed data' button."),
+            tags$a(href = "https://www.austraits.org.au", "AusTraits Website")
+          )
+        )
+      ),
+      nav_panel(
+        title = "Taxon View",
+        card(
+          card_header("Information about selected Taxon"),
+          card_body(
+            htmlOutput("taxon_text"),
+          )
+        )
+      ),
+      nav_panel(
+        title = "Trait View",
+        card(
+          card_header("Information about selected trait"),
+          card_body(
+            fillable = TRUE,
+            p("This panel displays information about the selected trait."),
+            p("You can explore the trait data and its distribution across different taxa."),
+            p("Use the sidebar to filter the data based on different criteria."),
+          )
+        )
+      ),
+      nav_panel(
+        title = "Citations",
+        card(
+          card_header("Referencing your filtered data"),
+          card_body(
+            htmlOutput("usage_text")
           )
         )
       )
     )
   )
 }
-
-

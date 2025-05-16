@@ -10,7 +10,13 @@ austraits_server <- function(input, output, session) {
   
   # New reactive value to store datatable filter state
   dt_proxy <- reactiveVal(NULL)
+
+  # Contains the data usage text 
+  usage_text <- reactiveVal(NULL)
   
+  # Contains the taxon text
+  taxon_text <- reactiveVal(NULL)
+
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
     all_taxon_names
@@ -27,6 +33,17 @@ austraits_server <- function(input, output, session) {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
     
+    # First, clear the Fabaceae selection from family if switching to another rank
+    if (input$taxon_rank != "family") {
+      updateSelectizeInput(
+        session,
+        "family",
+        choices = family_choices(),
+        selected = NULL,
+        server = TRUE
+      )
+    }
+    # Then update the appropriate input based on selected rank
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
@@ -87,7 +104,10 @@ observeEvent(list(
         apply_filters_categorical(input_values) |>
         apply_filters_location(input_values) |> 
         dplyr::collect()
-      
+
+      usage_text(generate_usage_and_citations_text(filtered_data))
+      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
+
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
@@ -111,6 +131,58 @@ observeEvent(list(
     }
   }
 ) 
+
+  # Check the taxon_name selection (input$taxon_name) when switching to "Taxon View" tab
+  observeEvent(list(
+                    input$main_tabs,
+                    input$taxon_rank,
+                    input$taxon_name
+  ), {
+    # Hold the filtered data    
+    data <- filtered_database()
+
+    # Check if the current tab is "Taxon View"
+    if (input$main_tabs == "Taxon View") {
+      # Check if taxon_rank is "taxon_name"
+      if (!input$taxon_rank == "taxon_name") {
+          showNotification(
+            "Only a single taxon name can be used for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+      
+      # Check if taxon_name is NULL (nothing selected)
+    else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+        showNotification(
+          "Please select a single taxon name for Taxon View",
+          type = "warning",
+          duration = 5
+        )
+      }
+      # Check if multiple taxa are selected
+    else if (length(input$taxon_name) > 1) {
+        showNotification(
+          "Please select a single taxon name for Taxon View",
+          type = "warning",
+          duration = 5
+        )
+      }
+    # Generate Taxon View text    
+     else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1 && nrow(data) > 0) {
+        # Generate the taxon text
+        taxon_text(generate_taxon_text(data, input$taxon_name))
+        output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
+      } else {
+        # If no data is available, show a notification
+        showNotification(
+          "No data available for the selected taxon name",
+          type = "warning",
+          duration = 5
+        )
+      }
+    }
+}, ignoreInit = TRUE)
 
   # Clear filters button action
   observeEvent(input$clear_filters, {
@@ -180,6 +252,9 @@ observeEvent(list(
     if (!is.null(dt_proxy())) {
       DT::replaceData(dt_proxy(), display_data_table())
     }
+
+    # Reset the usage text
+    usage_text(NULL)
     
     # Show notification
     showNotification("Filters have been cleared",
@@ -300,7 +375,7 @@ observeEvent(list(
     # Get the number of rows currently displayed after filtering
     if (!is.null(input$data_table_rows_all)) {
       total_visible <- length(input$data_table_rows_all)
-      return(HTML(paste0("<span> Download will include ", total_visible, " observsations.</span>")))
+      return(HTML(paste0("<span> Download will include ", total_visible, " observations.</span>")))
     }
     return(NULL)
   })
@@ -308,23 +383,53 @@ observeEvent(list(
   # Download handler
   output$download_data <- downloadHandler(
     filename = function() {
-      paste("austraits-", Sys.Date(), ".csv", sep = "")
+      paste("austraits-", Sys.Date(), ".zip", sep = "")
     },
     content = function(file) {
+      # Create a temporary directory that will hold the zip file contents
+      # A new temp directory is made since the one returned by tempdir() is in use
+      # by other libraries
+      tmpdir = tempfile(pattern="tempdir", fileext = ".dir")
+      dir.create(tmpdir)
+      csv_file <- file.path(tmpdir, "austraits-data.csv")
+      bib_file <- file.path(tmpdir, "sources.bib")
+      html_file <- file.path(tmpdir, "usage.html")
+
       # Get the current download data with datatable filtering applied
       data_to_download <- download_data_table()
-      
+
       # Handle NULL or empty data case
       if (is.null(data_to_download) || nrow(data_to_download) == 0) {
         data_to_download <- data.frame(message = "No data selected")
       }
-      
+
+      # Download austraits data
+      utils::write.csv(data_to_download, csv_file, row.names = FALSE)
+
+      # Export bibtex from the filtered data
+      keys <- data_to_download$source_primary_key |> unique()
+      export_bibtex_for_data(keys, filename = bib_file)
+
+      # Update the usage text and convert to html
+      usage_text(generate_usage_and_citations_text(data_to_download))
+      html_usage <- HTML(commonmark::markdown_html(usage_text()))
+      htmltools::save_html(html_usage, html_file)
+
       # Show notification
       showNotification("Downloading filtered data...",
                        type = "message",
                        duration = 3)
-      
-      utils::write.csv(data_to_download, file, row.names = FALSE)
-    }
+
+
+      zip::zip(
+        zipfile = file, 
+        files = list.files(tmpdir, full.names = TRUE), 
+        mode = "cherry-pick"
+      )
+
+      # Clean up temporary directory
+      unlink(tmpdir, recursive = TRUE)
+    },
+    contentType = "application/zip"
   )
 }
