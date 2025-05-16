@@ -33,6 +33,17 @@ austraits_server <- function(input, output, session) {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
     
+    # First, clear the Fabaceae selection from family if switching to another rank
+    if (input$taxon_rank != "family") {
+      updateSelectizeInput(
+        session,
+        "family",
+        choices = family_choices(),
+        selected = NULL,
+        server = TRUE
+      )
+    }
+    # Then update the appropriate input based on selected rank
     if (input$taxon_rank == "taxon_name") {
       updateSelectizeInput(
         session,
@@ -97,11 +108,6 @@ observeEvent(list(
       usage_text(generate_usage_and_citations_text(filtered_data))
       output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
 
-      taxon_text(generate_taxon_text(filtered_data, filtered_data$taxon_name[1]))
-      output$taxon_text <- renderUI({
-        HTML(commonmark::markdown_html(taxon_text()))
-      })
-
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
@@ -132,12 +138,20 @@ observeEvent(list(
                     input$taxon_rank,
                     input$taxon_name
   ), {
-    # browser()
-
+    # First, handle cases where we need to clear the taxon view
+      # Case 1: Taxon rank is not "taxon_name"
+      # Case 2: taxon_name is NULL or empty
+      if (input$taxon_rank != "taxon_name" || is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+        # Clear the taxon text
+        taxon_text(NULL)
+        output$taxon_text <- renderUI({NULL})
+      }
+    
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
+      # browser()
       # Check if taxon_rank is "taxon_name"
-      if (!input$taxon_rank == "taxon_name") {
+      if (!input$taxon_rank == "taxon_name" || is.null(input$taxon_name)) {
           showNotification(
             "Only a single taxon name can be used for Taxon View",
             type = "warning",
@@ -146,7 +160,7 @@ observeEvent(list(
         }
       
       # Check if taxon_name is NULL (nothing selected)
-      else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+    else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
         showNotification(
           "Please select a single taxon name for Taxon View",
           type = "warning",
@@ -154,15 +168,50 @@ observeEvent(list(
         )
       }
       # Check if multiple taxa are selected
-      else if (length(input$taxon_name) > 1) {
+    else if (length(input$taxon_name) > 1) {
         showNotification(
-          "Please select only one taxon for Taxon View",
+          "Please select a single taxon name for Taxon View",
           type = "warning",
           duration = 5
         )
       }
+
+# Generate Taxon View text if passes all checks
+    else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
+      
+      # Get the filtered data    
+      data <- filtered_database()
+      
+      # Check if data is NULL or if user has manually cleared filters
+      if (is.null(data)) {
+        # Apply a filter just for this taxon to generate the taxon view
+        data <- austraits |>
+          apply_filters_categorical(input) |>
+          dplyr::collect()
+        
+        # Update the filtered_database reactive
+        filtered_database(data)
+      }
+      
+      # Now we can use the data (whether it was already filtered or we just created it)
+      if (nrow(data) > 0) {
+        # Generate the taxon text
+        taxon_text(generate_taxon_text(data, input$taxon_name))
+        output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
+      } else {
+        # If no data is available, show a notification
+        showNotification(
+          "No data available for the selected taxon name",
+          type = "warning",
+          duration = 5
+        )
+        # Clear the taxon text
+        taxon_text(NULL)
+        output$taxon_text <- renderUI({NULL})
+      }
     }
-  }, ignoreInit = TRUE)
+  }
+}, ignoreInit = TRUE)
 
   # Clear filters button action
   observeEvent(input$clear_filters, {
