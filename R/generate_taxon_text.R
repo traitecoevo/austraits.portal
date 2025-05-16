@@ -43,7 +43,7 @@ Download: [full data (csv)](%s), [summary table (csv)](%s)
 ##
 "
     , 
-    taxon_name,
+    taxon_info$taxon_name,
     taxon_info$family, 
     taxon_info$scientific_name, 
     taxon_info$taxon_distribution,
