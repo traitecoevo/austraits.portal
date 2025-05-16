@@ -1,0 +1,202 @@
+---
+title: trait tab
+output:
+  html_document:
+    df_print: kable
+    highlight: tango
+    keep_md: no
+    smart: no
+    theme: yeti
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+params:
+    trait_name: provide
+    austraits: provide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results="hide"}
+library(traits.build)
+library(austraits)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+
+austraits <- readRDS("C:/Users/z3524079/Documents/GitHub/austraits.portal/ignore/austraits.rds")
+
+my_kable_styling <- util_kable_styling_html
+
+trait <- "photosynthetic_pathway"
+trait_data <- extract_trait(austraits, trait, partial_matches_allowed = F)
+trait_data_flat <- austraits::flatten_database(trait_data)
+trait_definition <- austraits$definitions[[trait]]
+
+tmp <- trait_data$traits %>% filter(!trait_name %in% c("flowering_time", "fruiting_time", "recruitment_time", "germination_time"))
+traits <- tmp$trait_name %>% unique() %>% sort()
+traits_numeric <- traits[util_extract_list_element(traits, austraits$definitions, "type") == "numeric"]
+traits_categorical <- traits[util_extract_list_element(traits, austraits$definitions, "type") != "numeric"]
+```
+
+**`r trait`** is defined as: **`r trait_definition$description %>% str_replace("^.*\\;", "")`**
+
+For this trait, AusTraits includes a total of **`r trait_data_flat %>% nrow()`** records. This includes:
+
+- data for **`r trait_data_flat$taxon_name %>% unique() %>% length()`** species.
+
+- data for **`r trait_data_flat$family %>% unique() %>% length()`** families.
+
+- data from **`r trait_data_flat$dataset_id %>% unique() %>% length()`** datasets: `r trait_data_flat$dataset_id %>% unique() %>% paste0(collapse = "; ")`
+
+- of the total, **`r trait_data_flat %>% filter(!is.na(.data[["latitude (deg)"]])) %>% nrow()`** of the observations are georeferenced. The other records generally represent species-level data that apply across the species' range.
+
+
+Some additional information about this trait:
+
+- **label**: `r trait_definition$label`  
+
+- **additional comments**: `r trait_definition$comments`
+
+
+
+```{r, echo=FALSE, message=FALSE}
+if(isTRUE(traits_numeric == trait)) {
+  
+  writeLines(
+    sprintf("- **units**: %s", trait_definition$units)
+  )
+  
+  writeLines(
+    sprintf("- **allowable range**: %s -  %s %s", trait_definition$allowed_values_min, trait_definition$allowed_values_max, trait_definition$units)
+  )
+
+}
+```
+  
+  
+- **categorical trait values**:
+
+```{r, echo=FALSE, message=FALSE}
+if(isTRUE(traits_categorical == trait)) {
+
+trait_definition$allowed_values_levels %>% 
+  traits.build::convert_list_to_df1() %>% 
+  rename(description = value, value = key) %>%
+  kable(caption = "Categorical trait values") %>%
+  kable_classic()
+
+}
+```
+
+See the AusTraits Plant Dictionary (`r trait_definition$entity_URI`) for additional information about this trait.
+
+Visualising data records across families indicates the taxonomic breadth of information for this trait.
+
+```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE, fig.height=10, fig.width=6, eval=TRUE}
+if(isTRUE(traits_numeric == trait)) {
+
+    trait_data_beeswarm <- trait_data_flat %>%
+      filter(!value_type %in% c("bin", "range")) %>%
+      mutate(value = as.numeric(value))
+  
+  austraits::plot_trait_distribution_beeswarm(trait_data_beeswarm, trait, "family", hide_ids = FALSE)
+}
+```
+
+```{r categorical, results='asis', echo=FALSE, eval=TRUE, warning=FALSE, fig.height=10, fig.width=6, message=FALSE}
+
+if(isTRUE(traits_categorical == trait)) {
+
+  trait_data_tmp <- trait_data_flat %>%
+    select(family, taxon_name, value, dataset_id) %>%
+    tidyr::separate_longer_delim(value, delim = " ") %>%
+    distinct() %>%
+    group_by(family, taxon_name, value) %>%
+    mutate(counts = n()) %>%
+    ungroup() %>%
+    distinct(family, taxon_name, value, counts)
+  
+  most_common_families <- trait_data_tmp %>%
+    select(-taxon_name) %>%
+    group_by(family) %>%
+    mutate(counts_per_value = sum(counts)) %>%
+    ungroup() %>%
+    distinct(family, counts_per_value) %>%
+    arrange(-counts_per_value) %>%
+    slice(1:50)
+    
+  plotdata1 <- trait_data_tmp %>%
+    select(-taxon_name) %>%
+    filter(family %in% most_common_families$family) %>%
+    group_by(family, value) %>%
+    mutate(counts_per_value = sum(counts)) %>%
+    ungroup() %>%
+    distinct(family, value, counts_per_value) %>%
+    tidyr::pivot_wider(names_from = value, values_from = counts_per_value)
+  
+  plotdata1 <- plotdata1 %>%
+    mutate(
+      across(where(is.numeric), ~replace_na(., 0)),
+      total = (rowSums(across(2:length(plotdata1)), na.rm = TRUE)),
+      prop = .[[2]]/total
+      ) %>%
+    select(-prop) %>%
+    select(total, everything()) 
+  
+  plotdata2 <- plotdata1 %>%
+    tidyr::pivot_longer(cols=3:length(plotdata1)) %>%
+    mutate(prop = value/total) %>%
+    arrange(name, prop)
+    
+  counts_by_value <- plotdata2 %>%
+    group_by(name) %>%
+    mutate(total_counts = sum(value)) %>%
+    ungroup() %>% distinct(name, total_counts) %>%
+    arrange(-total_counts) %>%
+    pull(name)
+  
+  plotdata2 <- plotdata2 %>%
+    mutate(
+      name = factor(name, levels = counts_by_value)
+      )
+  
+  family_vector <- plotdata2 %>%
+   filter(name == levels(plotdata2$name)[1]) %>%
+    arrange(-prop) %>%
+    pull(family)
+
+  plotdata2 <- plotdata2 %>%
+    mutate(
+      family = factor(family, levels = family_vector)
+    ) %>%
+    filter(!is.na(family))
+  
+  ggplot(aes(y = family, x = name, fill = prop, size = value), data = plotdata2 %>% filter(prop >0)) +
+  geom_jitter(shape = 21, width =0.15, height =0) +
+  scale_size_continuous() +
+  scale_fill_viridis_c(option = "C") +
+  labs(x = NULL, y = NULL) +
+  theme_minimal() +
+    theme(
+      axis.line.y = element_blank(),
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+}
+```
+
+Visualising data records across Australia indicates the geographic breadth of data collection for this trait
+
+```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=6, eval=TRUE}
+  trait_data_map <- trait_data_flat %>%
+    filter(!is.na(`latitude (deg)`)) %>%
+    mutate(value = as.numeric(value))
+
+austraits::plot_locations(trait_data_map)
+```
+
+
+
+
