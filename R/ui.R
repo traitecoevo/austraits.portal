@@ -176,7 +176,6 @@ austraits_ui <- function() {
       nav_panel(
         title = "Taxon View",
         card(
-          card_header("Information about selected Taxon"),
           card_body(
             htmlOutput("taxon_text"),
           )
@@ -185,7 +184,6 @@ austraits_ui <- function() {
       nav_panel(
         title = "Trait View",
         card(
-          card_header("Information about selected trait"),
           card_body(
             fillable = TRUE,
             p("This panel displays information about the selected trait."),
