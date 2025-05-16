@@ -156,7 +156,7 @@ observeEvent(list(
       # Check if multiple taxa are selected
       else if (length(input$taxon_name) > 1) {
         showNotification(
-          "Please select only one taxon for Taxon View",
+          "Please select a single taxon name for Taxon View",
           type = "warning",
           duration = 5
         )
