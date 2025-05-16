@@ -36,7 +36,7 @@ generate_taxon_text <- function(data, taxon) {
     ) |>
     dplyr::rename(trait_name = trait) |>
     dplyr::mutate(core_trait = ifelse(!is.na(core_trait) & core_trait == "core_trait", "core", "other")) |>
-    left_join(data_taxon_trait_means, by = "trait_name") |>
+    dplyr::left_join(data_taxon_trait_means, by = "trait_name") |>
     dplyr::mutate(data_available = !is.na(type))
 
   trait_info_na <- trait_info_all |> dplyr::filter(!data_available)

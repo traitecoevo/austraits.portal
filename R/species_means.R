@@ -1,5 +1,23 @@
 # Numeric traits
 
+
+#' Estimate Species Trait Means
+#'
+#' Calculates mean trait values for each species in the provided Austraits dataset.
+#'
+#' @param austraits A data frame or list containing trait data, typically in the Austraits format.
+#'
+#' @return A data frame with estimated mean trait values for each species.
+#'
+#' @details
+#' This function processes the input Austraits dataset to compute mean values of traits for each species.
+#'
+#' @examples
+#' \dontrun{
+#' means <- estimate_species_trait_means(austraits)
+#' }
+#'
+#' @export
 estimate_species_trait_means <- function(austraits) {
 
   traits <-
@@ -40,12 +58,8 @@ estimate_species_trait_means <- function(austraits) {
     )
 }
 
-#' @title Austraits weighted means
-#' @description
-#' This function calculates the weighted means for Austraits data.  
-#' It takes a data frame of Austraits data and a vector of trait names as input.
-#' It filters the data for the specified traits and value types,  
-
+#' @keywords internal
+#' @noRd
 estimate_species_trait_means_numerical <- function(austraits, traits) {
 
   # any data that is a mean, median or raw, create a site mean
@@ -76,6 +90,8 @@ estimate_species_trait_means_numerical <- function(austraits, traits) {
   means
 }
 
+#' @keywords internal
+#' @noRd
 estimate_species_trait_means_locations <- function(austraits, traits) {
   # any data that is a mean, median or raw, create a location mean
   x <- austraits |>
@@ -104,6 +120,8 @@ estimate_species_trait_means_locations <- function(austraits, traits) {
   )
 }
 
+#' @keywords internal
+#' @noRd
 estimate_species_trait_means_floras <- function(austraits, traits) {
   flora_data <- 
     austraits |>
@@ -135,7 +153,8 @@ estimate_species_trait_means_floras <- function(austraits, traits) {
 
 }
 
-
+#' @keywords internal
+#' @noRd
 estimate_species_trait_summary_categorical <- function(austraits, 
 traits) {
 
@@ -154,6 +173,8 @@ traits) {
   # )
 }
 
+#' @keywords internal
+#' @noRd
 estimate_species_trait_value_summary_categorical <- function(austraits, traits) {
 
   austraits |>
