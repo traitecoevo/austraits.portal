@@ -138,6 +138,15 @@ observeEvent(list(
                     input$taxon_rank,
                     input$taxon_name
   ), {
+    # First, handle cases where we need to clear the taxon view
+      # Case 1: Taxon rank is not "taxon_name"
+      # Case 2: taxon_name is NULL or empty
+      if (input$taxon_rank != "taxon_name" || is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+        # Clear the taxon text
+        taxon_text(NULL)
+        output$taxon_text <- renderUI({NULL})
+      }
+    
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
 
@@ -196,6 +205,9 @@ observeEvent(list(
           type = "warning",
           duration = 5
         )
+        # Clear the taxon text
+        taxon_text(NULL)
+        output$taxon_text <- renderUI({NULL})
       }
     }
   }
