@@ -149,9 +149,9 @@ observeEvent(list(
     
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
-
+      # browser()
       # Check if taxon_rank is "taxon_name"
-      if (!input$taxon_rank == "taxon_name") {
+      if (!input$taxon_rank == "taxon_name" || is.null(input$taxon_name)) {
           showNotification(
             "Only a single taxon name can be used for Taxon View",
             type = "warning",
