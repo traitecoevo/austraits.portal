@@ -176,19 +176,15 @@ austraits_ui <- function() {
       nav_panel(
         title = "Taxon View",
         card(
-          card_header("Information about selected Taxon"),
+          card_header("AusTraits trait profile"),
           card_body(
-            fillable = TRUE,
-            p("This panel displays information about the selected taxon."),
-            p("You can view the taxon name, family, and other relevant details."),
-            p("Use the sidebar to filter the data based on different criteria."),
+            htmlOutput("taxon_text"),
           )
         )
       ),
       nav_panel(
         title = "Trait View",
         card(
-          card_header("Information about selected trait"),
           card_body(
             fillable = TRUE,
             p("This panel displays information about the selected trait."),
