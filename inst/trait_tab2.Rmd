@@ -104,7 +104,7 @@ if(isTRUE(traits_numeric == trait)) {
 ```
 
 ```{r categorical, results='asis', echo=FALSE, eval=TRUE, warning=FALSE, fig.height=10, fig.width=6, message=FALSE}
-plot_categorical_trait_distribution <- function(data, trait) {
+plot_categorical_trait_distribution <- function(data, trait, family_count) {
   
   # if relational database, retain traits layer only
   if (is.null(dim(data))) {
@@ -148,7 +148,7 @@ plot_categorical_trait_distribution <- function(data, trait) {
     dplyr::ungroup() %>%
     dplyr::distinct(family, species_per_family) %>%
     dplyr::arrange(-species_per_family) %>%
-    dplyr::slice(1:50)
+    dplyr::slice(1:family_count)
 
   # now combine species-level proportions for each categorical trait value, 
   # outputting family-level proportions instead
@@ -224,7 +224,7 @@ plot_categorical_trait_distribution <- function(data, trait) {
 
 
 if(isTRUE(traits_categorical == trait)) {
-  plot_categorical_trait_distribution(trait_data_flat, trait)
+  plot_categorical_trait_distribution(trait_data_flat, trait, family_count = 50)
 }
 ```
 
