@@ -3,8 +3,8 @@
 ## For now will use the R package and store in Github Releases see branch data-load
 
 # Load the austraits dataset
-# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
-austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
+# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
 
 # Set up possible values for selectize menus
 
