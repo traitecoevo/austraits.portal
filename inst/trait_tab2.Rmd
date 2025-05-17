@@ -86,6 +86,10 @@ trait_definition$allowed_values_levels %>%
 
 See the AusTraits Plant Dictionary (`r trait_definition$entity_URI`) for additional information about this trait.
 
+### Visualising trait data
+
+The data displays shown below include all data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means.
+
 Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait.
 
 ```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE, fig.height=10, fig.width=6, eval=TRUE}
