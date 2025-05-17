@@ -1,6 +1,8 @@
 # Load data
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo,
 ## For now will use the R package and store in Github Releases see branch data-load
+## Use austraits R package load_austraits() function to download data to the file path below
+## Then create this parquet following code in data-raw/create-flat-austraits.R
 
 # Load the austraits dataset
 austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
