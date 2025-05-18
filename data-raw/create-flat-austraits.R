@@ -7,7 +7,6 @@ library(dplyr)
 austraits:::austraits_5.0.0_lite |> flatten_database() |>
     mutate(row_id = row_number())|>
 write_parquet("inst/extdata/austraits/austraits-lite-obs.parquet")
-#RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")
 
 #------------------------------------------------------------
 # Save the full database as a parquet
@@ -16,6 +15,8 @@ write_parquet("inst/extdata/austraits/austraits-lite-obs.parquet")
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo, needs row_id added to Zenodo upload
 ## For now will use the R package and store in Github Releases
 austraits <- load_austraits(version = "6.0.0", path = "inst/extdata/austraits", update = FALSE)
+austraits$definitions |> yaml::write_yaml("inst//extdata/austraits/definitions.yml")
+austraits$sources |> RefManageR::WriteBib("inst/extdata/austraits/sources.bib")
 
 ## Flatten the database
 flatten_austraits <- austraits |> flatten_database()  |> 
@@ -28,7 +29,6 @@ flatten_austraits <- austraits |> flatten_database()  |>
 
 ## Save the flattened database
 write_parquet(flatten_austraits, "inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
-RefManageR::WriteBib(austraits$sources, "inst/extdata/austraits/sources.bib")
 
 #------------------------------------------------------------
 # Save an intermediate sized version, to reduce size of the database

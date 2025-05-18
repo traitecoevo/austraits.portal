@@ -50,6 +50,7 @@ Imports:
     commonmark,
     zip,
     htmltools,
+    yaml,
     jsonlite,
     RefManageR
 Remotes:
