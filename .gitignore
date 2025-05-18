@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 inst/extdata/austraits/*.parquet
+inst/extdata/austraits/*.rds
 ignore/
 .vscode/
 *.html
