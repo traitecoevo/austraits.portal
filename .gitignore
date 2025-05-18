@@ -5,3 +5,4 @@
 austraits-6.0.0-flatten.parquet
 ignore/
 .vscode/
+*.html
