@@ -54,7 +54,13 @@ Imports:
     htmltools,
     yaml,
     jsonlite,
-    RefManageR
+    RefManageR,
+    cli,
+    forcats,
+    knitr,
+    leaflet,
+    plotly,
+    scales
 Remotes:
   traitecoevo/austraits
 Suggests: 

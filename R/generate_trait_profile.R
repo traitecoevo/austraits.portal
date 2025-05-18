@@ -82,7 +82,7 @@ Visualising data records across the families with the most data for the trait in
         trait_definition$units),
       sprintf("- **Allowed values**: \n\n %s",
         trait_definition$allowed_values_levels |>
-        traits.build::convert_list_to_df1() |>
+        convert_list_to_df1() |>
         rename(description = value, value = key) |>
         knitr::kable() |>
         kableExtra::kable_styling(full_width = TRUE,
@@ -130,4 +130,13 @@ The map below shows the geographical distribution of trait data for this trait. 
   }
 
   output
+}
+
+convert_list_to_df1 <- function(my_list) {
+  for (f in names(my_list)) {
+    if (is.null(my_list[[f]])) {
+      my_list[[f]] <- NA
+    }
+  }
+  tibble::tibble(key = names(my_list), value = unname(unlist(my_list)))
 }
