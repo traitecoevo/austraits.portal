@@ -36,7 +36,9 @@ apply_filters_categorical <- function(data = austraits, input){
     # Construct filter conditions dynamically
     purrr::map(function(v) {
       # paste in case value contains more than one item
-      value <- input[[v]] |> paste(collapse = "|") 
+      value <- input[[v]] |> paste(collapse = "|")
+      # only match whole cells
+      value <- paste0("^(", value, ")$")
       # formulate the filter condition as an expression
       expr(stringr::str_detect(.data[[v]], !!value))
     })
