@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-austraits-6.0.0-flatten.parquet
+inst/extdata/austraits/*.parquet
 ignore/
 .vscode/
 *.html
