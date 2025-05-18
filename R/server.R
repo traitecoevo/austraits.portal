@@ -77,7 +77,7 @@ austraits_server <- function(input, output, session) {
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
   
   # Apply Filter
-observeEvent(list(
+  observeEvent(list(
     input$family,
     input$genus,
     input$taxon_name,
@@ -129,8 +129,7 @@ observeEvent(list(
         return()
       }
     }
-  }
-) 
+  }) 
 
   # Check the taxon_name selection (input$taxon_name) when switching to "Taxon View" tab
   observeEvent(list(
@@ -158,60 +157,60 @@ observeEvent(list(
             duration = 5
           )
         }
-      
-      # Check if taxon_name is NULL (nothing selected)
-    else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
-        showNotification(
-          "Please select a single taxon name for Taxon View",
-          type = "warning",
-          duration = 5
-        )
-      }
-      # Check if multiple taxa are selected
-    else if (length(input$taxon_name) > 1) {
-        showNotification(
-          "Please select a single taxon name for Taxon View",
-          type = "warning",
-          duration = 5
-        )
-      }
-
-# Generate Taxon View text if passes all checks
-    else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
-      
-      # Get the filtered data    
-      data <- filtered_database()
-      
-      # Check if data is NULL or if user has manually cleared filters
-      if (is.null(data)) {
-        # Apply a filter just for this taxon to generate the taxon view
-        data <- austraits |>
-          apply_filters_categorical(input) |>
-          dplyr::collect()
         
-        # Update the filtered_database reactive
-        filtered_database(data)
-      }
-      
-      # Now we can use the data (whether it was already filtered or we just created it)
-      if (nrow(data) > 0) {
-        # Generate the taxon text
-        taxon_text(generate_taxon_text(data, input$taxon_name))
-        output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
-      } else {
-        # If no data is available, show a notification
-        showNotification(
-          "No data available for the selected taxon name",
-          type = "warning",
-          duration = 5
-        )
-        # Clear the taxon text
-        taxon_text(NULL)
-        output$taxon_text <- renderUI({NULL})
+        # Check if taxon_name is NULL (nothing selected)
+      else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+          showNotification(
+            "Please select a single taxon name for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+        # Check if multiple taxa are selected
+      else if (length(input$taxon_name) > 1) {
+          showNotification(
+            "Please select a single taxon name for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+
+  # Generate Taxon View text if passes all checks
+      else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
+        
+        # Get the filtered data    
+        data <- filtered_database()
+        
+        # Check if data is NULL or if user has manually cleared filters
+        if (is.null(data)) {
+          # Apply a filter just for this taxon to generate the taxon view
+          data <- austraits |>
+            apply_filters_categorical(input) |>
+            dplyr::collect()
+          
+          # Update the filtered_database reactive
+          filtered_database(data)
+        }
+        
+        # Now we can use the data (whether it was already filtered or we just created it)
+        if (nrow(data) > 0) {
+          # Generate the taxon text
+          taxon_text(generate_taxon_text(data, input$taxon_name))
+          output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
+        } else {
+          # If no data is available, show a notification
+          showNotification(
+            "No data available for the selected taxon name",
+            type = "warning",
+            duration = 5
+          )
+          # Clear the taxon text
+          taxon_text(NULL)
+          output$taxon_text <- renderUI({NULL})
+        }
       }
     }
-  }
-}, ignoreInit = TRUE)
+  }, ignoreInit = TRUE)
 
   # Clear filters button action
   observeEvent(input$clear_filters, {
