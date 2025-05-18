@@ -113,13 +113,13 @@ austraits_server <- function(input, output, session) {
       # for some reason the leaflet plot is not rendering
       output$trait_profile <- renderUI({
         tagList(
-          trait_profile[[1]],
-          HTML("<b>Trait histogram:</b>"),
-          trait_profile[[2]],
-          HTML("<b>Trait table:</b>"),
-          trait_profile[[3]],
-          HTML("<b>Trait map:</b>"),
-          leaflet::renderLeaflet(trait_profile[[4]])
+          trait_profile[[1]]
+          # HTML("<b>Trait histogram:</b>"),
+          # trait_profile[[2]],
+          # HTML("<b>Trait table:</b>"),
+          # trait_profile[[3]],
+          # HTML("<b>Trait map:</b>"),
+          # leaflet::renderLeaflet(trait_profile[[4]])
         )
       })
       # Store filtered data into reactive value

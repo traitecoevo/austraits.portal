@@ -187,7 +187,15 @@ austraits_ui <- function() {
         card(
           card_header("AusTraits trait profile"),
           card_body(
-            htmlOutput("trait_profile"),
+            card(
+              htmlOutput("trait_profile")
+            ),
+            card(
+              card_header("Observed values")
+            ),
+            card(
+              card_header("Geographical distribution of trait data")
+            )
           )
         )
       ),
