@@ -19,17 +19,10 @@ You can install the development version of austraits.portal from
 pak::pak("traitecoevo/austraits.portal")
 ```
 
-## To open the data portal locally 
+## To open the data portal locally
 
 ``` r
 library(austraits.portal)
 
 open_data_portal()
 ```
-
-## Maintainers: 
-
-1. Clone this repo locally
-2. Open .Rproj
-3. devtools::load_all()
-4. austraits.portal::open_data_portal()
