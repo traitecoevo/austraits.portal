@@ -117,7 +117,7 @@ The map below shows the geographical distribution of trait data for this trait. 
   if(nrow(data_geo) == 0) {
     output[[4]] <- leaflet::leaflet()
   } else {
-    output[[4]] <- 
+    output[[4]] <-
       leaflet::leaflet(data = data_geo) |>
       leaflet::addTiles() |>
       leaflet::addCircleMarkers(
