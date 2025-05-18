@@ -17,6 +17,9 @@ austraits_server <- function(input, output, session) {
   # Contains the taxon text
   taxon_text <- reactiveVal(NULL)
 
+  # Contains the taxon text
+  trait_text <- reactiveVal(NULL)
+
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
     all_taxon_names

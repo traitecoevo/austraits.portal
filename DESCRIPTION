@@ -41,6 +41,8 @@ Imports:
     readr,
     tidyr,
     tibble,
+    ggplot2,
+    patchwork,
     kableExtra,
     purrr,
     stringr,

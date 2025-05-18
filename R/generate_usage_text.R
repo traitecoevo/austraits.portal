@@ -47,7 +47,7 @@ References
     paste("- ", references) |> paste(collapse = "\n" )
   )
 
-  usage_text
+  usage_text |> commonmark::markdown_html() |> HTML()
 }
 
 #' Export BibTeX Entries for Data
