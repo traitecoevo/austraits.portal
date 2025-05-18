@@ -48,3 +48,10 @@ flatten_mid <-
     dplyr::filter(taxon_name %in% taxon_names, trait_name %in% traits) |>
     dplyr::mutate(row_id = dplyr::row_number())
 arrow::write_parquet(flatten_mid, "inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
+
+## species averages
+flatten_mid_avg <- 
+    flatten_mid |> estimate_species_trait_means()
+
+arrow::write_parquet(flatten_mid_avg, "inst/extdata/austraits/austraits-6.0.0-mid-flatten-means.parquet")
+
