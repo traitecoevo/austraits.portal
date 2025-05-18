@@ -17,9 +17,6 @@ austraits_server <- function(input, output, session) {
   # Contains the taxon text
   taxon_text <- reactiveVal(NULL)
 
-  # Contains the taxon text
-  trait_text <- reactiveVal(NULL)
-
   # Initialize dropdown choices
   taxon_name_choices <- reactive({
     all_taxon_names
@@ -109,13 +106,33 @@ austraits_server <- function(input, output, session) {
         dplyr::collect()
 
       usage_text(generate_usage_and_citations_text(filtered_data))
-      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
+      output$usage_text <- renderUI({usage_text()})
 
+      trait_profile <- generate_trait_profile(filtered_data)
+
+      # for some reason the leaflet plot is not rendering
+      output$trait_profile <- renderUI({
+        tagList(
+          trait_profile[[1]],
+          HTML("<b>Trait histogram:</b>"),
+          trait_profile[[2]],
+          HTML("<b>Trait table:</b>"),
+          trait_profile[[3]],
+          HTML("<b>Trait map:</b>"),
+          leaflet::renderLeaflet(trait_profile[[4]])
+        )
+      })
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
       # No filters selected
       filtered_database(NULL)
+
+      output$trait_profile <- renderUI({
+        tagList(
+          HTML("Please select a single trait to view.")
+        )
+      })
     }
   })
     
@@ -443,8 +460,7 @@ austraits_server <- function(input, output, session) {
 
       # Update the usage text and convert to html
       usage_text(generate_usage_and_citations_text(data_to_download))
-      html_usage <- HTML(commonmark::markdown_html(usage_text()))
-      htmltools::save_html(html_usage, html_file)
+      htmltools::save_html(usage_text(), html_file)
 
       # Show notification
       showNotification("Downloading filtered data...",

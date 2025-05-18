@@ -305,5 +305,5 @@ plot_trait_distribution_beeswarm <- function(data,
 
   # combine plots
   library(patchwork)
-  p1 + p2 + plot_layout(nrow = 2, heights = heights)
+  p1 + p2 + patchwork::plot_layout(nrow = 2, heights = heights)
 }
