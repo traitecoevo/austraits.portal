@@ -4,8 +4,10 @@ library(dplyr)
 
 #------------------------------------------------------------
 # Save lite version as a parquet
-arrow::write_parquet(austraits:::austraits_5.0.0_lite |> flatten_database(), "inst/extdata/austraits/austraits-lite.parquet")
-RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")
+austraits:::austraits_5.0.0_lite |> flatten_database() |>
+    mutate(row_id = row_number())|>
+write_parquet("inst/extdata/austraits/austraits-lite-obs.parquet")
+#RefManageR::WriteBib(austraits:::austraits_5.0.0_lite$sources, "inst/extdata/austraits/sources.bib")
 
 #------------------------------------------------------------
 # Save the full database as a parquet
@@ -17,15 +19,15 @@ austraits <- load_austraits(version = "6.0.0", path = "inst/extdata/austraits", 
 
 ## Flatten the database
 flatten_austraits <- austraits |> flatten_database()  |> 
-    dplyr::mutate(row_id = dplyr::row_number())  |> 
-    dplyr::mutate(measurement_remarks = iconv(measurement_remarks,
+    mutate(row_id = row_number())  |> 
+    mutate(measurement_remarks = iconv(measurement_remarks,
                     from = "",      # Let R guess the current encoding
                     to = "UTF-8",   # Convert to UTF-8
                     sub = ""        # Remove any bytes that can't be converted
     ))
 
 ## Save the flattened database
-arrow::write_parquet(flatten_austraits, "inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+write_parquet(flatten_austraits, "inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
 RefManageR::WriteBib(austraits$sources, "inst/extdata/austraits/sources.bib")
 
 #------------------------------------------------------------
@@ -45,13 +47,13 @@ taxon_names <- c(
 ## filter and save
 flatten_mid <- 
     flatten_austraits |>
-    dplyr::filter(taxon_name %in% taxon_names, trait_name %in% traits) |>
-    dplyr::mutate(row_id = dplyr::row_number())
-arrow::write_parquet(flatten_mid, "inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
+    filter(taxon_name %in% taxon_names, trait_name %in% traits) |>
+    mutate(row_id = row_number())
+write_parquet(flatten_mid, "inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
 
 ## species averages
 flatten_mid_avg <- 
     flatten_mid |> estimate_species_trait_means()
 
-arrow::write_parquet(flatten_mid_avg, "inst/extdata/austraits/austraits-6.0.0-mid-flatten-means.parquet")
+write_parquet(flatten_mid_avg, "inst/extdata/austraits/austraits-6.0.0-mid-flatten-means.parquet")
 
