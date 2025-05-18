@@ -36,13 +36,22 @@ Imports:
     arrow,
     bslib,
     bsplus,
-    dplyr,
     DT,
+    dplyr,
+    readr,
+    tidyr,
+    tibble,
+    kableExtra,
     purrr,
     stringr,
     tidyselect,
     utils,
-    httr2
+    httr2,
+    commonmark,
+    zip,
+    htmltools,
+    jsonlite,
+    RefManageR
 Remotes:
   traitecoevo/austraits
 Suggests: 
