@@ -127,14 +127,14 @@ austraits_server <- function(input, output, session) {
         tagList(
           p("The plot below shows the distribution of selected data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means."),
           p("Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait"),
-          em("Trait histogram:")
+          # em("Trait histogram:") #TODO: Not sure if this is needed
         )
       })
 
       output$trait_beeswarm_plot <- plotly::renderPlotly({
         req(filtered_data, input$trait_name)
         plot_trait_distribution(filtered_data, input$trait_name) |>
-          plotly::ggplotly(tooltip = c("x", "y", "text"))
+          plotly::ggplotly(tooltip = c("x", "y", "text"), height = 400)
       })
 
 
