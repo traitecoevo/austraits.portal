@@ -2,6 +2,27 @@ library(austraits)
 library(arrow)
 library(dplyr)
 
+#------------------------------- HELPER FUNCTIONS ------------------------------
+# Truncate data helper
+austraits_truncate <- function(formatted_data, original_data) {
+  text_columns <- sapply(original_data, is.character)
+  columns_to_exclude <- c("taxon_name", "trait_name", "genus", "family", "source_primary_citation")  # Exclude the hyperlink column from truncation
+  for (col in names(original_data)[text_columns]) {
+    # Skip the excluded columns
+    if (col %in% columns_to_exclude) next
+    
+    formatted_data[[col]] <- sapply(original_data[[col]], function(x) {
+      if (is.na(x) || is.null(x)) return(x)
+      if (nchar(x) > 20) {
+        paste0(substr(x, 1, 20), "...")
+      } else {
+        x
+      }
+    })
+  }
+  return(formatted_data)
+}
+
 #------------------------------------------------------------
 # Save lite version as a parquet
 austraits:::austraits_5.0.0_lite |> flatten_database() |>
@@ -14,21 +35,40 @@ write_parquet("inst/extdata/austraits/austraits-lite-obs.parquet")
 ## Load data
 ## TODO: One day parquet of flattened database may be uploaded to Zenodo, needs row_id added to Zenodo upload
 ## For now will use the R package and store in Github Releases
+# Full database
 austraits <- load_austraits(version = "6.0.0", path = "inst/extdata/austraits", update = FALSE)
 austraits$definitions |> yaml::write_yaml("inst//extdata/austraits/definitions.yml")
 austraits$sources |> RefManageR::WriteBib("inst/extdata/austraits/sources.bib")
 
-## Flatten the database
-flatten_austraits <- austraits |> flatten_database()  |> 
-    mutate(row_id = row_number())  |> 
+print("Formatting for use")
+austraits <- austraits |> 
+  flatten_database() |> 
+  mutate(row_id = row_number()) |> 
     mutate(measurement_remarks = iconv(measurement_remarks,
-                    from = "",      # Let R guess the current encoding
-                    to = "UTF-8",   # Convert to UTF-8
-                    sub = ""        # Remove any bytes that can't be converted
+      from = "",      # Let R guess the current encoding
+      to = "UTF-8",   # Convert to UTF-8
+      sub = ""        # Remove any bytes that can't be converted
     ))
+print("done")
 
-## Save the flattened database
-write_parquet(flatten_austraits, "inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+# Database for DT display
+print("Formatting for display")
+austraits_display <- austraits |> 
+  format_database_for_display() |> 
+  format_hyperlinks_for_display()
+print("done")
+
+# Truncate display db
+print("Truncate db")
+austraits_display <- austraits_truncate(austraits_display, austraits)
+print("done")
+
+## Flatten and format the databases
+# flatten_austraits <- austraits_format(austraits)
+
+## Save the flattened and display database
+# write_parquet(flatten_austraits, "inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+write_parquet(austraits_display, "inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
 
 #------------------------------------------------------------
 # Save an intermediate sized version, to reduce size of the database
@@ -56,4 +96,3 @@ flatten_mid_avg <-
     flatten_mid |> estimate_species_trait_means()
 
 write_parquet(flatten_mid_avg, "inst/extdata/austraits/austraits-6.0.0-mid-flatten-means.parquet")
-
