@@ -90,6 +90,32 @@ For this trait, AusTraits includes a total of **%s** records. This includes:
   data_trait$dataset_id |> dplyr::n_distinct()
   ) |> commonmark::markdown_html() |> HTML()
 
+  # Geo text
+    output[[3]] <-
+    sprintf(
+"
+Of the %s records for this trait, **%s** have latitude and longitude coordinates. 
+
+ The map below shows the geographical distribution of trait data for this trait. The data are shown as points on the map, with the size of the point indicating the number of records at that location. 
+
+", 
+  data_trait |> nrow(),
+  nrow(data_geo)
+  ) |> commonmark::markdown_html() |> HTML()
+
+  # Geomap
+      output[[4]] <-
+      leaflet::leaflet(data = data_geo) |>
+      leaflet::addTiles() |>
+      leaflet::addCircleMarkers(
+        lng = ~`longitude (deg)`,
+        lat = ~`latitude (deg)`,
+        label = ~as.character(dataset_id),
+        radius = 4,
+        fillOpacity = 0.7
+      )
+
+
   output
 }
 

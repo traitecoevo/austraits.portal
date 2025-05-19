@@ -137,6 +137,15 @@ austraits_server <- function(input, output, session) {
           plotly::ggplotly(tooltip = c("x", "y", "text"), height = 400)
       })
 
+      output$trait_geo_text <- renderUI({
+          trait_profile[[3]]
+        
+      })
+
+      output$trait_geo_map <- leaflet::renderLeaflet({
+        trait_profile[[4]]
+      })
+
 
       # Store filtered data into reactive value
       filtered_database(filtered_data)

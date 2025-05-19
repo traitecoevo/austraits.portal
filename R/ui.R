@@ -202,7 +202,12 @@ austraits_ui <- function() {
               fillable = FALSE
             ),
             card(
-              card_header("Geographical distribution of trait data")
+              card_header("Geographical distribution of trait data"),
+              min_height = 600,
+              card_body(
+                uiOutput("trait_geo_text"),
+                leaflet::leafletOutput("trait_geo_map", height = "600px")
+              )
             )
           )
         )
