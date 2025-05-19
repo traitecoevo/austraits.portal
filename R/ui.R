@@ -189,15 +189,15 @@ austraits_ui <- function() {
           card_body(
             card(
               htmlOutput("trait_profile"),
-              height = "auto"
+              min_height = 500
             ),
             card(
               card_header("Observed values"),
               card_body(
                         uiOutput("trait_histogram_text"),
-                        plotly::plotlyOutput("trait_beeswarm_plot")
-              )
-
+                        plotly::plotlyOutput("trait_beeswarm_plot", height = "800px")
+              ),
+              min_height = 500
             ),
             card(
               card_header("Geographical distribution of trait data")
