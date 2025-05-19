@@ -77,7 +77,7 @@ austraits_server <- function(input, output, session) {
   updateSelectizeInput(session, "life_stage", choices = all_age, server = TRUE)
   
   # Apply Filter
-observeEvent(list(
+  observeEvent(list(
     input$family,
     input$genus,
     input$taxon_name,
@@ -106,13 +106,58 @@ observeEvent(list(
         dplyr::collect()
 
       usage_text(generate_usage_and_citations_text(filtered_data))
-      output$usage_text <- renderUI({HTML(commonmark::markdown_html(usage_text()))})
+      output$usage_text <- renderUI({usage_text()})
+
+      trait_profile <- generate_trait_profile(filtered_data)
+
+      # TODO: for some reason the leaflet plot is not rendering
+      output$trait_profile <- renderUI({
+        tagList(
+          trait_profile[[1]]
+          # HTML("<b>Trait histogram:</b>"),
+          # trait_profile[[2]],
+          # HTML("<b>Trait table:</b>"),
+          # trait_profile[[3]],
+          # HTML("<b>Trait map:</b>"),
+          # leaflet::renderLeaflet(trait_profile[[4]])
+        )
+      })
+
+      output$trait_histogram_text <- renderUI({
+        tagList(
+          p("The plot below shows the distribution of selected data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means."),
+          p("Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait"),
+          # em("Trait histogram:") #TODO: Not sure if this is needed
+        )
+      })
+
+      output$trait_beeswarm_plot <- plotly::renderPlotly({
+        req(filtered_data, input$trait_name)
+        plot_trait_distribution(filtered_data, input$trait_name) |>
+          plotly::ggplotly(tooltip = c("x", "y", "text"), height = 400)
+      })
+
+      output$trait_geo_text <- renderUI({
+          trait_profile[[3]]
+        
+      })
+
+      output$trait_geo_map <- leaflet::renderLeaflet({
+        trait_profile[[4]]
+      })
+
 
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
       # No filters selected
       filtered_database(NULL)
+
+      output$trait_profile <- renderUI({
+        tagList(
+          HTML("Please select a single trait to view.")
+        )
+      })
     }
   })
     
@@ -129,8 +174,7 @@ observeEvent(list(
         return()
       }
     }
-  }
-) 
+  }) 
 
   # Check the taxon_name selection (input$taxon_name) when switching to "Taxon View" tab
   observeEvent(list(
@@ -158,60 +202,60 @@ observeEvent(list(
             duration = 5
           )
         }
-      
-      # Check if taxon_name is NULL (nothing selected)
-    else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
-        showNotification(
-          "Please select a single taxon name for Taxon View",
-          type = "warning",
-          duration = 5
-        )
-      }
-      # Check if multiple taxa are selected
-    else if (length(input$taxon_name) > 1) {
-        showNotification(
-          "Please select a single taxon name for Taxon View",
-          type = "warning",
-          duration = 5
-        )
-      }
-
-# Generate Taxon View text if passes all checks
-    else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
-      
-      # Get the filtered data    
-      data <- filtered_database()
-      
-      # Check if data is NULL or if user has manually cleared filters
-      if (is.null(data)) {
-        # Apply a filter just for this taxon to generate the taxon view
-        data <- austraits |>
-          apply_filters_categorical(input) |>
-          dplyr::collect()
         
-        # Update the filtered_database reactive
-        filtered_database(data)
-      }
-      
-      # Now we can use the data (whether it was already filtered or we just created it)
-      if (nrow(data) > 0) {
-        # Generate the taxon text
-        taxon_text(generate_taxon_text(data, input$taxon_name))
-        output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
-      } else {
-        # If no data is available, show a notification
-        showNotification(
-          "No data available for the selected taxon name",
-          type = "warning",
-          duration = 5
-        )
-        # Clear the taxon text
-        taxon_text(NULL)
-        output$taxon_text <- renderUI({NULL})
+        # Check if taxon_name is NULL (nothing selected)
+      else if (is.null(input$taxon_name) || length(input$taxon_name) == 0) {
+          showNotification(
+            "Please select a single taxon name for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+        # Check if multiple taxa are selected
+      else if (length(input$taxon_name) > 1) {
+          showNotification(
+            "Please select a single taxon name for Taxon View",
+            type = "warning",
+            duration = 5
+          )
+        }
+
+  # Generate Taxon View text if passes all checks
+      else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
+        
+        # Get the filtered data    
+        data <- filtered_database()
+        
+        # Check if data is NULL or if user has manually cleared filters
+        if (is.null(data)) {
+          # Apply a filter just for this taxon to generate the taxon view
+          data <- austraits |>
+            apply_filters_categorical(input) |>
+            dplyr::collect()
+          
+          # Update the filtered_database reactive
+          filtered_database(data)
+        }
+        
+        # Now we can use the data (whether it was already filtered or we just created it)
+        if (nrow(data) > 0) {
+          # Generate the taxon text
+          taxon_text(generate_taxon_text(data, input$taxon_name))
+          output$taxon_text <- renderUI({HTML(commonmark::markdown_html(taxon_text()))})
+        } else {
+          # If no data is available, show a notification
+          showNotification(
+            "No data available for the selected taxon name",
+            type = "warning",
+            duration = 5
+          )
+          # Clear the taxon text
+          taxon_text(NULL)
+          output$taxon_text <- renderUI({NULL})
+        }
       }
     }
-  }
-}, ignoreInit = TRUE)
+  }, ignoreInit = TRUE)
 
   # Clear filters button action
   observeEvent(input$clear_filters, {
@@ -441,8 +485,7 @@ observeEvent(list(
 
       # Update the usage text and convert to html
       usage_text(generate_usage_and_citations_text(data_to_download))
-      html_usage <- HTML(commonmark::markdown_html(usage_text()))
-      htmltools::save_html(html_usage, html_file)
+      htmltools::save_html(usage_text(), html_file)
 
       # Show notification
       showNotification("Downloading filtered data...",

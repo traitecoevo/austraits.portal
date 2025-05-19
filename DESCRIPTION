@@ -41,6 +41,8 @@ Imports:
     readr,
     tidyr,
     tibble,
+    ggplot2,
+    patchwork,
     kableExtra,
     purrr,
     stringr,
@@ -50,8 +52,15 @@ Imports:
     commonmark,
     zip,
     htmltools,
+    yaml,
     jsonlite,
-    RefManageR
+    RefManageR,
+    cli,
+    forcats,
+    knitr,
+    leaflet,
+    plotly,
+    scales
 Remotes:
   traitecoevo/austraits
 Suggests: 
