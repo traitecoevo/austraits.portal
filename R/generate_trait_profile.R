@@ -93,7 +93,6 @@ For this trait, AusTraits includes a total of **%s** records. This includes:
   output
 }
 
-
 convert_list_to_df1 <- function(my_list) {
   for (f in names(my_list)) {
     if (is.null(my_list[[f]])) {

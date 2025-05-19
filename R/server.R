@@ -110,7 +110,7 @@ austraits_server <- function(input, output, session) {
 
       trait_profile <- generate_trait_profile(filtered_data)
 
-      # for some reason the leaflet plot is not rendering
+      # TODO: for some reason the leaflet plot is not rendering
       output$trait_profile <- renderUI({
         tagList(
           trait_profile[[1]]
@@ -122,6 +122,22 @@ austraits_server <- function(input, output, session) {
           # leaflet::renderLeaflet(trait_profile[[4]])
         )
       })
+
+      output$trait_histogram_text <- renderUI({
+        tagList(
+          p("The plot below shows the distribution of selected data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means."),
+          p("Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait"),
+          em("Trait histogram:")
+        )
+      })
+
+      output$trait_beeswarm_plot <- plotly::renderPlotly({
+        req(filtered_data, input$trait_name)
+        plot_trait_distribution(filtered_data, input$trait_name) |>
+          plotly::ggplotly(tooltip = c("x", "y", "text"))
+      })
+
+
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
