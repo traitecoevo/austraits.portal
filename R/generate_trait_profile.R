@@ -60,12 +60,6 @@ For this trait, AusTraits includes a total of **%s** records. This includes:
 - data for **%s** species.
 - data for **%s** families.
 - data from **%s** datasets (see below for a list of sources)
-
-### Observed values
-
-The plot below shows the distribution of selected data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means.
-
-Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait
   ", 
   trait, 
   trait_definition$label,
@@ -96,15 +90,10 @@ Visualising data records across the families with the most data for the trait in
   data_trait$dataset_id |> dplyr::n_distinct()
   ) |> commonmark::markdown_html() |> HTML()
 
-  output[[2]] <- plot_trait_distribution(data_trait, trait) |>
-    plotly::ggplotly() |> htmltools::as.tags()
-
-  output[[3]] <-
+  # Geo text
+    output[[3]] <-
     sprintf(
 "
-
-### Geographical distribution of trait data
-
 Of the %s records for this trait, **%s** have latitude and longitude coordinates. 
 
 The map below shows the geographical distribution of trait data for this trait. The data are shown as points on the map, with the size of the point indicating the number of records at that location. 
@@ -114,10 +103,8 @@ The map below shows the geographical distribution of trait data for this trait. 
   nrow(data_geo)
   ) |> commonmark::markdown_html() |> HTML()
 
-  if(nrow(data_geo) == 0) {
-    output[[4]] <- leaflet::leaflet()
-  } else {
-    output[[4]] <-
+  # Geomap
+      output[[4]] <-
       leaflet::leaflet(data = data_geo) |>
       leaflet::addTiles() |>
       leaflet::addCircleMarkers(
@@ -127,7 +114,6 @@ The map below shows the geographical distribution of trait data for this trait. 
         radius = 4,
         fillOpacity = 0.7
       )
-  }
 
   output
 }

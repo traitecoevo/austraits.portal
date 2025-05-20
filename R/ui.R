@@ -187,7 +187,28 @@ austraits_ui <- function() {
         card(
           card_header("AusTraits trait profile"),
           card_body(
-            htmlOutput("trait_profile"),
+            card(
+              htmlOutput("trait_profile"),
+              min_height = 600
+            ),
+            card(
+              card_header("Observed values"),
+              card_body(
+                        uiOutput("trait_histogram_text"),
+                        plotly::plotlyOutput("trait_beeswarm_plot")
+              ),
+              min_height = 650,
+              full_screen = TRUE,
+              fillable = FALSE
+            ),
+            card(
+              card_header("Geographical distribution of trait data"),
+              min_height = 600,
+              card_body(
+                uiOutput("trait_geo_text"),
+                leaflet::leafletOutput("trait_geo_map", height = "600px")
+              )
+            )
           )
         )
       ),

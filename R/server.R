@@ -7,6 +7,7 @@
 austraits_server <- function(input, output, session) {
   # Reactive value to store the filtered data later
   filtered_database <- reactiveVal(NULL)
+  display_database <- reactiveVal(NULL)
   
   # New reactive value to store datatable filter state
   dt_proxy <- reactiveVal(NULL)
@@ -32,6 +33,7 @@ austraits_server <- function(input, output, session) {
   observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
+    display_database(NULL)
     
     # First, clear the Fabaceae selection from family if switching to another rank
     if (input$taxon_rank != "family") {
@@ -100,13 +102,59 @@ austraits_server <- function(input, output, session) {
       input_values <- reactiveValuesToList(input)
 
       # Apply filters with the input values
+      # print(input_values)
+      print("filtering 1")
       filtered_data <- austraits |>
         apply_filters_categorical(input_values) |>
         apply_filters_location(input_values) |> 
         dplyr::collect()
-
+      print("filtering 2")
+      display_data <- austraits_display |>
+        apply_filters_categorical(input_values) |>
+        apply_filters_location(input_values) |> 
+        dplyr::collect()
+      print("done")
       usage_text(generate_usage_and_citations_text(filtered_data))
       output$usage_text <- renderUI({usage_text()})
+
+      trait_profile <- generate_trait_profile(filtered_data)
+
+      # TODO: for some reason the leaflet plot is not rendering
+      output$trait_profile <- renderUI({
+        tagList(
+          trait_profile[[1]]
+          # HTML("<b>Trait histogram:</b>"),
+          # trait_profile[[2]],
+          # HTML("<b>Trait table:</b>"),
+          # trait_profile[[3]],
+          # HTML("<b>Trait map:</b>"),
+          # leaflet::renderLeaflet(trait_profile[[4]])
+        )
+      })
+
+      output$trait_histogram_text <- renderUI({
+        tagList(
+          p("The plot below shows the distribution of selected data for this trait, including data collected on individuals of all age classes (seedling, sapling, adult), both field-collected and experimental data, and data representing individuals and population means."),
+          p("Visualising data records across the families with the most data for the trait indicates the taxonomic breadth of information for this trait"),
+          # em("Trait histogram:") #TODO: Not sure if this is needed
+        )
+      })
+
+      output$trait_beeswarm_plot <- plotly::renderPlotly({
+        req(filtered_data, input$trait_name)
+        plot_trait_distribution(filtered_data, input$trait_name) |>
+          plotly::ggplotly(tooltip = c("x", "y", "text"), height = 400)
+      })
+
+      output$trait_geo_text <- renderUI({
+          trait_profile[[3]]
+        
+      })
+
+      output$trait_geo_map <- leaflet::renderLeaflet({
+        trait_profile[[4]]
+      })
+
 
       trait_profile <- generate_trait_profile(filtered_data)
 
@@ -124,9 +172,13 @@ austraits_server <- function(input, output, session) {
       })
       # Store filtered data into reactive value
       filtered_database(filtered_data)
+      display_database(display_data)
+      # print("initial filtering")
+      # print(display_database())
     } else {
       # No filters selected
       filtered_database(NULL)
+      display_database(NULL)
 
       output$trait_profile <- renderUI({
         tagList(
@@ -142,7 +194,11 @@ austraits_server <- function(input, output, session) {
     if(input$taxon_rank == "all") {
       # If not taxonomic rank is selected, show full database
       full_database <- austraits |> dplyr::collect()
+      formatted_database <- austraits_display |> dplyr::collect()
       filtered_database(full_database)
+      display_database(formatted_database)
+      # print("showing all")
+      # print(display_database())
     } 
     else {
       if (is.null(filtered_database())) {
@@ -207,9 +263,15 @@ austraits_server <- function(input, output, session) {
           data <- austraits |>
             apply_filters_categorical(input) |>
             dplyr::collect()
-          
+          # print("taxon view")
+          display_data <- austraits_display |>
+            apply_filters_categorical(input) |>
+            dplyr::collect()
+
           # Update the filtered_database reactive
           filtered_database(data)
+          display_database(display_data)
+          # print(display_database())
         }
         
         # Now we can use the data (whether it was already filtered or we just created it)
@@ -290,6 +352,7 @@ austraits_server <- function(input, output, session) {
 
     # Set the filtered database to NULL
     filtered_database(NULL)
+    display_database(NULL)
 
     # Reset the download data to NULL
     download_data_table <- reactive({
@@ -311,19 +374,16 @@ austraits_server <- function(input, output, session) {
     )
   })
   
+  # Todo - remove this
   # Set up display data as reactive expression
   display_data_table <- reactive({
-    # Get the current filtered database
-    filtered_db <- filtered_database()
-    
     # Check if it's NULL and return appropriate value
-    if (is.null(filtered_db)) {
+    data <- display_database()
+    # print(data)
+    if (is.null(data)) {
       return(NULL)
     }
-    
-    # Format the database for display
-    format_database_for_display(filtered_db) |> 
-      format_hyperlinks_for_display()
+    return(data)
   })
   
   # Set up download data as reactive expression
@@ -357,37 +417,21 @@ austraits_server <- function(input, output, session) {
   # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
+    print("collecting austraits display data")
     display_data <- display_data_table()
-    
+    print("done")
+
     # Return NULL or empty table if no data
     if (is.null(display_data)) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
     
-    # Truncate text columns to 20 characters except for column names listed below
-    display_data_truncated <- display_data
-    text_columns <- sapply(display_data, is.character)
-    columns_to_exclude <- c("taxon_name", "trait_name", "genus", "family", "source_primary_citation")  # Exclude the hyperlink column from truncation
-    
-    for (col in names(display_data)[text_columns]) {
-      # Skip the excluded columns
-      if (col %in% columns_to_exclude) next
-      
-      display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
-        if (is.na(x) || is.null(x)) return(x)
-        if (nchar(x) > 20) {
-          paste0(substr(x, 1, 20), "...")
-        } else {
-          x
-        }
-      })
-    }
     # Determine column indices where we want to turn off column filtering
-    no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
+    no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     # Hide the row_id column
-    hide_cols <- which(names(display_data_truncated) %in% c("row_id"))
+    hide_cols <- which(names(display_data) %in% c("row_id"))
     dt <- datatable(
-      data = display_data_truncated,
+      data = display_data,
       escape = FALSE,
       options = list(
         pageLength = 10,
