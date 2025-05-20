@@ -96,7 +96,7 @@ For this trait, AusTraits includes a total of **%s** records. This includes:
 "
 Of the %s records for this trait, **%s** have latitude and longitude coordinates. 
 
-The map below shows the geographical distribution of trait data for this trait. The data are shown as points on the map, with the size of the point indicating the number of records at that location. 
+ The map below shows the geographical distribution of trait data for this trait. The data are shown as points on the map, with the size of the point indicating the number of records at that location. 
 
 ", 
   data_trait |> nrow(),
