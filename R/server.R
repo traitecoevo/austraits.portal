@@ -430,11 +430,8 @@ austraits_server <- function(input, output, session) {
     no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     # Hide the row_id column
     hide_cols <- which(names(display_data) %in% c("row_id"))
-    # Shorten the width of these columns
-    # Don't shorten taxon name, trait name, genus, family
+    # Shorten the width of columns except the ones listed below
     thin_cols <- which(names(display_data) %not_in% c("taxon_name", "trait_name", "genus", "family"))
-    #thin_cols <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31)
-    print(thin_cols)
     dt <- datatable(
       data = display_data,
       escape = FALSE,
