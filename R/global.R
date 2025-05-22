@@ -6,11 +6,14 @@ options(shiny.launch.browser = TRUE)
 ## Use austraits R package load_austraits() function to download data to the file path below
 ## Then create this parquet following code in data-raw/create-flat-austraits.R
 
+# Custom logic
+`%not_in%` <- Negate(`%in%`)
+
 # Load the austraits dataset
-# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
-# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display-obs.parquet")
-austraits <- as.data.frame(arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet"))
-austraits_display <- as.data.frame(arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet"))
+austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
+austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display-obs.parquet")
+# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
 
 # Set up possible values for selectize menus

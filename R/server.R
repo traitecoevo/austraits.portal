@@ -430,29 +430,39 @@ austraits_server <- function(input, output, session) {
     no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     # Hide the row_id column
     hide_cols <- which(names(display_data) %in% c("row_id"))
+    # Shorten the width of these columns
+    # Don't shorten taxon name, trait name, genus, family
+    thin_cols <- which(names(display_data) %not_in% c("taxon_name", "trait_name", "genus", "family"))
+    #thin_cols <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31)
+    print(thin_cols)
     dt <- datatable(
       data = display_data,
       escape = FALSE,
+      rownames = FALSE,
+      filter = "top",
+      class = "cell-border stripe nowrap",
       options = list(
         pageLength = 10,
-        scrollX = TRUE,
         searching = FALSE,
+        autoWidth = FALSE,
+        scrollX = TRUE,
         columnDefs = list(
           list(
-            searchable = FALSE, 
-            targets = no_filter_cols - 1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+            targets = no_filter_cols - 1, # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+            searchable = FALSE
           ),
           list(
-            visible = FALSE,
-            targets = hide_cols - 1 # hide these columns from table view
+            targets = hide_cols - 1, # hide these columns from table view
+            visible = FALSE
+          ),
+          list(
+            targets = thin_cols - 1, # Force these columns to have a smaller width
+            className = "truncated"
           )
         ),
         # Add server-side processing for better filtering performance
         serverSide = FALSE # Keep this as FALSE for client-side filtering to access filtered rows
       ),
-      rownames = FALSE,
-      filter = "top",
-      class = "cell-border stripe nowrap",
       # Removed selection = 'multiple' option
     )
     
