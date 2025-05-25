@@ -11,7 +11,7 @@ options(shiny.launch.browser = TRUE)
 
 # Load the austraits dataset
 austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
-austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display-obs.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display-obs.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
 # austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
