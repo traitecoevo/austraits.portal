@@ -10,16 +10,17 @@ options(shiny.launch.browser = TRUE)
 `%not_in%` <- Negate(`%in%`)
 
 # Load the original AusTraits dataset for download
-austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
+austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-flatten.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
 
 # Load the display version of AusTraits for displaying in datatable
 austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display.parquet")
-# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-display.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-display.parquet")
+
 
 # Set up possible values for selectize menus
-
 ## Taxonomy
 ### Unique values of family
 all_family <- austraits |>
