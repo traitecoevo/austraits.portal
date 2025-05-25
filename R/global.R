@@ -9,12 +9,14 @@ options(shiny.launch.browser = TRUE)
 # Custom logic
 `%not_in%` <- Negate(`%in%`)
 
-# Load the austraits dataset
+# Load the original AusTraits dataset for download
 austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
-# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display-obs.parquet")
-# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
-# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
+# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+
+# Load the display version of AusTraits for displaying in datatable
+austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten-display.parquet")
 
 # Set up possible values for selectize menus
 
