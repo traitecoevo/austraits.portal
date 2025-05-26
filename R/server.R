@@ -7,7 +7,6 @@
 austraits_server <- function(input, output, session) {
   # Reactive value to store the filtered data later
   filtered_database <- reactiveVal(NULL)
-  display_database <- reactiveVal(NULL)
   
   # New reactive value to store datatable filter state
   dt_proxy <- reactiveVal(NULL)
@@ -33,7 +32,6 @@ austraits_server <- function(input, output, session) {
   observeEvent(input$taxon_rank, {
     # Reset the filtered database to clear the data preview
     filtered_database(NULL)
-    display_database(NULL)
     
     # First, clear the Fabaceae selection from family if switching to another rank
     if (input$taxon_rank != "family") {
@@ -103,13 +101,8 @@ austraits_server <- function(input, output, session) {
 
       # Apply filters with the input values
       # print(input_values)
-      print("filtering 1")
-      filtered_data <- austraits |>
-        apply_filters_categorical(input_values) |>
-        apply_filters_location(input_values) |> 
-        dplyr::collect()
-      print("filtering 2")
-      display_data <- austraits_display |>
+      print("filtering")
+      filtered_data <- austraits_display |>
         apply_filters_categorical(input_values) |>
         apply_filters_location(input_values) |> 
         dplyr::collect()
@@ -172,13 +165,9 @@ austraits_server <- function(input, output, session) {
       })
       # Store filtered data into reactive value
       filtered_database(filtered_data)
-      display_database(display_data)
-      # print("initial filtering")
-      # print(display_database())
     } else {
       # No filters selected
       filtered_database(NULL)
-      display_database(NULL)
 
       output$trait_profile <- renderUI({
         tagList(
@@ -193,12 +182,8 @@ austraits_server <- function(input, output, session) {
     input$taxon_rank, {
     if(input$taxon_rank == "all") {
       # If not taxonomic rank is selected, show full database
-      full_database <- austraits |> dplyr::collect()
-      formatted_database <- austraits_display |> dplyr::collect()
+      full_database <- austraits_display |> dplyr::collect()
       filtered_database(full_database)
-      display_database(formatted_database)
-      # print("showing all")
-      # print(display_database())
     } 
     else {
       if (is.null(filtered_database())) {
@@ -270,7 +255,6 @@ austraits_server <- function(input, output, session) {
 
           # Update the filtered_database reactive
           filtered_database(data)
-          display_database(display_data)
           # print(display_database())
         }
         
@@ -352,7 +336,6 @@ austraits_server <- function(input, output, session) {
 
     # Set the filtered database to NULL
     filtered_database(NULL)
-    display_database(NULL)
 
     # Reset the download data to NULL
     download_data_table <- reactive({
@@ -361,7 +344,7 @@ austraits_server <- function(input, output, session) {
  
     # Reset datatable filters
     if (!is.null(dt_proxy())) {
-      DT::replaceData(dt_proxy(), display_data_table())
+      DT::replaceData(dt_proxy(), filtered_database())
     }
 
     # Reset the usage text
@@ -373,30 +356,18 @@ austraits_server <- function(input, output, session) {
                      duration = 3
     )
   })
-  
-  # Todo - remove this
-  # Set up display data as reactive expression
-  display_data_table <- reactive({
-    # Check if it's NULL and return appropriate value
-    data <- display_database()
-    # print(data)
-    if (is.null(data)) {
-      return(NULL)
-    }
-    return(data)
-  })
-  
+    
   # Set up download data as reactive expression
   download_data_table <- reactive({
-    # Get the current filtered database
-    filtered_db <- filtered_database()
-    display_db <- display_data_table()
+    # Get the current filtered database that is on display
+    display_db <- filtered_database()
     
     # Check if it's NULL and return appropriate value
-    if (is.null(filtered_db)) {
+    if (is.null(filtered_database)) {
       return(NULL)
     }
     
+    # Assuming user has used column filtering: 
     # Get the row indices from the DT table that are currently visible
     # after filtering in the datatable
     if (!is.null(input$data_table_rows_all)) {
@@ -407,18 +378,18 @@ austraits_server <- function(input, output, session) {
       display_db_filtered <- display_db[visible_rows, , drop = FALSE]
       
       # Join back up to full dataset to get all columns for only the visible rows
-      return(filtered_db |> dplyr::semi_join(display_db_filtered, by = "row_id"))
+      return(austraits |> dplyr::semi_join(display_db_filtered, by = "row_id"))
     }
     
     # Default: Join back up to full dataset to get all columns
-    filtered_db |> dplyr::semi_join(display_db, by = "row_id")
+    austraits |> dplyr::semi_join(display_db, by = "row_id")
   })
   
   # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
     print("collecting austraits display data")
-    display_data <- display_data_table()
+    display_data <- filtered_database()
     print("done")
 
     # Return NULL or empty table if no data
