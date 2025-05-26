@@ -126,6 +126,7 @@ format_database_for_display <- function(database){
          "taxonomic_dataset"),
       "dataset_id", 
       "source_primary_citation", 
+      "source_primary_key",
       "row_id"
     ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 

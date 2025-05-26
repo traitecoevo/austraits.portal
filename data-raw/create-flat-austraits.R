@@ -16,7 +16,7 @@ austraits_lite_flatten |>
     arrow::write_parquet("inst/extdata/austraits/austraits-lite-flatten.parquet")  
 
 # Save the display version of the lite database
-austraits_lite_flatten
+austraits_lite_flatten |> 
     format_database_for_display() |> 
     format_hyperlinks_for_display() |> 
     arrow::write_parquet("inst/extdata/austraits/austraits-lite-display.parquet")
