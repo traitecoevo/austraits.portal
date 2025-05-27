@@ -112,26 +112,13 @@ format_database_for_display <- function(database){
          "description", 
          "assistants", 
          "dataset_curators", 
-         "aligned_name",
-         "binomial", 
-         "trinomial", 
-         "taxon_name_alternatives", 
          "sampling_strategy"),
-      -c("taxon_id_genus",
-         "taxon_id_family",
-         "taxonomic_resolution",
-         "aligned_name_taxonomic_status",
-         "taxonomic_status",
-         "scientific_name",
-         "taxonomic_dataset"),
       "dataset_id", 
       "source_primary_citation", 
       "source_primary_key", # For usage text
-      "aligned_name_taxonomic_status", # For trait profile
       "location_id", # For trait profile
-      "observation_id", # For trait profile
-      "scientific_name_id", # For trait profile
-      "taxon_name_alternatives", # For trait profile
+      "observation_id", # For trait profile,
+      "taxon_name", "taxon_distribution", "taxon_rank":"aligned_name_taxonomic_status", # For trait profile
       "row_id"
     ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 

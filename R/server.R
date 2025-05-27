@@ -198,6 +198,7 @@ austraits_server <- function(input, output, session) {
                     input$taxon_rank,
                     input$taxon_name
   ), {
+
     # First, handle cases where we need to clear the taxon view
       # Case 1: Taxon rank is not "taxon_name"
       # Case 2: taxon_name is NULL or empty
@@ -239,17 +240,14 @@ austraits_server <- function(input, output, session) {
   # Generate Taxon View text if passes all checks
       else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
         
+       
         # Get the filtered data    
         data <- filtered_database()
         
         # Check if data is NULL or if user has manually cleared filters
         if (is.null(data)) {
           # Apply a filter just for this taxon to generate the taxon view
-          data <- austraits |>
-            apply_filters_categorical(input) |>
-            dplyr::collect()
-          # print("taxon view")
-          display_data <- austraits_display |>
+          data <- austraits_display |>
             apply_filters_categorical(input) |>
             dplyr::collect()
 
