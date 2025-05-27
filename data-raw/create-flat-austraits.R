@@ -1,6 +1,7 @@
 library(austraits)
 library(arrow)
 library(dplyr)
+source("R/a-helper.R")
 
 # TODO: Filing structure for display/species averages?
 # TODO: Encoding issue in full database
