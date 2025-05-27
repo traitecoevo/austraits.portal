@@ -6,13 +6,31 @@ options(shiny.launch.browser = TRUE)
 ## Use austraits R package load_austraits() function to download data to the file path below
 ## Then create this parquet following code in data-raw/create-flat-austraits.R
 
-# Load the austraits dataset
-austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-obs.parquet")
-# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+# Custom logic
+`%not_in%` <- Negate(`%in%`)
+
+# Load the original AusTraits dataset for download
+austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-flatten.parquet")
 # austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-flatten.parquet")
+# austraits <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-flatten.parquet")
+
+# Load the display version of AusTraits for displaying in datatable
+austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-lite-display.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-mid-display.parquet")
+# austraits_display <- arrow::open_dataset("inst/extdata/austraits/austraits-6.0.0-display.parquet")
+
+columns_display <- c(
+  "dataset_id", "taxon_name", "genus", "family", "trait_name", "value", "unit",
+  "entity_type", "value_type", "basis_of_value", "replicates", "basis_of_record",
+  "life_stage", "collection_date", "measurement_remarks", "original_name", 
+  "location_name", "latitude (deg)", "longitude (deg)", "location_properties",
+  "treatment_context_properties", "plot_context_properties", 
+  "entity_context_properties", "temporal_context_properties", 
+  "method_context_properties", "source_primary_citation", "data_contributors",
+  "taxon_rank", "taxon_distribution", "establishment_means"
+)
 
 # Set up possible values for selectize menus
-
 ## Taxonomy
 ### Unique values of family
 all_family <- austraits |>

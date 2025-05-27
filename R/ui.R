@@ -2,7 +2,18 @@
 
 austraits_ui <- function() {
   ui <- page_sidebar(
-
+    # Custom CSS for DataTable
+      tags$head(
+        tags$style(HTML("
+          /* Set max widths for truncated columns */
+          .truncated {
+            max-width: 20rem !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        ")
+      )),
     # Set the overall theme of the app
     theme = bs_theme(preset = "flatly"),
 
@@ -17,7 +28,6 @@ austraits_ui <- function() {
       div("Created by AusTraits Team",  
           target)
       ),
-
     # Create a sidebar for the app
     sidebar = sidebar(
       # Filter by taxonomic information

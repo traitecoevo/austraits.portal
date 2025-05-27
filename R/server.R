@@ -100,11 +100,13 @@ austraits_server <- function(input, output, session) {
       input_values <- reactiveValuesToList(input)
 
       # Apply filters with the input values
-      filtered_data <- austraits |>
+      # print(input_values)
+      print("filtering")
+      filtered_data <- austraits_display |>
         apply_filters_categorical(input_values) |>
         apply_filters_location(input_values) |> 
         dplyr::collect()
-
+      print("done")
       usage_text(generate_usage_and_citations_text(filtered_data))
       output$usage_text <- renderUI({usage_text()})
 
@@ -147,6 +149,20 @@ austraits_server <- function(input, output, session) {
       })
 
 
+      trait_profile <- generate_trait_profile(filtered_data)
+
+      # for some reason the leaflet plot is not rendering
+      output$trait_profile <- renderUI({
+        tagList(
+          trait_profile[[1]],
+          HTML("<b>Trait histogram:</b>"),
+          trait_profile[[2]],
+          HTML("<b>Trait table:</b>"),
+          trait_profile[[3]],
+          HTML("<b>Trait map:</b>"),
+          leaflet::renderLeaflet(trait_profile[[4]])
+        )
+      })
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
@@ -166,7 +182,7 @@ austraits_server <- function(input, output, session) {
     input$taxon_rank, {
     if(input$taxon_rank == "all") {
       # If not taxonomic rank is selected, show full database
-      full_database <- austraits |> dplyr::collect()
+      full_database <- austraits_display |> dplyr::collect()
       filtered_database(full_database)
     } 
     else {
@@ -182,6 +198,7 @@ austraits_server <- function(input, output, session) {
                     input$taxon_rank,
                     input$taxon_name
   ), {
+
     # First, handle cases where we need to clear the taxon view
       # Case 1: Taxon rank is not "taxon_name"
       # Case 2: taxon_name is NULL or empty
@@ -193,7 +210,7 @@ austraits_server <- function(input, output, session) {
     
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
-      # browser()
+      
       # Check if taxon_rank is "taxon_name"
       if (!input$taxon_rank == "taxon_name" || is.null(input$taxon_name)) {
           showNotification(
@@ -223,18 +240,20 @@ austraits_server <- function(input, output, session) {
   # Generate Taxon View text if passes all checks
       else if (input$taxon_rank == "taxon_name" && !is.null(input$taxon_name) && length(input$taxon_name) == 1) {
         
+       
         # Get the filtered data    
         data <- filtered_database()
         
         # Check if data is NULL or if user has manually cleared filters
         if (is.null(data)) {
           # Apply a filter just for this taxon to generate the taxon view
-          data <- austraits |>
+          data <- austraits_display |>
             apply_filters_categorical(input) |>
             dplyr::collect()
-          
+
           # Update the filtered_database reactive
           filtered_database(data)
+          # print(display_database())
         }
         
         # Now we can use the data (whether it was already filtered or we just created it)
@@ -323,7 +342,7 @@ austraits_server <- function(input, output, session) {
  
     # Reset datatable filters
     if (!is.null(dt_proxy())) {
-      DT::replaceData(dt_proxy(), display_data_table())
+      DT::replaceData(dt_proxy(), filtered_database())
     }
 
     # Reset the usage text
@@ -335,33 +354,18 @@ austraits_server <- function(input, output, session) {
                      duration = 3
     )
   })
-  
-  # Set up display data as reactive expression
-  display_data_table <- reactive({
-    # Get the current filtered database
-    filtered_db <- filtered_database()
     
-    # Check if it's NULL and return appropriate value
-    if (is.null(filtered_db)) {
-      return(NULL)
-    }
-    
-    # Format the database for display
-    format_database_for_display(filtered_db) |> 
-      format_hyperlinks_for_display()
-  })
-  
   # Set up download data as reactive expression
   download_data_table <- reactive({
-    # Get the current filtered database
-    filtered_db <- filtered_database()
-    display_db <- display_data_table()
+    # Get the current filtered database that is on display
+    display_db <- filtered_database()
     
     # Check if it's NULL and return appropriate value
-    if (is.null(filtered_db)) {
+    if (is.null(filtered_database)) {
       return(NULL)
     }
     
+    # Assuming user has used column filtering: 
     # Get the row indices from the DT table that are currently visible
     # after filtering in the datatable
     if (!is.null(input$data_table_rows_all)) {
@@ -372,68 +376,59 @@ austraits_server <- function(input, output, session) {
       display_db_filtered <- display_db[visible_rows, , drop = FALSE]
       
       # Join back up to full dataset to get all columns for only the visible rows
-      return(filtered_db |> dplyr::semi_join(display_db_filtered, by = "row_id"))
+      return(austraits |> dplyr::semi_join(display_db_filtered, by = "row_id")  |> dplyr::collect())
     }
     
     # Default: Join back up to full dataset to get all columns
-    filtered_db |> dplyr::semi_join(display_db, by = "row_id")
+    austraits |> dplyr::semi_join(display_db, by = "row_id") |> dplyr::collect()
   })
   
   # Render user selected data table output
   output$data_table <- DT::renderDT({
     # Get the display data
-    display_data <- display_data_table()
-    
+    print("collecting austraits display data")
+    display_data <- filtered_database()
+    print("done")
+
     # Return NULL or empty table if no data
     if (is.null(display_data)) {
       return(datatable(data.frame(), options = list(pageLength = 10)))
     }
     
-    # Truncate text columns to 20 characters except for column names listed below
-    display_data_truncated <- display_data
-    text_columns <- sapply(display_data, is.character)
-    columns_to_exclude <- c("taxon_name", "trait_name", "genus", "family", "source_primary_citation")  # Exclude the hyperlink column from truncation
-    
-    for (col in names(display_data)[text_columns]) {
-      # Skip the excluded columns
-      if (col %in% columns_to_exclude) next
-      
-      display_data_truncated[[col]] <- sapply(display_data[[col]], function(x) {
-        if (is.na(x) || is.null(x)) return(x)
-        if (nchar(x) > 20) {
-          paste0(substr(x, 1, 20), "...")
-        } else {
-          x
-        }
-      })
-    }
     # Determine column indices where we want to turn off column filtering
-    no_filter_cols <- which(names(display_data_truncated) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
+    no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
     # Hide the row_id column
-    hide_cols <- which(names(display_data_truncated) %in% c("row_id"))
+    hide_cols <- which(names(display_data) %not_in% columns_display)
+    # Truncate these columns
+    thin_cols <- which(names(display_data) %not_in% c("taxon_name", "trait_name", "genus", "family"))
     dt <- datatable(
-      data = display_data_truncated,
+      data = display_data,
       escape = FALSE,
+      rownames = FALSE,
+      filter = "top",
+      class = "cell-border stripe nowrap",
       options = list(
         pageLength = 10,
-        scrollX = TRUE,
         searching = FALSE,
+        autoWidth = FALSE,
+        scrollX = TRUE,
         columnDefs = list(
           list(
-            searchable = FALSE, 
-            targets = no_filter_cols - 1 # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+            targets = no_filter_cols - 1, # Targets denotes the columns index where filter will be switched off - Note that JS is 0 indexing
+            searchable = FALSE
           ),
           list(
-            visible = FALSE,
-            targets = hide_cols - 1 # hide these columns from table view
+            targets = hide_cols - 1, # Hide these columns from table view
+            visible = FALSE
+          ),
+          list(
+            targets = thin_cols - 1, # Force these columns to have a smaller width
+            className = "truncated"
           )
         ),
         # Add server-side processing for better filtering performance
         serverSide = FALSE # Keep this as FALSE for client-side filtering to access filtered rows
       ),
-      rownames = FALSE,
-      filter = "top",
-      class = "cell-border stripe nowrap",
       # Removed selection = 'multiple' option
     )
     

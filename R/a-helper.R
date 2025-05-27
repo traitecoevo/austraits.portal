@@ -112,20 +112,13 @@ format_database_for_display <- function(database){
          "description", 
          "assistants", 
          "dataset_curators", 
-         "aligned_name",
-         "binomial", 
-         "trinomial", 
-         "taxon_name_alternatives", 
          "sampling_strategy"),
-      -c("taxon_id_genus",
-         "taxon_id_family",
-         "taxonomic_resolution",
-         "aligned_name_taxonomic_status",
-         "taxonomic_status",
-         "scientific_name",
-         "taxonomic_dataset"),
       "dataset_id", 
       "source_primary_citation", 
+      "source_primary_key", # For usage text
+      "location_id", # For trait profile
+      "observation_id", # For trait profile,
+      "taxon_name", "taxon_distribution", "taxon_rank":"aligned_name_taxonomic_status", # For trait profile
       "row_id"
     ) |> 
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
@@ -144,7 +137,7 @@ format_hyperlinks_for_display <- function(database){
     source_primary_citation_URL = stringr::str_match(.data$source_primary_citation, "\\((https?://[^\\s)]+)\\)")[,2], # Extract URL
     source_primary_citation = gsub("\\[([^]]+)\\]\\([^)]+\\)", "\\1", .data$source_primary_citation), # Remove DOI MD link structure
     source_primary_citation = gsub("_([^_]+)_", "<i>\\1</i>", .data$source_primary_citation), # Replace MD italics with HTML italics
-    source_primary_citation = paste0('<a href="', .data$source_primary_citation_URL, '" target="_blank">', stringr::str_trunc(.data$source_primary_citation, 30, "right"), '</a>') # Replaces the original source_primary_citation with a truncated HTML version
+    source_primary_citation = paste0('<a href="', .data$source_primary_citation_URL, '" target="_blank">', .data$source_primary_citation, '</a>') # Replaces the original source_primary_citation with a HTML version
   ) |>
   dplyr::select(
     -"source_primary_citation_URL"

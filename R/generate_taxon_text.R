@@ -18,7 +18,28 @@ generate_taxon_text <- function(data, taxon) {
     dplyr::filter(taxon_name == taxon)
 
   taxon_info <- data_taxon |>
-    dplyr::select(taxon_name, taxon_distribution, taxon_rank:aligned_name_taxonomic_status) |>
+    dplyr::select(
+      taxon_name, 
+      taxon_distribution, 
+      taxon_rank, 
+      taxonomic_status, 
+      taxonomic_dataset, 
+      taxon_name_alternatives,
+      genus, 
+      family, 
+      binomial,
+      trinomial, 
+      establishment_means,
+      scientific_name,
+      taxon_id,
+      taxon_id_genus, 
+      taxon_id_family,
+      scientific_name_id, 
+      aligned_name, 
+      taxonomic_resolution,
+      aligned_name_taxon_id,
+      aligned_name_taxonomic_status
+      ) |>
     dplyr::slice(1) |>
     as.list()
 

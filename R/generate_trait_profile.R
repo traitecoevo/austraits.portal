@@ -115,7 +115,6 @@ Of the %s records for this trait, **%s** have latitude and longitude coordinates
         fillOpacity = 0.7
       )
 
-
   output
 }
 
