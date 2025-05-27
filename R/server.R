@@ -210,7 +210,7 @@ austraits_server <- function(input, output, session) {
     
     # Check if the current tab is "Taxon View"
     if (input$main_tabs == "Taxon View") {
-      # browser()
+      
       # Check if taxon_rank is "taxon_name"
       if (!input$taxon_rank == "taxon_name" || is.null(input$taxon_name)) {
           showNotification(
@@ -376,11 +376,11 @@ austraits_server <- function(input, output, session) {
       display_db_filtered <- display_db[visible_rows, , drop = FALSE]
       
       # Join back up to full dataset to get all columns for only the visible rows
-      return(austraits |> dplyr::semi_join(display_db_filtered, by = "row_id"))
+      return(austraits |> dplyr::semi_join(display_db_filtered, by = "row_id")  |> dplyr::collect())
     }
     
     # Default: Join back up to full dataset to get all columns
-    austraits |> dplyr::semi_join(display_db, by = "row_id")
+    austraits |> dplyr::semi_join(display_db, by = "row_id") |> dplyr::collect()
   })
   
   # Render user selected data table output
