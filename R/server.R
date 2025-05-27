@@ -397,9 +397,10 @@ austraits_server <- function(input, output, session) {
     
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
+    print(no_filter_cols)
     # Hide the row_id column
-    hide_cols <- which(names(display_data) %in% c("row_id"))
-    # Shorten the width of columns except the ones listed below
+    hide_cols <- which(names(display_data) %not_in% columns_display)
+    # Truncate these columns
     thin_cols <- which(names(display_data) %not_in% c("taxon_name", "trait_name", "genus", "family"))
     dt <- datatable(
       data = display_data,
@@ -418,7 +419,7 @@ austraits_server <- function(input, output, session) {
             searchable = FALSE
           ),
           list(
-            targets = hide_cols - 1, # hide these columns from table view
+            targets = hide_cols - 1, # Hide these columns from table view
             visible = FALSE
           ),
           list(
