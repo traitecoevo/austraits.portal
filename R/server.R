@@ -397,7 +397,6 @@ austraits_server <- function(input, output, session) {
     
     # Determine column indices where we want to turn off column filtering
     no_filter_cols <- which(names(display_data) %in% c("value", "unit", "entity_type", "value_type", "replicates"))
-    print(no_filter_cols)
     # Hide the row_id column
     hide_cols <- which(names(display_data) %not_in% columns_display)
     # Truncate these columns
