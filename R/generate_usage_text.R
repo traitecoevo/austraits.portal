@@ -16,8 +16,6 @@
 generate_usage_and_citations_text <- function(data) {
 
   # Extract the version of the package
-  metatdata <- jsonlite::read_json("inst/extdata/austraits/austraits.json")
-
   version <- metatdata$hits$hits[[1]]$metadata$version
   doi <- metatdata$hits$hits[[1]]$metadata$doi
   date <- metatdata$hits$hits[[1]]$metadata$publication_date

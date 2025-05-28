@@ -28,7 +28,7 @@ generate_trait_profile <- function(data_trait) {
 
   trait <- data_trait$trait_name[1]
 
-  trait_definition <- yaml::read_yaml("inst/extdata/austraits/definitions.yml")[[trait]]
+  trait_definition <- trait_definitions[[trait]]
 
   data_geo <-
     data_trait |>

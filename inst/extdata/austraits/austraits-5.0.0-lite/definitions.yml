@@ -20,7 +20,7 @@ accessory_cost_mass:
   label: Seed accessory cost mass
   description: A reproductive shoot system [PO:0025082] biomass allocation [EnvThes:21360]
     trait which is the sum of the dry [PATO:0001824] mass [PATO:0000125] of all flower
-    buds [PO:0000055], flowers [PO:0009046], fruits [PO:0009001], aborted seeds, and
+    buds [PO:0000056], flowers [PO:0009046], fruits [PO:0009001], aborted seeds, and
     dispersal [EnvThes:21038] tissues produced during the developmental process involved
     in reproduction [GO:0003006], but excludes mature [PATO:0001701] seed [PO:0009010]
     dry mass.;The mass of seed accessory costs, which is the total biomass investment
@@ -46,8 +46,7 @@ atmospheric_CO2_concentration:
 bark_Al_per_dry_mass:
   label: Bark aluminium (Al) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of aluminium [CHEBI:28984]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of aluminium in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -57,9 +56,7 @@ bark_ash_per_dry_mass:
   label: Bark ash content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of bark [PO:0004518]
     ash [ENVO:02000090] remaining after a combustion process [ENVO:01000839] to the
-    bark dry mass before the combustion process.;The ratio of the mass of bark ash
-    remaining after a combustion process to the bark dry mass before the combustion
-    process.
+    bark dry mass before the combustion process.
   type: numeric
   units: g/g
   allowed_values_min: 0.0001
@@ -68,8 +65,7 @@ bark_ash_per_dry_mass:
 bark_B_per_dry_mass:
   label: Bark boron (B) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of boron [CHEBI:27560]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of boron in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -78,8 +74,7 @@ bark_B_per_dry_mass:
 bark_C_per_dry_mass:
   label: Bark carbon (C) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of carbon in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 50.0
@@ -88,8 +83,7 @@ bark_C_per_dry_mass:
 bark_Ca_per_dry_mass:
   label: Bark calcium (Ca) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of calcium in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -98,8 +92,7 @@ bark_Ca_per_dry_mass:
 bark_cellulose_per_dry_mass:
   label: Bark cellulose content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of cellulose [CHEBI:62967]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of cellulose in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/mg
   allowed_values_min: 0.1
@@ -108,8 +101,7 @@ bark_cellulose_per_dry_mass:
 bark_Cu_per_dry_mass:
   label: Bark copper (Cu) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of copper [CHEBI:28694]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of copper in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.0001
@@ -118,7 +110,7 @@ bark_Cu_per_dry_mass:
 bark_delta13C:
   label: Bark stable carbon isotope composition (delta13C)
   description: Carbon stable isotope ratio [ECSO:00001142], d13C [ECSO:00000669],
-    of bark [PO:0004518].;Carbon stable isotope ratio, d13C, of bark.
+    of bark [PO:0004518].
   comments: delta13C is calculated as the ratio of, 13C/12C in a sample to 13C/12C
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A more negative value for delta13C indicates the sample
@@ -131,7 +123,7 @@ bark_delta13C:
 bark_delta15N:
   label: Bark stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of bark [PO:0004518].;Nitrogen stable isotope ratio, d15N, of bark.
+    of bark [PO:0004518].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -164,8 +156,7 @@ bark_dry_mass_per_surface_area:
 bark_Fe_per_dry_mass:
   label: Bark iron (Fe) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of iron [CHEBI:18248]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of iron in bark to
-    bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -174,8 +165,7 @@ bark_Fe_per_dry_mass:
 bark_K_per_dry_mass:
   label: Bark potassium (K) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of potassium in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -184,8 +174,7 @@ bark_K_per_dry_mass:
 bark_lignin_per_dry_mass:
   label: Bark lignin content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of lignin [CHEBI:6457]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of lignin in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/mg
   allowed_values_min: 0.01
@@ -194,8 +183,7 @@ bark_lignin_per_dry_mass:
 bark_Mg_per_dry_mass:
   label: Bark magnesium (Mg) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of magnesium in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -204,8 +192,7 @@ bark_Mg_per_dry_mass:
 bark_Mn_per_dry_mass:
   label: Bark manganese (Mn) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of manganese [CHEBI:18291]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of manganese in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -252,8 +239,7 @@ bark_morphology_eucalyptus:
 bark_N_per_dry_mass:
   label: Bark nitrogen (N) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of nitrogen in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -262,8 +248,7 @@ bark_N_per_dry_mass:
 bark_Na_per_dry_mass:
   label: Bark sodium (Na) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sodium [CHEBI:26708]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of sodium in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -272,8 +257,7 @@ bark_Na_per_dry_mass:
 bark_P_per_dry_mass:
   label: Bark phosphorus (P) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of phosphorus in
-    bark to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -292,8 +276,7 @@ bark_photosynthetic_status:
 bark_S_per_dry_mass:
   label: Bark sulphur (S) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sulphur [CHEBI:26833]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of sulphur in bark
-    to bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -302,8 +285,7 @@ bark_S_per_dry_mass:
 bark_tannin_per_dry_mass:
   label: Bark tannin content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of tannins [CHEBI:26848]
-    (polyphenols [CHEBI:26195]) in bark [PO:0004518] to bark dry mass.;The ratio of
-    the mass of tannins (polyphenols) in bark to bark dry mass.
+    (polyphenols [CHEBI:26195]) in bark [PO:0004518] to bark dry mass.
   comments: Tannins are a specific class of polyphenolic compounds found in plants.
   type: numeric
   units: mg/mg
@@ -362,8 +344,7 @@ bark_water_content_per_saturated_mass:
 bark_Zn_per_dry_mass:
   label: Bark zinc (Zn) content per unit bark dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of zinc [CHEBI:27363]
-    in bark [PO:0004518] to bark dry mass.;The ratio of the mass of zinc in bark to
-    bark dry mass.
+    in bark [PO:0004518] to bark dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -425,7 +406,7 @@ bud_bank_location:
   allowed_values_levels:
     apical_buds: Plants resprout from above-ground apical meristems. Also termed a
       caudex. Term refers to palm-like plants with aerial buds that resprout, including
-      grass trees, palms, tree ferns, and pandanus. (Synonyms, aerial apical sprouter)
+      grass trees, palms, tree ferns, and pandanus. (Synonym, aerial apical sprouter)
     basal_buds: Plants resprout from its base, with buds originating from stem tissue
       (e.g. lignotuber) and root tissue (root crown) not distinguished between. Most
       buds designated as being basal are likely to be resprouts from a lignotuber,
@@ -433,13 +414,13 @@ bud_bank_location:
       `basal stem buds` or `lignotuber`.
     basal_stem_buds: Plants resprout from the base of the stem. Australian plants
       with basal stem buds usually have a lignotuber, documented in the trait `storage_organ`.
-      (Synonyms, rootstock, lignotuberous resprouter)
+      (Synonym, rootstock, lignotuberous resprouter)
     bud-bearing_root: Root buds produce vertical suckers (from root crown) or adventitious
-      roots. (Synonyms, root-suckering resprouter, adventitious buds)
+      roots. (Synonyms, root-suckering resprouter; adventitious buds)
     epicormic_buds: Plants resprout from the stem or trunk.
     fleshy_underground_organ: Plants resprouts from buds on a fleshy underground organ
       that is a taproot tuber, bulb, corm, stem tuber, root tuber, or belowground
-      caudex. (Synonyms, geophyte)
+      caudex. (Synonym, geophyte)
     none: Plants lack regenerative buds.
     rhizome: Plants resprout from buds on a rhizome, where it is not specified if
       the rhizome is woody or non-woody.
@@ -455,43 +436,6 @@ bud_bank_location:
     underground_buds: Plants that resprout from underground organ, but the type of
       organ isn't specified.
   entity_URI: https://w3id.org/APD/traits/trait_0030513
-bud_length:
-  label: Bud length
-  description: A floral organ morphology trait [TO:0000862] which is the  length [PATO:0000122]
-    of the bud [PO:0000055] from the base of the receptable [PO:0009064] or the base
-    of an inferior ovary [PO:0009072] to the tip of the bud.;Linear dimension from
-    the base to the apex of a bud, even if this is not the longest dimension.
-  type: numeric
-  units: cm
-  allowed_values_min: 0.01
-  allowed_values_max: 200.0
-  entity_URI: https://w3id.org/APD/traits/trait_0012301
-bud_width:
-  label: Bud width
-  description: A floral organ morphology trait [TO:0000862] which is the  width [PATO:0000921]
-    of the bud [PO:0000055] from the base of the receptable [PO:0009064] or the base
-    of an inferior ovary [PO:0009072] to the tip of the bud. Width is the greatest
-    linear dimension [PATO:0001708] perpendicular to [PATO:0002434] to the bud length
-    [PATO:0000122];Greatest linear width dimension of a bud, sometimes referred to
-    as 'diameter' in buds where the width and height are identical; orthogonal to
-    the bud length, the base-to-apex dimension.
-  type: numeric
-  units: cm
-  allowed_values_min: 0.01
-  allowed_values_max: 200.0
-  entity_URI: https://w3id.org/APD/traits/trait_0012302
-buds_per_inflorescence:
-  label: Buds per inflorescence
-  description: A floral organ morphology trait [TO:0000862] which is the count [NCIT:C25463]
-    of buds [PO:0000055] in an inflorescence [PO:0009049], where an inflorescence
-    can be either a single cluster of flowers or the entire reproductive shoot system
-    [PO:0025082].;The count of buds in an inflorescence, where an inflorescence can
-    be either a single cluster of flowers or the entire reproductive shoot system.
-  type: numeric
-  units: '{count}/{count}'
-  allowed_values_min: 1.0
-  allowed_values_max: 1000.0
-  entity_URI: https://w3id.org/APD/traits/trait_0012351
 bulk_modulus_of_elasticity:
   label: Bulk modulus of elasticity (e)
   description: A parameter [STATO:0000034] calculated from a pressure-volume curve
@@ -1409,8 +1353,7 @@ flower_length:
 flower_N_per_dry_mass:
   label: Flower nitrogen (N) content per unit flower dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in flowers [PO:0009046] to flower dry mass.;The ratio of the mass of nitrogen
-    in flowers to flower dry mass.
+    in flowers [PO:0009046] to flower dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.5
@@ -1834,8 +1777,7 @@ flowering_time:
 fruit_Ca_per_dry_mass:
   label: Fruit calcium (Ca) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of calcium in fruit
-    to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.5
@@ -1913,8 +1855,7 @@ fruit_height:
 fruit_K_per_dry_mass:
   label: Fruit potassium (K) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of potassium in
-    fruit to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.5
@@ -1934,8 +1875,7 @@ fruit_length:
 fruit_Mg_per_dry_mass:
   label: Fruit magnesium (Mg) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of magnesium in
-    fruit to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.05
@@ -1944,8 +1884,7 @@ fruit_Mg_per_dry_mass:
 fruit_N_per_dry_mass:
   label: Fruit nitrogen (N) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of nitrogen in
-    fruit to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.5
@@ -1954,8 +1893,7 @@ fruit_N_per_dry_mass:
 fruit_P_per_dry_mass:
   label: Fruit phosphorus (P) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of phosphorus in
-    fruit to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -1964,8 +1902,7 @@ fruit_P_per_dry_mass:
 fruit_S_per_dry_mass:
   label: Fruit sulphur (S) content per unit fruit dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sulphur [CHEBI:26833]
-    in fruit [PO:0009001] to fruit dry mass.;The ratio of the mass of sulphur in fruit
-    to fruit dry mass.
+    in fruit [PO:0009001] to fruit dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.05
@@ -2007,7 +1944,7 @@ fruit_type:
       a half-carpel.)
     multiple_fruit: A fruit composed of several fruitlets developing from a single
       flower (e.g. raspberries, magnolias); fruits developing from more than one flower
-      are included under compound (aggregate) fruits. (Synonyms, apocarp)
+      are included under compound (aggregate) fruits. (Synonym, apocarp)
     nut: A simple, dry, indehiscent fruit with a single seed and a hard pericarp.
     nutlet: A diminutive of nut, referring to a simple, dry, indehiscent structure
       with a single seed that might be an entire fruit (nut; monocarp) or a portion
@@ -2163,8 +2100,7 @@ leaf_absorption:
 leaf_Al_per_dry_mass:
   label: Leaf aluminium (Al) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of aluminium [CHEBI:28984]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    aluminium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -2226,14 +2162,14 @@ leaf_arrangement:
       (a rosette), toward the top of the plant, toward the end of branches, or in
       distinct tuft (fascicles), but more information is not provided.
     clustered_basal: When leaves are clustered or crowded to the base of the stem,
-      arranged in a rosette or other basal clustering. (Synonyms, rosette)
+      arranged in a rosette or other basal clustering. (Synonym, rosette)
     crowded: When internode length varies considerably along a stem, such that leaves
-      appear crowded or tufted. (Synonyms, congested)
+      appear crowded or tufted. (Synonym, congested)
     decussate: When sequential pairs of opposite leaves attach at right angles to
       the pair above or below.
     distichous: When alternate or opposite leaves are arranged in two opposite rows.
     fasciculate: A tight bundle or cluster of leaves attaches to the stem in a single
-      location, generally due to the shortening of internodes. (Synonyms, tufted)
+      location, generally due to the shortening of internodes. (Synonym, tufted)
     imbricate: When leaves lay tightly against the stem and are overlapping.
     rosette: When leaves radiate from a central point at or near ground level.
     scattered: When leaves are attached along the entire length of stem.
@@ -2244,9 +2180,7 @@ leaf_ash_per_dry_mass:
   label: Leaf ash content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of leaf [PO:0025034]
     ash [ENVO:02000090] remaining after a combustion process [ENVO:01000839] to the
-    leaf dry mass before the combustion process.;The ratio of the mass of leaf ash
-    remaining after a combustion process to the leaf dry mass before the combustion
-    process.
+    leaf dry mass before the combustion process.
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/g
@@ -2256,8 +2190,7 @@ leaf_ash_per_dry_mass:
 leaf_B_per_dry_mass:
   label: Leaf boron (B) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of boron [CHEBI:27560]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    boron in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -2297,8 +2230,7 @@ leaf_base_shape:
 leaf_C_per_dry_mass:
   label: Leaf carbon (C) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    carbon in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -2308,8 +2240,7 @@ leaf_C_per_dry_mass:
 leaf_Ca_per_dry_mass:
   label: Leaf calcium (Ca) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    calcium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -2319,8 +2250,7 @@ leaf_Ca_per_dry_mass:
 leaf_carotenoid_per_area:
   label: Leaf carotenoid content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carotenoids
-    [CHEBI:23044] in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio of
-    the mass of carotenoids in a leaf to leaf area.
+    [CHEBI:23044] in a leaf [PO:0025034] to leaf area [PATO:0001323].
   type: numeric
   units: umol/m2
   allowed_values_min: 10.0
@@ -2329,8 +2259,7 @@ leaf_carotenoid_per_area:
 leaf_carotenoid_per_dry_mass:
   label: Leaf carotenoid content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carotenoids
-    [CHEBI:23044] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio
-    of the mass of carotenoids in a leaf to leaf dry mass.
+    [CHEBI:23044] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   type: numeric
   units: mmol/kg
   allowed_values_min: 0.1
@@ -2351,8 +2280,7 @@ leaf_cell_wall_N_per_cell_wall_dry_mass:
   label: Leaf cell wall nitrogen (N) per unit cell wall dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in the plant cell wall [GO:0009505] in a leaf [PO:0025034] to the cell wall dry
-    mass in the leaf.;The ratio of the mass of nitrogen in the plant cell wall in
-    a leaf to the cell wall dry mass in the leaf.
+    mass in the leaf.
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mmol{N}/g
@@ -2363,8 +2291,7 @@ leaf_cell_wall_N_per_leaf_N:
   label: Leaf cell wall nitrogen (N) per unit leaf N content
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in the plant cell wall [GO:0009505] in a leaf [PO:0025034] to the mass of nitrogen
-    in the leaf.;The ratio of the mass of nitrogen in the plant cell wall in a leaf
-    to the mass of nitrogen in the leaf.
+    in the leaf.
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/mg
@@ -2374,8 +2301,7 @@ leaf_cell_wall_N_per_leaf_N:
 leaf_cellulose_per_dry_mass:
   label: Leaf cellulose content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of cellulose [CHEBI:62967]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    cellulose in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   type: numeric
   units: mg/mg
   allowed_values_min: 0.01
@@ -2385,8 +2311,7 @@ leaf_chlorophyll_A_B_ratio:
   label: Ratio of leaf chlorophyll A content to leaf chlorophyll B content
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
     a [CHEBI:18230] in a leaf [PO:0025034] to the mass of chlorophyll b [CHEBI:27888]
-    in the leaf.;The ratio of the mass of chlorophyll a in a leaf to the mass of chlorophyll
-    b in the leaf.
+    in the leaf.
   type: numeric
   units: umol/umol
   allowed_values_min: 0.1
@@ -2395,8 +2320,7 @@ leaf_chlorophyll_A_B_ratio:
 leaf_chlorophyll_A_per_area:
   label: Leaf chlorophyll A content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
-    a [CHEBI:18230] in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio
-    of the mass of chlorophyll a in a leaf to leaf area.
+    a [CHEBI:18230] in a leaf [PO:0025034] to leaf area [PATO:0001323].
   type: numeric
   units: umol/m2
   allowed_values_min: 50.0
@@ -2405,8 +2329,7 @@ leaf_chlorophyll_A_per_area:
 leaf_chlorophyll_A_per_dry_mass:
   label: Leaf chlorophyll A content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
-    a [CHEBI:18230] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio
-    of the mass of chlorophyll a in a leaf to leaf dry mass.
+    a [CHEBI:18230] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   type: numeric
   units: mmol/kg
   allowed_values_min: 0.1
@@ -2415,8 +2338,7 @@ leaf_chlorophyll_A_per_dry_mass:
 leaf_chlorophyll_B_per_area:
   label: Leaf chlorophyll B content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
-    b [CHEBI:27888] in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio
-    of the mass of chlorophyll b in a leaf to leaf area.
+    b [CHEBI:27888] in a leaf [PO:0025034] to leaf area [PATO:0001323].
   type: numeric
   units: umol/m2
   allowed_values_min: 10.0
@@ -2425,8 +2347,7 @@ leaf_chlorophyll_B_per_area:
 leaf_chlorophyll_B_per_dry_mass:
   label: Leaf chlorophyll B content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
-    b [CHEBI:27888] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio
-    of the mass of chlorophyll b in a leaf to leaf dry mass.
+    b [CHEBI:27888] in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   type: numeric
   units: mmol/kg
   allowed_values_min: 0.01
@@ -2452,8 +2373,7 @@ leaf_chlorophyll_per_area:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
     [CHEBI:28966] in a leaf [PO:0025034] to leaf area [PATO:0001323], where chlorophyll
     content is the sum of chlorophyll a [CHEBI:18230] and chlorophyll b [CHEBI:27888]
-    content.;The ratio of the mass of chlorophyll in a leaf to leaf area, where chlorophyll
-    content is the sum of chlorophyll a and chlorophyll b content.
+    content.
   type: numeric
   units: umol/m2
   allowed_values_min: 10.0
@@ -2464,8 +2384,7 @@ leaf_chlorophyll_per_dry_mass:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorophyll
     [CHEBI:28966] in a leaf [PO:0025034] to leaf dry mass [TO:0001014], where chlorophyll
     content is the sum of chlorophyll a [CHEBI:18230] and chlorophyll b [CHEBI:27888]
-    content.;The ratio of the mass of chlorophyll in a leaf to leaf dry mass, where
-    chlorophyll content is the sum of chlorophyll a and chlorophyll b content.
+    content.
   type: numeric
   units: mmol/kg
   allowed_values_min: 0.1
@@ -2484,8 +2403,7 @@ leaf_chloroplast_CO2_concentration:
 leaf_Cl_per_dry_mass:
   label: Leaf chlorine (Cl) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chlorine [CHEBI:23116]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    chlorine in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -2495,8 +2413,7 @@ leaf_Cl_per_dry_mass:
 leaf_CN_ratio:
   label: Leaf carbon to nitrogen ratio  (C/N)
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in a leaf [PO:0025034] to the mass of nitrogen [CHEBI:25555] in the leaf.;The
-    ratio of the mass of carbon in a leaf to the mass of nitrogen in the leaf.
+    in a leaf [PO:0025034] to the mass of nitrogen [CHEBI:25555] in the leaf.
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/g
@@ -2506,8 +2423,7 @@ leaf_CN_ratio:
 leaf_Co_per_dry_mass:
   label: Leaf cobalt (Co) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of cobalt [CHEBI:27638]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    cobalt in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: ppm
@@ -2531,8 +2447,7 @@ leaf_compoundness:
 leaf_Cr_per_dry_mass:
   label: Leaf chromium (Cr) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of chromium [CHEBI:28073]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    chromium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: ppm
@@ -2542,8 +2457,7 @@ leaf_Cr_per_dry_mass:
 leaf_Cu_per_dry_mass:
   label: Leaf copper (Cu) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of copper [CHEBI:28694]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    copper in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -2616,7 +2530,7 @@ leaf_dark_transpiration_per_area:
 leaf_delta13C:
   label: Leaf stable carbon isotope composition (delta13C)
   description: Carbon stable isotope ratio [ECSO:00001142], d13C [ECSO:00000669],
-    of leaves [PO:0025034].;Carbon stable isotope ratio, d13C, of leaves.
+    of leaves [PO:0025034].
   comments: delta13C is calculated as the ratio of, 13C/12C in a sample to 13C/12C
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A more negative value for delta13C indicates the sample
@@ -2629,7 +2543,7 @@ leaf_delta13C:
 leaf_delta15N:
   label: Leaf stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of leaves [PO:0025034].;Nitrogen stable isotope ratio, d15N, of leaves.
+    of leaves [PO:0025034].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -2642,7 +2556,7 @@ leaf_delta15N:
 leaf_delta18O:
   label: Leaf stable oxygen isotope composition (delta18O)
   description: Oxygen stable isotope ratio [ECSO:00001740], d18O [ECSO:00001677],
-    of leaves [PO:0025034].;Oxygen stable isotope ratio, d18O, of leaves.
+    of leaves [PO:0025034].
   comments: delta18O is calculated as the ratio of, 18O/16O in a sample to 18O/16O
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta18O indicates the sample has
@@ -2730,8 +2644,7 @@ leaf_epidermal_cell_density_both_sides:
 leaf_epidermis_Ca_per_fresh_mass:
   label: Leaf epidermis calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in epidermal cells [PO:0004013] to epidermal cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of calcium in epidermal cells to epidermal cell fresh mass.
+    in epidermal cells [PO:0004013] to epidermal cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -2740,8 +2653,7 @@ leaf_epidermis_Ca_per_fresh_mass:
 leaf_epidermis_P_per_fresh_mass:
   label: Leaf epidermis phosphorus (P) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in epidermal cells [PO:0004013] to epidermal cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of phosphorus in epidermal cells to epidermal cell fresh mass.
+    in epidermal cells [PO:0004013] to epidermal cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -2784,8 +2696,7 @@ leaf_epidermis_thickness_adaxial:
 leaf_Fe_per_dry_mass:
   label: Leaf iron (Fe) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of iron [CHEBI:18248]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    iron in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -2920,13 +2831,12 @@ leaf_hairs_immature_leaves:
     hairy: Immature (still expanding) leaves have hairs (trichomes).
   entity_URI: https://w3id.org/APD/traits/trait_0011363
 leaf_hydraulic_vulnerability:
-  label: Leaf xylem pressure, 50% lost conductance (P50)
+  label: Leaf xylem pressure, 50% lost conductance
   description: The tension [PATO:0002284] (water pressure) (water potential [EnvThes:22311])  in
     leaf [PO:0025034] xylem vessels [PO:0025417] at which the hydraulic conductance
-    [EnvThes:22133] has declined by 50% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;A
-    measure of leaf hydraulic vulnerability, which is the leaf xylem water pressure
-    at which leaf hydraulic conductance has declined by 50% from the mean maximum
-    rate of hydraulic conductance.
+    [EnvThes:22133] has declined by 50% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;Leaf
+    xylem water pressure at which leaf hydraulic conductance has declined by 50% from
+    the mean maximum rate of hydraulic conductance.
   type: numeric
   units: MPa
   allowed_values_min: -40.0
@@ -2935,8 +2845,7 @@ leaf_hydraulic_vulnerability:
 leaf_hypodermis_Ca_per_fresh_mass:
   label: Leaf hypodermis calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in the hypodermis [PO:0005051] to hypodermis fresh mass [APD:glossary/40044].;The
-    ratio of the mass of calcium in the hypodermis to hypodermis fresh mass.
+    in the hypodermis [PO:0005051] to hypodermis fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -2945,8 +2854,7 @@ leaf_hypodermis_Ca_per_fresh_mass:
 leaf_hypodermis_P_per_fresh_mass:
   label: Leaf hypodermis phosphorus (P) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in the hypodermis [PO:0005051] to hypodermis fresh mass [APD:glossary/40044].;The
-    ratio of the mass of phosphorus in the hypodermis to hypodermis fresh mass.
+    in the hypodermis [PO:0005051] to hypodermis fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -2994,8 +2902,7 @@ leaf_insoluble_protein_per_area:
   label: Leaf insoluble protein content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     insoluble [PATO:0001538] protein [CHEBI:36080] in a leaf [PO:0025034] to leaf
-    area [PATO:0001323].;The ratio of the mass of water insoluble protein in a leaf
-    to leaf area.
+    area [PATO:0001323].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -3050,8 +2957,7 @@ leaf_intercellular_CO2_concentration_to_atmospheric_CO2_concentration_ratio:
 leaf_internal_parenchyma_Ca_per_fresh_mass:
   label: Leaf internal parenchyma cell calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in parenchyma cells [PO:0000074] to parenchyma cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of calcium in parenchyma cells to parenchyma cell fresh mass.
+    in parenchyma cells [PO:0000074] to parenchyma cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -3061,8 +2967,7 @@ leaf_internal_parenchyma_P_per_fresh_mass:
   label: Leaf internal parenchyma cell phosphorus (P) content per unit leaf fresh
     mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in parenchyma cells [PO:0000074] to parenchyma cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of phosphorus in parenchyma cells to parenchyma cell fresh mass.
+    in parenchyma cells [PO:0000074] to parenchyma cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -3071,8 +2976,7 @@ leaf_internal_parenchyma_P_per_fresh_mass:
 leaf_K_per_area:
   label: Leaf potassium (K) content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio of the mass of potassium
-    in a leaf to leaf area.
+    in a leaf [PO:0025034] to leaf area [PATO:0001323].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/m2
@@ -3082,8 +2986,7 @@ leaf_K_per_area:
 leaf_K_per_dry_mass:
   label: Leaf potassium (K) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    potassium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -3163,11 +3066,11 @@ leaf_lamina_posture:
     concave: A longitudinal posture term indicating the leaf lamina is curved upward
       along the central axis, such that the upper leaf lamina surface is concave.
     conduplicate: A longitudinal posture term indicating the leaf lamina is folded
-      upward along the central axis. (Synonyms, folded)
+      upward along the central axis. (Synonym, folded)
     convex: A longitudinal posture term indicating the leaf lamina is curved downward
       along the central axis, such that the lower leaf lamina surface is concave.
-      (Synonyms, concavoconvex, planoconvex)
-    convolute: Leaf lamina is contorted. (Synonyms, twisted)
+      (Synonym, concavoconvex, planoconvex)
+    convolute: Leaf lamina is contorted. (Synonym, twisted)
     flat: The leaf lamina is a 2-dimensional plane.
     incurved: Leaf tip is curved upward.
     involute: A longitudinal posture term indicating the outer portions of the leaf
@@ -3177,7 +3080,7 @@ leaf_lamina_posture:
     revolute: A longitudinal posture term indicating the outer portions of the leaf
       lamina are rolled outward or downward.
     undulate: The leaf lamina surface is rippled or wavy in its 2-dimensional plane.
-      [PATO:0000967] (Synonyms, wavy, rippled, sinuate)
+      [PATO:0000967]  (Synonyms, wavy, rippled, sinuate)
   entity_URI: https://w3id.org/APD/traits/trait_0011319
 leaf_length:
   label: Leaf length
@@ -3224,8 +3127,7 @@ leaf_light_respiration_per_area:
 leaf_lignin_per_dry_mass:
   label: Leaf lignin content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of lignin [CHEBI:6457]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    lignin in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   type: numeric
   units: mg/g
   allowed_values_min: 10.0
@@ -3291,11 +3193,11 @@ leaf_margin_posture:
   allowed_values_levels:
     flat: Leaf lamina, including margins, is a 2-dimensional plane. [PATO:0000407]
     involute: Leaf margins along the side of the leaf are rolled upward, such that
-      the margin of the adaxial (upper) leaf surface is rolled inward. (Synonyms,
-      inrolled, incurved)
+      the margin of the adaxial (upper) leaf surface is rolled inward. (Synonym, inrolled,
+      incurved)
     revolute: Leaf margins along the side of the leaf are rolled under or downward,
       such that the margin of the abaxial (lower) leaf surface is rolled inward. [PATO:0001963]
-      (Synonyms, recurved)
+      (Synonym, recurved)
     undulate: Leaf margins are wavy in their 2-dimensional plane. (Synonyms, wavy,
       rippled, sinuate)
   entity_URI: https://w3id.org/APD/traits/trait_0011314
@@ -3366,8 +3268,7 @@ leaf_mesophyll_conductance_per_mass:
 leaf_Mg_per_dry_mass:
   label: Leaf magnesium (Mg) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    magnesium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -3377,8 +3278,7 @@ leaf_Mg_per_dry_mass:
 leaf_Mn_per_dry_mass:
   label: Leaf manganese (Mn) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of manganese [CHEBI:18291]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    manganese in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -3388,8 +3288,7 @@ leaf_Mn_per_dry_mass:
 leaf_Mo_per_dry_mass:
   label: Leaf molybdenum (Mo) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of molybdenum [CHEBI:28685]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    molybdenum in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -3399,8 +3298,7 @@ leaf_Mo_per_dry_mass:
 leaf_N_per_area:
   label: Leaf nitrogen (N) content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio of the mass of nitrogen
-    in a leaf to leaf area.
+    in a leaf [PO:0025034] to leaf area [PATO:0001323].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/m2
@@ -3410,8 +3308,7 @@ leaf_N_per_area:
 leaf_N_per_dry_mass:
   label: Leaf nitrogen (N) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    nitrogen in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -3419,15 +3316,12 @@ leaf_N_per_dry_mass:
   allowed_values_max: 100.0
   entity_URI: https://w3id.org/APD/traits/trait_0000038
 leaf_N_resorption:
-  label: Leaf nitrogen resorption efficiency
+  label: Leaf nitrogen resorption
   description: A leaf [PO:0025034] nutrient recycling trait which is one minus the
     ratio [PATO:0001470] of leaf nitrogen [CHEBI:25555] content in a senescent [PATO:0001487]
     leaf (leaf litter [ENVO:01000628]) to leaf nitrogen content in a live [PATO:0001421]
-    leaf, indicating what proportion of nitrogen is resorbed [NCIT:C93204] from the
-    senescent leaf before it is shed.;A leaf nutrient recycling trait which is one
-    minus the ratio of leaf nitrogen content in a senescent leaf (leaf litter) to
-    leaf nitrogen content in a live leaf, indicating what proportion of nitrogen is
-    resorbed from the senescent leaf before it is shed.
+    leaf, indicating how much nitrogen is resorbed [NCIT:C93204] from the senescent
+    leaf before it is shed.
   type: numeric
   units: mg/mg
   allowed_values_min: -1.1
@@ -3436,8 +3330,7 @@ leaf_N_resorption:
 leaf_Na_per_dry_mass:
   label: Leaf sodium (Na) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sodium [CHEBI:26708]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    sodium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -3447,8 +3340,7 @@ leaf_Na_per_dry_mass:
 leaf_Ni_per_dry_mass:
   label: Leaf nickel (Ni) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nickel [CHEBI:28112]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    nickel in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -3458,8 +3350,7 @@ leaf_Ni_per_dry_mass:
 leaf_NP_ratio:
   label: Leaf nitrogen to phosphorus ratio (N/P) per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in a leaf [PO:0025034] to the mass of phosphorus [CHEBI:28659] in the leaf.;The
-    ratio of the mass of nitrogen in a leaf to the mass of phosphorus in the leaf.
+    in a leaf [PO:0025034] to the mass of phosphorus [CHEBI:28659] in the leaf.
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/g
@@ -3469,8 +3360,7 @@ leaf_NP_ratio:
 leaf_P_per_area:
   label: Leaf phosphorus (P) content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio of the mass of phosphorus
-    in a leaf to leaf area.
+    in a leaf [PO:0025034] to leaf area [PATO:0001323].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/m2
@@ -3480,8 +3370,7 @@ leaf_P_per_area:
 leaf_P_per_dry_mass:
   label: Leaf phosphorus (P) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    phosphorus in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -3489,15 +3378,12 @@ leaf_P_per_dry_mass:
   allowed_values_max: 12.0
   entity_URI: https://w3id.org/APD/traits/trait_0000044
 leaf_P_resorption:
-  label: Leaf phosphorus resorption efficiency
+  label: Leaf phosphorus resorption
   description: A leaf [PO:0025034] nutrient recycling trait which is one minus the
     ratio [PATO:0001470] of leaf phosphorus [CHEBI:28659] content in a senescent [PATO:0001487]
     leaf (leaf litter [ENVO:01000628]) to leaf phosphorus content in a live [PATO:0001421]
-    leaf, indicating what proportion of phosphorus is resorbed [NCIT:C93204] from
-    the senescent leaf before it is shed.;A leaf nutrient recycling trait which is
-    one minus the ratio of leaf phosphorus content in a senescent leaf (leaf litter)
-    to leaf phosphorus content in a live leaf, indicating what proportion of phosphorus
-    is resorbed from the senescent leaf before it is shed.
+    leaf, indicating how much phosphorus is resorbed [NCIT:C93204] from the senescent
+    leaf before it is shed.
   type: numeric
   units: mg/mg
   allowed_values_min: -1.1
@@ -3537,8 +3423,7 @@ leaf_palisade_mesophyll_Ca_per_fresh_mass:
   label: Leaf palisade mesophyll cell calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
     in palisade mesophyll cells [PO:0006206] to palisade mesophyll cell fresh mass
-    [APD:glossary/40044].;The ratio of the mass of calcium in palisade mesophyll cells
-    to palisade mesophyll cell fresh mass.
+    [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -3548,8 +3433,7 @@ leaf_palisade_mesophyll_P_per_fresh_mass:
   label: Leaf palisade mesophyll cell phosphorus (P) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
     in palisade mesophyll cells [PO:0006206] to palisade mesophyll cell fresh mass
-    [APD:glossary/40044].;The ratio of the mass of phosphorus in palisade mesophyll
-    cells to palisade mesophyll cell fresh mass.
+    [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -3596,8 +3480,7 @@ leaf_phenol_per_dry_mass:
   label: Total leaf phenolic content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phenol [CHEBI:33853]
     in a leaf [PO:0025034] to leaf dry mass [TO:0001014], where phenol content is
-    measured as gallic acid [CHEBI:30778] equivalents.;The ratio of the mass of phenol
-    in a leaf to leaf dry mass, where phenol content is measured as gallic acid equivalents.
+    measured as gallic acid [CHEBI:30778] equivalents.
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -4049,8 +3932,7 @@ leaf_rubisco_N_per_total_leaf_N:
   label: Leaf rubisco nitrogen (N) content per unit leaf N content
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in rubisco [MESH:D012273] in a leaf [PO:0025034] to the mass of nitrogen in a
-    leaf.;The ratio of the mass of nitrogen in rubisco in a leaf to the mass of nitrogen
-    in a leaf.
+    leaf.
   comments: This trait is most commonly measured on leaf tissue. If the Rubisco concentration
     of a different tissue is measured, this should be explicitly noted in the methods
     or as a method context.
@@ -4062,8 +3944,7 @@ leaf_rubisco_N_per_total_leaf_N:
 leaf_rubisco_per_leaf_dry_mass:
   label: Leaf rubisco content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of rubisco [MESH:D012273]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    rubisco in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: This trait is most commonly measured on leaf tissue. If the Rubisco concentration
     of a different tissue is measured, this should be explicitly noted in the methods
     or as a method context.
@@ -4075,8 +3956,7 @@ leaf_rubisco_per_leaf_dry_mass:
 leaf_S_per_dry_mass:
   label: Leaf sulphur (S) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sulphur [CHEBI:26833]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    sulphur in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4086,9 +3966,7 @@ leaf_S_per_dry_mass:
 leaf_sclerenchyma_Ca_per_fresh_mass:
   label: Leaf sclerenchyma cell calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in sclerenchyma cells [PO:0000077] to sclerenchyma cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of calcium in sclerenchyma cells to sclerenchyma cell fresh
-    mass.
+    in sclerenchyma cells [PO:0000077] to sclerenchyma cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -4097,9 +3975,7 @@ leaf_sclerenchyma_Ca_per_fresh_mass:
 leaf_sclerenchyma_P_per_fresh_mass:
   label: Leaf sclerenchyma cell phosphorus (P) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in sclerenchyma cells [PO:0000077] to sclerenchyma cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of phosphorus in sclerenchyma cells to sclerenchyma cell fresh
-    mass.
+    in sclerenchyma cells [PO:0000077] to sclerenchyma cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -4108,8 +3984,7 @@ leaf_sclerenchyma_P_per_fresh_mass:
 leaf_Se_per_dry_mass:
   label: Leaf selenium (Se) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of selenium [CHEBI:27568]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    selenium in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: ppm
@@ -4134,8 +4009,7 @@ leaf_senesced_Al_per_dry_mass:
   label: Senesced leaf aluminium (Al) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of aluminium [CHEBI:28984]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of aluminium
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4146,8 +4020,7 @@ leaf_senesced_B_per_dry_mass:
   label: Senesced leaf boron (B) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of boron [CHEBI:27560]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of boron in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4158,8 +4031,7 @@ leaf_senesced_C_per_dry_mass:
   label: Senesced leaf carbon (C) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of carbon in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: g/g
@@ -4170,8 +4042,7 @@ leaf_senesced_Ca_per_dry_mass:
   label: Senesced leaf calcium (Ca) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of calcium
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4182,8 +4053,7 @@ leaf_senesced_Cu_per_dry_mass:
   label: Senesced leaf copper (Cu) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of copper [CHEBI:28694]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of copper in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4194,8 +4064,7 @@ leaf_senesced_Fe_per_dry_mass:
   label: Senesced leaf iron (Fe) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of iron [CHEBI:18248]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of iron in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4206,8 +4075,7 @@ leaf_senesced_K_per_dry_mass:
   label: Senesced leaf potassium (K) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of potassium
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4218,8 +4086,7 @@ leaf_senesced_Mg_per_dry_mass:
   label: Senesced leaf magnesium (Mg) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of magnesium
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4230,8 +4097,7 @@ leaf_senesced_Mn_per_dry_mass:
   label: Senesced leaf manganese (Mn) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of manganese [CHEBI:18291]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of manganese
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4242,8 +4108,7 @@ leaf_senesced_Mo_per_dry_mass:
   label: Senesced leaf molybdenum (Mo) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of molybdenum [CHEBI:28685]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of molybdenum
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4254,8 +4119,7 @@ leaf_senesced_N_per_dry_mass:
   label: Senesced leaf nitrogen (N) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of nitrogen
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4266,20 +4130,18 @@ leaf_senesced_Na_per_dry_mass:
   label: Senesced leaf sodium (Na) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sodium [CHEBI:26708]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of sodium in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
-  allowed_values_min: 10.0
+  allowed_values_min: 100.0
   allowed_values_max: 20000.0
   entity_URI: https://w3id.org/APD/traits/trait_0000140
 leaf_senesced_P_per_dry_mass:
   label: Senesced leaf phosphorus (P) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of phosphorus
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/g
@@ -4290,8 +4152,7 @@ leaf_senesced_S_per_dry_mass:
   label: Senesced leaf sulphur (S) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sulphur [CHEBI:26833]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of sulphur
-    in a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4302,8 +4163,7 @@ leaf_senesced_Zn_per_dry_mass:
   label: Senesced leaf zinc (Zn) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of zinc [CHEBI:27363]
     in a senescent [PATO:0001487] leaf [PO:0025034] (leaf litter [ENVO:01000628])
-    to the senescent leaf dry mass [TO:0001014].;The ratio of the mass of zinc in
-    a senescent leaf (leaf litter) to the senescent leaf dry mass.
+    to the senescent leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -4337,7 +4197,7 @@ leaf_shape:
     elliptical: A 2-dimensional shape that is an oval, with curved margins, lacking
       a distinct point, and a length:width ratio between 2:1 and 3:2. (Synonyms, oval)
     ensiform: A 2-dimensional shape that is sword-shaped with a pointed tip and a
-      length:width ratio greater than 12:1. (Synonyms, sword-shaped)
+      length:width ratio greater than 12:1 (Synonyms, sword-shaped)
     falcate: A 2-dimensional sickle-shape, approximately lanceolate to linear and
       curved on one side. (Synonyms, scimitar-shaped, sickle-shaped, falciform, crescent-shaped)
     filiform: A 2-dimensional shape that is long, thin, and typically flexuous, threadlike,
@@ -4412,11 +4272,11 @@ leaf_shape:
       oblanceolate in outline with a long attenuate base, like a spoon. (Synonyms,
       spoon-shaped, clavate)
     strap-shaped: A 2-dimensional shape that is strap-shaped with a rounded tip and
-      a length:width ratio greater than 12:1.
+      a length:width ratio greater than 12:1
     subulate: A 2-dimensional shape that is awl-shaped, approximately narrowly oblong
-      to narrowly triangular with a broad base. (Synonyms, awl-shaped)
+      to narrowly triangular with a broad base. (Synonyms, awl-shaped).
     terete: A 3-dimensional shape that is a long, narrow cylinder approximately circular
-      in cross-section. Terete leaves often taper toward the tip. (Synonyms, cylindrical)
+      in cross-section. Terete leaves often taper toward the tip. (Synonym, cylindrical)
     triangular: A 2-dimensional shape that is triangular to wedge-shaped, with a length:width
       ratio 2:1 to 3:2 and the petiole attaching near the widest portion of the leaf.
     trullate: A 2-dimensional shape that is approximately parallelogram-shaped, widest
@@ -4436,8 +4296,7 @@ leaf_shape:
 leaf_Si_per_dry_mass:
   label: Leaf silicon (Si) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of silicon [CHEBI:27573]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    silicon in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
     Leaf silicon (Si) must not be confused with leaf silica (SiO2). In plants, Si
     is mostly found as hydrated amorphous silica (SiO2 , nH2O).
@@ -4450,8 +4309,7 @@ leaf_soluble_protein_per_area:
   label: Leaf soluble protein content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     soluble [PATO:0001537] protein [CHEBI:36080] in a leaf [PO:0025034] to leaf area
-    [PATO:0001323].;The ratio of the mass of water soluble protein in a leaf to leaf
-    area.
+    [PATO:0001323].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -4461,8 +4319,7 @@ leaf_soluble_starch_per_area:
   label: Leaf soluble starch content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     soluble [PATO:0001537] starch [CHEBI:28017] in a leaf [PO:0025034] to leaf area
-    [PATO:0001323].;The ratio of the mass of water soluble starch in a leaf to leaf
-    area.
+    [PATO:0001323].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -4472,8 +4329,7 @@ leaf_soluble_starch_per_mass:
   label: Leaf soluble starch content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     soluble [PATO:0001537] starch [CHEBI:28017] in a leaf [PO:0025034] to leaf dry
-    mass [TO:0001014].;The ratio of the mass of water soluble starch in a leaf to
-    leaf dry mass.
+    mass [TO:0001014].
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -4485,9 +4341,7 @@ leaf_soluble_sugars_per_area:
     in a leaf [PO:0025034] to leaf area [PATO:0001323], where 'sugar' refers to an
     informal grouping of carbohydrates [CHEBI:16646] that are soluble in [PATO:0001537]
     water [CHEBI:15377], including both monosaccharides [CHEBI:35381] and disaccharides
-    [CHEBI:36233].;The ratio of the mass of sugar in a leaf to leaf area, where 'sugar'
-    refers to an informal grouping of carbohydrates that are soluble in water, including
-    both monosaccharides and disaccharides.
+    [CHEBI:36233].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -4499,9 +4353,7 @@ leaf_soluble_sugars_per_mass:
     in a leaf [PO:0025034] to leaf dry mass [TO:0001014], where 'sugar' refers to
     an informal grouping of carbohydrates [CHEBI:16646] that are soluble in [PATO:0001537]
     water [CHEBI:15377], including both monosaccharides [CHEBI:35381] and disaccharides
-    [CHEBI:36233].;The ratio of the mass of sugar in a leaf to leaf dry mass, where
-    'sugar' refers to an informal grouping of carbohydrates that are soluble in water,
-    including both monosaccharides and disaccharides.
+    [CHEBI:36233].
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -4554,9 +4406,7 @@ leaf_specific_hydraulic_conductivity:
 leaf_spongy_mesophyll_Ca_per_fresh_mass:
   label: Leaf spongy mesophyll cell calcium (Ca) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in spongy mesophyll cells [PO:0006205] to spongy mesophyll cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of calcium in spongy mesophyll cells to spongy mesophyll cell
-    fresh mass.
+    in spongy mesophyll cells [PO:0006205] to spongy mesophyll cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 1.0
@@ -4565,9 +4415,7 @@ leaf_spongy_mesophyll_Ca_per_fresh_mass:
 leaf_spongy_mesophyll_P_per_fresh_mass:
   label: Leaf spongy mesophyll cell phosphorus (P) content per unit leaf fresh mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in spongy mesophyll cells [PO:0006205] to spongy mesophyll cell fresh mass [APD:glossary/40044].;The
-    ratio of the mass of phosphorus in spongy mesophyll cells to spongy mesophyll
-    cell fresh mass.
+    in spongy mesophyll cells [PO:0006205] to spongy mesophyll cell fresh mass [APD:glossary/40044].
   type: numeric
   units: umol/g
   allowed_values_min: 0.0
@@ -4587,8 +4435,7 @@ leaf_spongy_mesophyll_thickness:
 leaf_starch_per_area:
   label: Leaf starch content per unit leaf area
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of total starch
-    [CHEBI:28017] in a leaf [PO:0025034] to leaf area [PATO:0001323].;The ratio of
-    the mass of total starch in a leaf to leaf area.
+    [CHEBI:28017] in a leaf [PO:0025034] to leaf area [PATO:0001323].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -4739,8 +4586,7 @@ leaf_tannin_per_dry_mass:
   label: Leaf tannin content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of tannins [CHEBI:26848]
     (a class of polyphenols [CHEBI:26195]) in a leaf [PO:0025034] to leaf dry mass
-    [TO:0001014].;The ratio of the mass of tannins (a class of polyphenols) in a leaf
-    to leaf dry mass.
+    [TO:0001014].
   comments: Tannins are a specific class of polyphenolic compounds found in plants.
   type: numeric
   units: mg/g
@@ -4767,8 +4613,7 @@ leaf_thylakoid_N_per_total_leaf_N:
   label: Leaf thylakoid protein nitrogen (N) content per unit leaf N content
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in thylakoid [GO:0009579] proteins [CHEBI:36080] in a leaf [PO:0025034] to the
-    mass of nitrogen in a leaf.;The ratio of the mass of nitrogen in thylakoid proteins
-    in a leaf to the mass of nitrogen in a leaf.
+    mass of nitrogen in a leaf.
   comments: This trait is most commonly measured on leaf tissue. If the Rubisco concentration
     of a different tissue is measured, this should be explicitly noted in the methods
     or as a method context.
@@ -4782,9 +4627,7 @@ leaf_total_non-structural_carbohydrates_per_area:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of non-structural
     carbohydrates [CHEBI:16646] (sugars [APD:glossary/40106]) in a leaf [PO:0025034]
     to leaf area [PATO:0001323], where non-structural carbohydrates are carbohydrates
-    that do not comprise the cell wall [GO:0009505].;The ratio of the mass of non-structural
-    carbohydrates (sugars) in a leaf to leaf area, where non-structural carbohydrates
-    are carbohydrates that do not comprise the cell wall.
+    that do not comprise the cell wall [GO:0009505].
   type: numeric
   units: g/m2
   allowed_values_min: 0.1
@@ -4795,9 +4638,7 @@ leaf_total_non-structural_carbohydrates_per_mass:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of non-structural
     carbohydrates [CHEBI:16646] (sugars [APD:glossary/40106]) in a leaf [PO:0025034]
     to leaf dry mass [TO:0001014], where non-structural carbohydrates are carbohydrates
-    that do not comprise the cell wall [GO:0009505].;The ratio of the mass of non-structural
-    carbohydrates (sugars) in a leaf to leaf dry mass, where non-structural carbohydrates
-    are carbohydrates that do not comprise the cell wall.
+    that do not comprise the cell wall [GO:0009505].
   type: numeric
   units: mg/g
   allowed_values_min: 10.0
@@ -5193,8 +5034,7 @@ leaf_work_to_tear_adjusted:
 leaf_xylem_delta15N:
   label: Leaf xylem stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of xylem sap [PO:0025539] from leaf [PO:0025034] xylem vessels [PO:0025417].;Nitrogen
-    stable isotope ratio, d15N, of xylem sap from leaf xylem vessels.
+    of xylem sap [PO:0025539] from leaf [PO:0025034] xylem vessels [PO:0025417].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -5207,8 +5047,7 @@ leaf_xylem_delta15N:
 leaf_Zn_per_dry_mass:
   label: Leaf zinc (Zn) content per unit leaf dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of zinc [CHEBI:27363]
-    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].;The ratio of the mass of
-    zinc in a leaf to leaf dry mass.
+    in a leaf [PO:0025034] to leaf dry mass [TO:0001014].
   comments: Includes measurements on leaf analogs, including cladodes and phylloclades.
   type: numeric
   units: mg/kg
@@ -5536,11 +5375,11 @@ plant_alternative_energy_and_nutrient_acquisition_strategy:
     plant. The trait `root_structures` includes specialised root structures
   type: categorical
   allowed_values_levels:
+    saprophyte: Plant that acquires nutrients from decaying biomass.
     carnivorous: Plant that acquires some or most of its nutrients from animals or
       protozoa.
     nutrient_mining: Plant that uses a specialised root structure, such as cluster
       roots, to mine nutrients inaccessible to other plant taxa.
-    saprophyte: Plant that acquires nutrients from decaying biomass.
   entity_URI: https://w3id.org/APD/traits/trait_0030017
 plant_climbing_mechanism:
   label: Plant climbing mechanisms
@@ -5651,8 +5490,7 @@ plant_growth_form:
       synonymous with `liana`. Woody climbers generally use hooks, tendrils, and/or
       adventitious roots to climb; the climbing mechanisms used by a taxon are captured
       under the trait `plant_climbing_mechanism`. (Synonyms, liana)
-    fern: A taxonomic grouping that includes acaulescent ferns; ferns are vascular
-      plants that reproduce via spores and have neither seeds nor flowers.
+    fern: A taxonomic grouping; ferns are vascular plants that reproduce via spores.
     geophyte: Subcategory of herb, specifically referring to plants that survive the
       winter/dry season as an organ (rhizome, bulb, corm, or tuber) buried in dry
       soil, with all leaves dying back each year.
@@ -5671,8 +5509,7 @@ plant_growth_form:
     hummock: Plant that grows as a dense mound up to 1 metre in height. The term generally
       applies only to species within the genera Triodia that form such mounds and
       these are considered a distinctive and uniquely Australian growth form.
-    lycophyte: A taxonomic grouping that includes quillworts, clubmosses, and spike
-      mosses.
+    lycophyte: A taxonomic grouping that includes quillworts, clubmosses, and selaginella.
     mallee: Refers to Eucalyptus species which are small trees that form a large lignotuber.
       They have multiple stems arising at or near ground level and regenerate from
       the lignotuber following fire.
@@ -5854,7 +5691,7 @@ plant_tolerance_calcicole:
   allowed_values_levels:
     calcicole: Plants are tolerant of basic soils, such as calcareous sands and limestone
       derived soils.
-    calcifuge: Plants are intolerant of basic soils. (Synonyms, acidophilous)
+    calcifuge: Plants are intolerant of basic soils (Synonyms, acidophilous).
   entity_URI: https://w3id.org/APD/traits/trait_0030817
 plant_tolerance_inundation:
   label: Plant inundation tolerance
@@ -6201,7 +6038,7 @@ resprouting_capacity:
   type: categorical
   allowed_values_levels:
     fire_killed: Fewer than 30% of plants resprout following a fire with 100% leaf
-      scorch. (Synonyms, fire-sensitive)
+      scorch. (Synonym, fire-sensitive)
     partial_resprouting: Between 30-70% of plants resprout following a fire with 100%
       leaf scorch.
     resprouts: More than 70% of plants resprout following a fire with 100% leaf scorch.
@@ -6285,8 +6122,7 @@ resprouting_capacity_stem_ratio:
 root_C_per_dry_mass:
   label: Root carbon (C) content per unit root dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in roots [PO:0009005] to root dry mass.;The ratio of the mass of carbon in roots
-    to root dry mass.
+    in roots [PO:0009005] to root dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 50.0
@@ -6295,7 +6131,7 @@ root_C_per_dry_mass:
 root_delta13C:
   label: Root stable carbon isotope composition (delta13C)
   description: Carbon stable isotope ratio [ECSO:00001142], d13C [ECSO:00000669],
-    of roots [PO:0009005].;Carbon stable isotope ratio, d13C, of roots.
+    of roots [PO:0009005].
   comments: delta13C is calculated as the ratio of, 13C/12C in a sample to 13C/12C
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A more negative value for delta13C indicates the sample
@@ -6308,7 +6144,7 @@ root_delta13C:
 root_delta15N:
   label: Root stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of roots [PO:0009005].;Nitrogen stable isotope ratio, d15N, of roots.
+    of roots [PO:0009005].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -6384,8 +6220,7 @@ root_mass_fraction:
 root_N_per_dry_mass:
   label: Root nitrogen (N) content per unit root dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in roots [PO:0009005] to root dry mass.;The ratio of the mass of nitrogen in roots
-    to root dry mass.
+    in roots [PO:0009005] to root dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -6394,8 +6229,7 @@ root_N_per_dry_mass:
 root_P_per_dry_mass:
   label: Root phosphorus (P) content per unit root dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in roots [PO:0009005] to root dry mass.;The ratio of the mass of phosphorus in
-    roots to root dry mass.
+    in roots [PO:0009005] to root dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -6417,7 +6251,7 @@ root_soluble_starch_per_mass:
   label: Root soluble starch content per unit root dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     soluble [PATO:0001537] starch [CHEBI:28017] in roots [PO:0009005] to root dry
-    mass.;The ratio of the mass of water soluble starch in roots to root dry mass.
+    mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -6428,10 +6262,7 @@ root_soluble_sugars_per_mass:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sugar [APD:glossary/40106]
     in roots [PO:0009005] to root dry mass, where 'sugar' refers to an informal grouping
     of carbohydrates [CHEBI:16646] that are soluble in [PATO:0001537] water [CHEBI:15377],
-    including both monosaccharides [CHEBI:35381] and disaccharides [CHEBI:36233].;The
-    ratio of the mass of sugar in roots to root dry mass, where 'sugar' refers to
-    an informal grouping of carbohydrates that are soluble in water, including both
-    monosaccharides and disaccharides.
+    including both monosaccharides [CHEBI:35381] and disaccharides [CHEBI:36233].
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -6578,8 +6409,7 @@ root_wood_density:
 root_xylem_delta15N:
   label: Root xylem stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of xylem sap [PO:0025539] from root [PO:0009005] xylem vessels [PO:0025417].;Nitrogen
-    stable isotope ratio, d15N, of xylem sap from root xylem vessels.
+    of xylem sap [PO:0025539] from root [PO:0009005] xylem vessels [PO:0025417].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -6633,8 +6463,7 @@ sapwood_specific_hydraulic_conductivity_theoretical:
 seed_Ca_per_seed_dry_mass:
   label: Seed calcium (Ca) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of calcium in seeds
-    to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -6669,7 +6498,7 @@ seed_dry_mass:
     dispersal, mature); 'air dried' (at local ambient conditions); 'seed bank air
     dried' (to 15% relative humidity); and 'oven dried' (>100 deg C for a set number
     of hours; e.g. seed bank standard is 103 deg C for 17 hours). It is expected that
-    some observations in AusTraits mapped onto 'seed_dry_mass' will actually include
+    some observations in AusTraits mapped onto â€˜seed_dry_mass' will actually include
     both the seed and some dispersal tissue, if the two cannot easily be separated;
     these should be mapped to 'diaspore_dry_mass'.
   type: numeric
@@ -6770,8 +6599,7 @@ seed_height:
 seed_K_per_seed_dry_mass:
   label: Seed potassium (K) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of potassium in
-    seeds to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -6797,8 +6625,7 @@ seed_length:
 seed_Mg_per_seed_dry_mass:
   label: Seed magnesium (Mg) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of magnesium in
-    seeds to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -6807,8 +6634,7 @@ seed_Mg_per_seed_dry_mass:
 seed_N_per_seed_dry_mass:
   label: Seed nitrogen (N) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of nitrogen in seeds
-    to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 10.0
@@ -6817,8 +6643,7 @@ seed_N_per_seed_dry_mass:
 seed_oil_per_seed_dry_mass:
   label: Seed oil content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of lipids [CHEBI:18059]
-    in a seed [PO:0009010] to seed dry mass [TO:0000181].;The ratio of the mass of
-    lipids in a seed to seed dry mass.
+    in a seed [PO:0009010] to seed dry mass [TO:0000181].
   comments: It is best practice for the denominator to be seed dry mass. If data are
     reported on a `per seed fresh mass` basis, this should be explicitly noted in
     the methods or as a method context.
@@ -6830,8 +6655,7 @@ seed_oil_per_seed_dry_mass:
 seed_P_per_seed_dry_mass:
   label: Seed phosphorus (P) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of phosphorus in
-    seeds to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -6840,8 +6664,7 @@ seed_P_per_seed_dry_mass:
 seed_protein_per_seed_dry_mass:
   label: Seed protein content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of protein [CHEBI:36080]
-    in a seed [PO:0009010] to seed dry mass [TO:0000181].;The ratio of the mass of
-    protein in a seed to seed dry mass.
+    in a seed [PO:0009010] to seed dry mass [TO:0000181].
   comments: It is best practice for the denominator to be seed dry mass. If data are
     reported on a `per seed fresh mass` basis, this should be explicitly noted in
     the methods or as a method context.
@@ -6853,8 +6676,7 @@ seed_protein_per_seed_dry_mass:
 seed_S_per_seed_dry_mass:
   label: Seed sulphur (S) content per unit seed dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sulphur [CHEBI:26833]
-    in seeds [PO:0009010] to seed dry mass.;The ratio of the mass of sulphur in seeds
-    to seed dry mass.
+    in seeds [PO:0009010] to seed dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -6913,8 +6735,8 @@ seed_shape:
     ovoid_elongated: A 3-dimensional shape that is egg-shaped in long section and
       circular in cross section, where the length dimension is much longer than the
       width/height dimensions. Term as used in AusTraits includes specific shapes
-      club-shaped (clavate/obclavate) and tear-shaped (lachrimiform). (Synonyms, lachrimiform,
-      tear-shaped, lachrymiform, clavate; obclavate, club-shaped)
+      club-shaped (clavate/obclavate) and tear-shaped (lachrimiform). (Synonyms, lachrimiform;
+      tear-shaped; lachrymiform; clavate; obclavate; club-shaped)
     ovoid_flattened: A 3-dimensional shape that is egg-shaped in long section and
       laterally compressed/flattened such that is non-circular in cross section.
     polyhedral: A 3-dimensional shape with distinct, fairly flat faces and edges;
@@ -6984,7 +6806,7 @@ seed_surface_texture:
       (Synonyms, scabrous)
     scaly: Seed surface rough with loose scales differing in direction or not parallel
       in direction. (Synonyms, scurfy, squarrose)
-    smooth: Seed surface smooth, lacking texture. (Synonyms, glabrous)
+    smooth: Seed surface smooth, lacking texture. (Synonym, glabrous)
     spiny: Seed surface with spines. (Synonyms, echinulate)
     wrinkled: Seed surface with a wrinkled, rugose texture. (Synonyms, rugose, rugulose,
       bullate)
@@ -7093,8 +6915,9 @@ seedling_establishment_conditions:
   description: The environmental conditions [ENVO:01000203] under which a taxon [NCIT:C40098]
     displays seed [PO:0009010] germination [GO:0009845] and seedling establishment
     [EnvThes:20410], with trait values reflecting successional changes to the vegetation
-    community.;The environmental conditions under which a taxon's seedlings can establish,
-    with trait values reflecting successional changes to the vegetation community.
+    community.;The environmental conditions [ENVO:01000203] under which a taxon's
+    seedlings can establish, with trait values reflecting successional changes to
+    the vegetation community.
   comments: The selection of trait values does not distinguish between the ability
     to establish in intermediate age versus mature vegetation, as this level of detail
     is rarely provided in datasets.
@@ -7231,8 +7054,7 @@ sprout_depth:
 stem_C_per_dry_mass:
   label: Stem carbon (C) content per unit stem dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in a stem [PO:0009047] to stem dry mass.;The ratio of the mass of carbon in a
-    stem to stem dry mass.
+    in a stem [PO:0009047] to stem dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 100.0
@@ -7265,7 +7087,7 @@ stem_dark_respiration_per_area:
 stem_delta13C:
   label: Stem stable carbon isotope composition (delta13C)
   description: Carbon stable isotope ratio [ECSO:00001142], d13C [ECSO:00000669],
-    of stems [PO:0009047].;Carbon stable isotope ratio, d13C, of stems.
+    of stems [PO:0009047].
   comments: delta13C is calculated as the ratio of, 13C/12C in a sample to 13C/12C
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A more negative value for delta13C indicates the sample
@@ -7278,7 +7100,7 @@ stem_delta13C:
 stem_delta15N:
   label: Stem stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of stems [PO:0009047].;Nitrogen stable isotope ratio, d15N, of stems.
+    of stems [PO:0009047].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -7421,8 +7243,7 @@ stem_modulus_of_elasticity:
 stem_N_per_dry_mass:
   label: Stem nitrogen (N) content per unit stem dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in a stem [PO:0009047] to stem dry mass.;The ratio of the mass of nitrogen in
-    a stem to stem dry mass.
+    in a stem [PO:0009047] to stem dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7432,7 +7253,7 @@ stem_soluble_starch_per_mass:
   label: Stem soluble starch content per unit stem dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of water [CHEBI:15377]
     soluble [PATO:0001537] starch [CHEBI:28017] in a stem [PO:0009047] to stem dry
-    mass.;The ratio of the mass of water soluble starch in a stem to stem dry mass.
+    mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7443,10 +7264,7 @@ stem_soluble_sugars_per_mass:
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sugar [APD:glossary/40106]
     in a stem [PO:0009047] to stem dry mass, where 'sugar' refers to an informal grouping
     of carbohydrates [CHEBI:16646] that are soluble in [PATO:0001537] water [CHEBI:15377],
-    including both monosaccharides [CHEBI:35381] and disaccharides [CHEBI:36233].;The
-    ratio of the mass of sugar in a stem to stem dry mass, where 'sugar' refers to
-    an informal grouping of carbohydrates that are soluble in water, including both
-    monosaccharides and disaccharides.
+    including both monosaccharides [CHEBI:35381] and disaccharides [CHEBI:36233].
   type: numeric
   units: mg/g
   allowed_values_min: 1.0
@@ -7593,8 +7411,7 @@ stem_water_content_per_saturated_mass:
 stem_water_delta18O:
   label: Stem water stable oxygen isotope composition (delta18O)
   description: Oxygen stable isotope ratio [ECSO:00001740], d18O [ECSO:00001677],
-    of water [CHEBI:15377] in stems [PO:0009047].;Oxygen stable isotope ratio, d18O,
-    of water in stems.
+    of water [CHEBI:15377] in stems [PO:0009047].
   comments: delta18O is calculated as the ratio of, 18O/16O in a sample to 18O/16O
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta18O indicates the sample has
@@ -7609,7 +7426,7 @@ stem_xylem_vulnerability_index:
   description: A vascular tissue morphology trait [TO:0000470] which is the ratio
     [PATO:0001470] of a stem'  [PO:0009047] average xylem vessel [PO:0025417] diameter
     [PATO:0001334] to the stem's xylem vessel count density [ECSO:00001160].;The ratio
-    of a stem's average xylem vessel diameter to the stem's xylem vessel density,
+    of a stemï¿½s average xylem vessel diameter to the stemï¿½s xylem vessel density,
     an index of sap conductance and xylem vessel susceptibility to vessel cavitation.
   type: numeric
   units: um.m2/{count}
@@ -7661,7 +7478,7 @@ storage_organ:
     rhizome_fleshy: A type of continually growing or creeping fleshy, non-woody underground
       stem.
     rhizome_woody: A type of continually growing or creeping woody underground stem.
-    root_tuber: A swollen root the stores nutrients, carbohydrates and water. (Synonyms,
+    root_tuber: A swollen root the stores nutrients, carbohydrates and water. (Synonym,
       taproot tuber)
     stem_tuber: A swollen underground stem that stores nutrients, carbohydrates and
       water.
@@ -7691,39 +7508,36 @@ vegetative_reproduction_ability:
       of vegetative material.
   entity_URI: https://w3id.org/APD/traits/trait_0030510
 water_potential_12percent_lost_conductivity:
-  label: Stem xylem pressure, 12% lost conductivity (P12)
+  label: Stem xylem pressure, 12% lost conductivity
   description: The tension [PATO:0002284] (water pressure) (water potential [EnvThes:22311])  in
     stem [PO:0009047] xylem vessels [PO:0025417] at which the hydraulic conductivity
-    [EnvThes:22133] has declined by 12% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;A
-    measure of stem hydraulic vulnerability, which is the stem xylem water pressure
-    value at which stem hydraulic conductivity has declined by 12% from the mean maximum
-    rate of hydraulic conductivity.
+    [EnvThes:22133] has declined by 12% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;Stem
+    xylem water pressure value at which stem hydraulic conductivity has declined by
+    12% from the mean maximum rate of hydraulic conductivity.
   type: numeric
   units: MPa
   allowed_values_min: -20.0
   allowed_values_max: 0.0
   entity_URI: https://w3id.org/APD/traits/trait_0021051
 water_potential_50percent_lost_conductivity:
-  label: Stem xylem pressure, 50% lost conductivity (P50)
+  label: Stem xylem pressure, 50% lost conductivity
   description: The tension [PATO:0002284] (water pressure) (water potential [EnvThes:22311])  in
     stem [PO:0009047] xylem vessels [PO:0025417] at which the hydraulic conductivity
-    [EnvThes:22133] has declined by 50% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;A
-    measure of stem hydraulic vulnerability, which is the stem xylem water pressure
-    value at which stem hydraulic conductivity has declined by 50% from the mean maximum
-    rate of hydraulic conductivity.
+    [EnvThes:22133] has declined by 50% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;Stem
+    xylem water pressure value at which stem hydraulic conductivity has declined by
+    50% from the mean maximum rate of hydraulic conductivity.
   type: numeric
   units: MPa
   allowed_values_min: -20.0
   allowed_values_max: 0.0
   entity_URI: https://w3id.org/APD/traits/trait_0021052
 water_potential_88percent_lost_conductivity:
-  label: Stem xylem pressure, 88% lost conductivity (P88)
+  label: Stem xylem pressure, 88% lost conductivity
   description: The tension [PATO:0002284] (water pressure) (water potential [EnvThes:22311])  in
     stem [PO:0009047] xylem vessels [PO:0025417] at which the hydraulic conductivity
-    [EnvThes:22133] has declined by 88% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;A
-    measure of stem hydraulic vulnerability, which is the stem xylem water pressure
-    value at which stem hydraulic conductivity has declined by 88% from the mean maximum
-    rate of hydraulic conductivity.
+    [EnvThes:22133] has declined by 88% from the mean maximum [NCIT:C25564] rate [PATO:0000161].;Stem
+    xylem water pressure value at which stem hydraulic conductivity has declined by
+    88% from the mean maximum rate of hydraulic conductivity.
   type: numeric
   units: MPa
   allowed_values_min: -20.0
@@ -7776,8 +7590,7 @@ wood_axial_parenchyma_fraction:
 wood_C_per_dry_mass:
   label: Wood carbon (C) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of carbon [CHEBI:27594]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of carbon in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 50.0
@@ -7786,8 +7599,7 @@ wood_C_per_dry_mass:
 wood_Ca_per_dry_mass:
   label: Wood calcium (Ca) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of calcium in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -7812,8 +7624,7 @@ wood_dead_Ca_per_dry_mass:
   label: Dead wood calcium (Ca) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of calcium [CHEBI:22984]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of calcium in senescent wood
-    (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7823,8 +7634,7 @@ wood_dead_K_per_dry_mass:
   label: Dead wood potassium (K) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of potassium in senescent
-    wood (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -7834,8 +7644,7 @@ wood_dead_Mg_per_dry_mass:
   label: Dead wood magnesium (Mg) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of magnesium in senescent
-    wood (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -7845,8 +7654,7 @@ wood_dead_N_per_dry_mass:
   label: Dead wood nitrogen (N) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of nitrogen in senescent
-    wood (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7856,8 +7664,7 @@ wood_dead_Na_per_dry_mass:
   label: Dead wood sodium (Na) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sodium [CHEBI:26708]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of sodium in senescent wood
-    (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -7867,8 +7674,7 @@ wood_dead_P_per_dry_mass:
   label: Dead wood phosphorus (P) content per unit dead wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
     in senescent [PATO:0001487] wood [PO:0005848] (litter [ENVO:01000628]) to the
-    dry mass of the senesced wood.;The ratio of the mass of phosphorus in senescent
-    wood (litter) to the dry mass of the senesced wood.
+    dry mass of the senesced wood.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -7877,7 +7683,7 @@ wood_dead_P_per_dry_mass:
 wood_delta13C:
   label: Wood stable carbon isotope composition (delta13C)
   description: Carbon stable isotope ratio [ECSO:00001142], d13C [ECSO:00000669],
-    of wood [NCIT:C93062].;Carbon stable isotope ratio, d13C, of wood.
+    of wood [NCIT:C93062].
   comments: delta13C is calculated as the ratio of, 13C/12C in a sample to 13C/12C
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A more negative value for delta13C indicates the sample
@@ -7890,7 +7696,7 @@ wood_delta13C:
 wood_delta15N:
   label: Wood stable nitrogen isotope composition (delta15N)
   description: Nitrogen stable isotope ratio [ECSO:00001737], d15N [ECSO:00001738],
-    of wood [NCIT:C93062].;Nitrogen stable isotope ratio, d15N, of wood.
+    of wood [NCIT:C93062].
   comments: delta15N is calculated as the ratio of, 15N/14N in a sample to 15N/14N
     in a standard, minus 1. The result is expressed in parts per thousand, commonly
     referred to as per mille. A lower value for delta15N indicates the sample has
@@ -7928,8 +7734,7 @@ wood_fibre_fraction:
 wood_K_per_dry_mass:
   label: Wood potassium (K) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of potassium [CHEBI:26216]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of potassium in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -7938,8 +7743,7 @@ wood_K_per_dry_mass:
 wood_Mg_per_dry_mass:
   label: Wood magnesium (Mg) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of magnesium [CHEBI:25107]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of magnesium in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.01
@@ -7948,8 +7752,7 @@ wood_Mg_per_dry_mass:
 wood_N_per_dry_mass:
   label: Wood nitrogen (N) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of nitrogen [CHEBI:25555]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of nitrogen in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7958,8 +7761,7 @@ wood_N_per_dry_mass:
 wood_Na_per_dry_mass:
   label: Wood sodium (Na) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of sodium [CHEBI:26708]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of sodium in wood
-    to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.1
@@ -7968,8 +7770,7 @@ wood_Na_per_dry_mass:
 wood_P_per_dry_mass:
   label: Wood phosphorus (P) content per unit wood dry mass
   description: The ratio [PATO:0001470] of the mass [PATO:0000125] of phosphorus [CHEBI:28659]
-    in wood [PO:0005848] to wood dry mass.;The ratio of the mass of phosphorus in
-    wood to wood dry mass.
+    in wood [PO:0005848] to wood dry mass.
   type: numeric
   units: mg/g
   allowed_values_min: 0.001
@@ -8048,8 +7849,8 @@ woodiness_detailed:
     woody: Plant whose stems produce secondary xylem (true wood).
     woody_base: Plant where secondary xylem (true wood) is present only at the base
       of stems. (Synonyms, suffrutescent)
-    woody_like_inflorescence: Taxa, including monocots, that produce thick, stiff,
-      robust lignified inflorescence shoots but are otherwise non-woody.
+    woody_like_inflorescence: Taxa, including monocots and ferns, that produce thick,
+      stiff, robust lignified inflorescence shoots but are otherwise non-woody.
     woody_like_stem: Taxa, including monocots and ferns, that produce thick, stiff,
       robust lignified stems but do not produce secondary xylem.
     woody_root: Plant that has a woody rootstock but non-woody above-ground stems.
