@@ -21,7 +21,7 @@ austraits_6.0.0 |>
 # Create an intermediate sized version, to reduce size of the database
 # Only has a subset of taxa and only core traits
 ## Only core traits
-traits <- arrow::read_csv_arrow("inst/extdata/austraits/trait_groups_for_portal.csv") |> filter(!is.na(core_trait)) |> pull(trait)
+traits <- arrow::read_csv_arrow("inst/extdata/austraits/trait_groups_for_portal.csv") |> dplyr::filter(!is.na(core_trait)) |> dplyr::pull(trait)
 ## Choose random selectioon of taxa, plus those in lite version
 set.seed(123)
 taxon_names <- c(
@@ -31,6 +31,6 @@ taxon_names <- c(
 ## Filter taxon and traits and save as parquet
 austraits_6.0.0_mid <- austraits_6.0.0
 austraits_6.0.0_mid$traits <-
-  austraits_6.0.0_mid$traits |> filter(trait_name %in% traits, taxon_name %in% taxon_names)
+  austraits_6.0.0_mid$traits |> dplyr::filter(trait_name %in% traits, taxon_name %in% taxon_names)
 
 austraits_6.0.0_mid |> prepare_data_for_portal("inst/extdata/austraits/austraits-6.0.0-mid")
