@@ -51,10 +51,7 @@ generate_taxon_text <- function(data, taxon) {
 
   # Load trait links and merge with trait means
   trait_info_all <- 
-    readr::read_csv(
-    "inst/extdata/austraits/trait_groups_for_portal.csv",
-    col_types = readr::cols(.default = readr::col_character())
-    ) |>
+    trait_groups |>
     dplyr::rename(trait_name = trait) |>
     dplyr::mutate(core_trait = ifelse(!is.na(core_trait) & core_trait == "core_trait", "core", "other")) |>
     dplyr::left_join(data_taxon_trait_means, by = "trait_name") |>

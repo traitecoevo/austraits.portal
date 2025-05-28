@@ -1,8 +1,8 @@
 .Rproj.user
 .Rhistory
 .RData
-inst/extdata/austraits/*.parquet
-inst/extdata/austraits/*.rds
+*.parquet
+*.rds
 ignore/
 data
 .vscode/

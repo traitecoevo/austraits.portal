@@ -96,6 +96,58 @@ extract_distinct_values <- function(data, var_name){
     dplyr::pull()
 }
 
+
+#' Prepare Austraits data for the portal
+#'
+#' Flattens the Austraits database, saves definitions and sources, and writes parquet files for data and display.
+#'
+#' @param austraits The Austraits database object.
+#' @param output_dir Directory to write output files.
+#' @param overwrite Logical; overwrite existing files if TRUE.
+#' @keywords internal
+#' @noRd
+prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
+  # Create output directory if it doesn't exist
+  if (!dir.exists(output_dir))
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+  ## Prepare the database and export (if doesn't already exist)
+  filename_data <- file.path(output_dir, "austraits-data.parquet")
+  filename_display <- file.path(output_dir, "austraits-display.parquet")
+  
+  if (!file.exists(filename_data) | overwrite) {
+
+    # Flatten the database
+    austraits_full_flatten <-
+      austraits |>
+      austraits::flatten_database() |>
+      dplyr::mutate(row_id = dplyr::row_number()) |>
+      dplyr::mutate(
+        measurement_remarks = iconv(measurement_remarks,
+          from = "", # Let's R guess the current encoding
+          to = "UTF-8", # Convert to UTF-8
+          sub = "" # Remove any bytes that can't be converted
+        )
+      )
+
+    ## Save the flattened database
+    austraits_full_flatten |>
+      arrow::write_parquet(filename_data)
+
+    # Save the display version of the flattened database
+    austraits_full_flatten |>
+      format_database_for_display() |>
+      format_hyperlinks_for_display() |>
+      arrow::write_parquet(filename_display)
+    
+    # Saving definitions
+    austraits$definitions |> yaml::write_yaml(file.path(output_dir, "definitions.yml"))
+
+    # Sources
+    austraits$sources |> RefManageR::WriteBib(file.path(output_dir, "sources.bib"))
+  }
+}
+
 #' Format flattened database for display
 #' @keywords internal 
 #' @noRd 
