@@ -11,6 +11,8 @@ options(shiny.launch.browser = TRUE)
 
 # set the path to the data
 data_path <- "inst/extdata/austraits/austraits-5.0.0-lite"
+# data_path <- "inst/extdata/austraits/austraits-6.0.0-mid"
+# data_path <- "inst/extdata/austraits/austraits-6.0.0-full"
 
 # Load the datasets
 austraits <- arrow::open_dataset(file.path(data_path, "austraits-data.parquet"))
@@ -20,7 +22,7 @@ trait_groups <- readr::read_csv(
   "inst/extdata/austraits/trait_groups_for_portal.csv",
   col_types = readr::cols(.default = readr::col_character())
   )
-
+metatdata <- jsonlite::read_json("inst/extdata/austraits/austraits.json")
 
 columns_display <- c(
   "dataset_id", "taxon_name", "genus", "family", "trait_name", "value", "unit",

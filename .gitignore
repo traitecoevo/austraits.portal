@@ -3,6 +3,9 @@
 .RData
 *.parquet
 *.rds
+*.bib
+definitions.yml
+
 ignore/
 data
 .vscode/
