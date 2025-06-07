@@ -35,6 +35,8 @@ columns_display <- c(
   "taxon_rank", "taxon_distribution", "establishment_means"
 )
 
+source_bib_file <- "inst/extdata/austraits/austraits-5.0.0-lite/sources.bib"
+
 # Set up possible values for selectize menus
 ## Taxonomy
 ### Unique values of family

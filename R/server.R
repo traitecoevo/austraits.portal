@@ -358,11 +358,16 @@ austraits_server <- function(input, output, session) {
     
   # Set up download data as reactive expression
   download_data_table <- reactive({
-    # Get the current filtered database that is on display
-    display_db <- filtered_database()
+    # Get the current filtered database that is on display by filtering the full dataset
+    input_values <- reactiveValuesToList(input)
+    display_db <- austraits |>
+      apply_filters_categorical(input_values) |>
+      apply_filters_location(input_values) |> 
+      dplyr::collect()
     
+
     # Check if it's NULL and return appropriate value
-    if (is.null(filtered_database)) {
+    if (is.null(display_db)) {
       return(NULL)
     }
     
@@ -477,7 +482,7 @@ austraits_server <- function(input, output, session) {
 
       # Export bibtex from the filtered data
       keys <- data_to_download$source_primary_key |> unique()
-      export_bibtex_for_data(keys, filename = bib_file)
+      export_bibtex_for_data(keys, bib_file)
 
       # Update the usage text and convert to html
       usage_text(generate_usage_and_citations_text(data_to_download))
@@ -487,7 +492,6 @@ austraits_server <- function(input, output, session) {
       showNotification("Downloading filtered data...",
                        type = "message",
                        duration = 3)
-
 
       zip::zip(
         zipfile = file, 
