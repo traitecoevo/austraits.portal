@@ -358,13 +358,8 @@ austraits_server <- function(input, output, session) {
     
   # Set up download data as reactive expression
   download_data_table <- reactive({
-    # Get the current filtered database that is on display by filtering the full dataset
-    input_values <- reactiveValuesToList(input)
-    display_db <- austraits |>
-      apply_filters_categorical(input_values) |>
-      apply_filters_location(input_values) |> 
-      dplyr::collect()
-    
+    # Get the current filtered database that is on display
+    display_db <- filtered_database()
 
     # Check if it's NULL and return appropriate value
     if (is.null(display_db)) {
