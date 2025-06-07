@@ -166,8 +166,10 @@ austraits_server <- function(input, output, session) {
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
-      # No filters selected
-      filtered_database(NULL)
+      # No filters selected and all taxa is not selected
+      if (input$taxon_rank != "all") {
+        filtered_database(NULL)
+      }
 
       output$trait_profile <- renderUI({
         tagList(
@@ -182,8 +184,8 @@ austraits_server <- function(input, output, session) {
     input$taxon_rank, {
     if(input$taxon_rank == "all") {
       # If not taxonomic rank is selected, show full database
-      full_database <- austraits_display |> dplyr::collect()
-      filtered_database(full_database)
+      full_display_database <- austraits_display |> dplyr::collect()
+      filtered_database(full_display_database)
     } 
     else {
       if (is.null(filtered_database())) {
@@ -253,7 +255,6 @@ austraits_server <- function(input, output, session) {
 
           # Update the filtered_database reactive
           filtered_database(data)
-          # print(display_database())
         }
         
         # Now we can use the data (whether it was already filtered or we just created it)
