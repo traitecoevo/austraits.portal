@@ -4,7 +4,6 @@
 #' Creates a textual summary for a specified trait based on the provided data.
 #'
 #' @param data_trait A data frame
-#' @param trait A character string specifying the name of the trait to summarize.
 #'
 #' @return A character string containing the generated summary for the specified trait.
 #'

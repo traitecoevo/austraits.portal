@@ -8,8 +8,6 @@ generate_trait_profile(data_trait)
 }
 \arguments{
 \item{data_trait}{A data frame}
-
-\item{trait}{A character string specifying the name of the trait to summarize.}
 }
 \value{
 A character string containing the generated summary for the specified trait.
