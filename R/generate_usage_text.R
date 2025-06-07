@@ -66,7 +66,7 @@ References
 export_bibtex_for_data <- function(keys, filename, 
     refs = 
         RefManageR::ReadBib(
-        file = source_bib_file,
+        file = "inst/extdata/austraits/austraits-5.0.0-lite/sources.bib",
         check = FALSE, .Encoding = "UTF-8")
 ) {
   # Get the bibtex for the keys
