@@ -166,8 +166,10 @@ austraits_server <- function(input, output, session) {
       # Store filtered data into reactive value
       filtered_database(filtered_data)
     } else {
-      # No filters selected
-      filtered_database(NULL)
+      # No filters selected and all taxa is not selected
+      if (input$taxon_rank != "all") {
+        filtered_database(NULL)
+      }
 
       output$trait_profile <- renderUI({
         tagList(
@@ -182,8 +184,8 @@ austraits_server <- function(input, output, session) {
     input$taxon_rank, {
     if(input$taxon_rank == "all") {
       # If not taxonomic rank is selected, show full database
-      full_database <- austraits_display |> dplyr::collect()
-      filtered_database(full_database)
+      full_display_database <- austraits_display |> dplyr::collect()
+      filtered_database(full_display_database)
     } 
     else {
       if (is.null(filtered_database())) {
@@ -253,7 +255,6 @@ austraits_server <- function(input, output, session) {
 
           # Update the filtered_database reactive
           filtered_database(data)
-          # print(display_database())
         }
         
         # Now we can use the data (whether it was already filtered or we just created it)
@@ -359,9 +360,9 @@ austraits_server <- function(input, output, session) {
   download_data_table <- reactive({
     # Get the current filtered database that is on display
     display_db <- filtered_database()
-    
+
     # Check if it's NULL and return appropriate value
-    if (is.null(filtered_database)) {
+    if (is.null(display_db)) {
       return(NULL)
     }
     
@@ -476,7 +477,7 @@ austraits_server <- function(input, output, session) {
 
       # Export bibtex from the filtered data
       keys <- data_to_download$source_primary_key |> unique()
-      export_bibtex_for_data(keys, filename = bib_file)
+      export_bibtex_for_data(keys, bib_file)
 
       # Update the usage text and convert to html
       usage_text(generate_usage_and_citations_text(data_to_download))
@@ -486,7 +487,6 @@ austraits_server <- function(input, output, session) {
       showNotification("Downloading filtered data...",
                        type = "message",
                        duration = 3)
-
 
       zip::zip(
         zipfile = file, 

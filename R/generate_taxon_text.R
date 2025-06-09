@@ -193,7 +193,7 @@ generate_taxon_portal_links <- function(taxon_info) {
 export_bibtex_for_data <- function(keys, filename, 
     refs = 
         RefManageR::ReadBib(
-        file = "inst/extdata/austraits/sources.bib",
+        file = paste(data_path, "/sources.bib", sep = ""),
         check = FALSE, .Encoding = "UTF-8")
 ) {
   # Get the bibtex for the keys
