@@ -10,9 +10,9 @@ options(shiny.launch.browser = TRUE)
 `%not_in%` <- Negate(`%in%`)
 
 # set the path to the data
-data_path <- "inst/extdata/austraits/austraits-5.0.0-lite"
+#data_path <- "inst/extdata/austraits/austraits-5.0.0-lite"
 # data_path <- "inst/extdata/austraits/austraits-6.0.0-mid"
-# data_path <- "inst/extdata/austraits/austraits-6.0.0-full"
+data_path <- "inst/extdata/austraits/austraits-6.0.0-full"
 
 # Load the datasets
 austraits <- arrow::open_dataset(file.path(data_path, "austraits-data.parquet"))
