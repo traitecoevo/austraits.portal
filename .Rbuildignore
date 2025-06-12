@@ -1,8 +1,8 @@
-^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
-^ignore$
-^README\.Rmd$
-^\.github$
-^app.R$
+dev_history.R
+^dev$
+$run_dev.*
+^.here$
+^CODE_OF_CONDUCT\.md$
