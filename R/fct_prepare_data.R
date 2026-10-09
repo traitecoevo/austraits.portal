@@ -28,6 +28,9 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
     austraits |>
     austraits::flatten_database() |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
+    # Hybrid formulas starting "(Genus species x ...)" get the genus "(Genus"
+    # upstream (APCalign); strip the bracket (issue #113)
+    dplyr::mutate(genus = stringr::str_remove(genus, "^\\(")) |>
     dplyr::mutate(
       measurement_remarks = iconv(measurement_remarks,
         from = "", # Let's R guess the current encoding
@@ -127,7 +130,7 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   
   dropdown_cache <- list(
     all_family = austraits_full_flatten |> dplyr::distinct(family) |> dplyr::pull() |> sort(),
-    all_genus = austraits_full_flatten |> dplyr::distinct(genus) |> dplyr::pull() |> stringr::str_remove("\\(") |> sort(),
+    all_genus = austraits_full_flatten |> dplyr::distinct(genus) |> dplyr::pull() |> sort(),
     all_taxon_names = austraits_full_flatten |> dplyr::distinct(taxon_name) |> dplyr::pull() |> sort(),
     all_traits = austraits_full_flatten |> dplyr::distinct(trait_name) |> dplyr::pull() |> sort(),
     all_bor = austraits_full_flatten |> dplyr::distinct(basis_of_record) |> dplyr::pull() |> sort(),
