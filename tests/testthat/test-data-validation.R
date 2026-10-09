@@ -4,9 +4,9 @@ test_that("data structure follows expected schema", {
   skip_if_no_data()
   
   # Check that loaded data has expected columns
-  expect_true("taxon_name" %in% names(austraits_display))
-  expect_true("trait_name" %in% names(austraits_display))
-  expect_true("value" %in% names(austraits_display))
+  expect_true("taxon_name" %in% colnames(austraits_display_duckdb))
+  expect_true("trait_name" %in% colnames(austraits_display_duckdb))
+  expect_true("value" %in% colnames(austraits_display_duckdb))
 })
 
 test_that("dropdown cache contains all required fields", {

@@ -22,12 +22,12 @@ mod_taxon_view_ui <- function(id){
 #'
 #' @param id Internal parameter for {shiny}
 #' @param filters Reactive containing filter values
-#' @param filtered_database Reactive containing filtered data
 #' @param current_tab Reactive containing current tab name
+#' @param apply_filters_trigger reactiveVal counting applied searches
 #'
 #' @noRd
 
-mod_taxon_view_server <- function(id, filters, filtered_database, current_tab, apply_filters_trigger){
+mod_taxon_view_server <- function(id, filters, current_tab, apply_filters_trigger){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
@@ -123,22 +123,8 @@ taxon_text_generated <- eventReactive(apply_filters_trigger(), {
           return()
         }
         
-        selected_taxon <- filter_vals$taxon_name[[1]]
-        
-        # Prefer current filtered DB, otherwise fetch
-        data <- filtered_database()
-        if (is.null(data)) {
-          data <- austraits_display |>
-            apply_filters(filter_vals) |>
-            dplyr::collect()
-          filtered_database(data)
-        }
-        
-        if (nrow(data) == 0) {
-          taxon_text(NULL)
-          return()
-        }
-        
+        # generate_taxon_text() queries the data for the taxon itself; it does
+        # not depend on the filtered result (which "Clear Filters" empties)
         # Get cached taxon text
         txt <- taxon_text_generated()
         

@@ -103,7 +103,9 @@ mod_data_table_server <- function(id, filtered_database, filtered_query_cache, c
       
         dt <- DT::datatable(
           data = display_data,
-          escape = FALSE,
+          # Escape HTML: context properties contain "<<description>>" text,
+          # which a browser would otherwise swallow as an unknown tag
+          escape = TRUE,
           rownames = FALSE,
           filter = "none",
           class = "cell-border stripe nowrap",

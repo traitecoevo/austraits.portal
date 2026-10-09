@@ -170,6 +170,11 @@ srv_url_params <- function(input, output, session,
         full_filtered_cache(NULL)
         filtered_database(filtered_data)
 
+        log_telemetry_event("search", details = list(
+          dataset_type = parsed_filters$dataset_type,
+          trait = parsed_filters$trait$trait_name
+        ))
+
         if (isTRUE(parsed_filters$taxon$taxon_type == "taxon_name") &&
             length(parsed_filters$taxon$taxon_name) == 1) {
 
