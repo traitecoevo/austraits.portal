@@ -11,6 +11,7 @@
 * Downloads are built in DuckDB (about 10 s and over 1 GB of memory less per download), and their citations now cover every source rather than a sample.
 * Trait View collects data only when exactly one trait is selected, and only once.
 * "Searches" telemetry counts only Apply clicks and links with filters. Telemetry is sent asynchronously and is off under tests.
+* The first switch between species averages and raw data now reloads the table.
 * Deploys wait for R-CMD-check and restart only this app; CI also runs on Linux.
 
 ## Major Changes

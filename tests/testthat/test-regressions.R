@@ -194,3 +194,12 @@ test_that("Download query returns full rows for the filtered row_ids", {
 test_that("Telemetry is off under testthat", {
   expect_true(telemetry_disabled())
 })
+
+test_that("Shiny does not auto-source R/ when serving app.R", {
+  # Shiny Server runs app.R after sourcing R/ into the app's environment,
+  # unless R/_disable_autoload.R exists. Those sourced copies would see only
+  # the empty data placeholders, and every filter would fail.
+  r_dir <- testthat::test_path("..", "..", "R")
+  skip_if_not(dir.exists(r_dir), "Not running from a source checkout")
+  expect_true(file.exists(file.path(r_dir, "_disable_autoload.R")))
+})

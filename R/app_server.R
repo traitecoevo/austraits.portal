@@ -124,7 +124,8 @@ app_server <- function(input, output, session) {
 
     publish_filter_result(parse_filters(filters()),
                           paste("Dataset type changed:", previous, "→", current))
-  }, ignoreInit = TRUE)
+  }, ignoreInit = FALSE)  # the first run records the starting dataset, so the
+                          # first switch reloads (ignoreInit = TRUE skipped it)
 
   # Data table module
   mod_data_table_server("data_table", filtered_query_cache, filtered_total, current_columns_display)
