@@ -6,6 +6,7 @@
 ^data-raw$
 ^ignore$
 ^README\.Rmd$
+^config\.yml$
 ^\.github$
 ^app.R$
 ^\.cache$

@@ -19,12 +19,10 @@ deployment is deprecated).
   `austraits-7.0.0-full` set is prepared locally (see README "Data Preparation").
 - **Data prep:** `prepare_data_for_portal()` (in `R/fct_prepare_data.R`) flattens the AusTraits
   database, computes species averages, exports Parquet, and caches metadata/dropdowns.
-- **Config:** `config.yml` (via the `config` package); deployment manifest in `manifest.json`.
+- **Config:** `config.yml` (via the `config` package; gitignored and build-ignored, because it holds the Supabase key); deployment manifest in `manifest.json`.
 - **Tests:** `tests/testthat/` (testthat edition 3) + `spelling`; see `tests/TEST_COVERAGE.md`.
 
-Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` /
-`pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source
-`app.R`); `devtools::test()`; `devtools::check()`. Default development branch is `develop`.
+Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` / `pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source `app.R`); `devtools::test()`; `devtools::check()`. The default branch is `master` (`develop` has been merged and deleted). A push to `master` deploys to AWS once R-CMD-check passes on it (`.github/workflows/auto-deploy.yml`).
 
 > Heads-up: the app needs prepared data files to run — only the `lite` set is in the repo, so a
 > fresh checkout shows the demo subset until you build the full set. The live portal is now served
