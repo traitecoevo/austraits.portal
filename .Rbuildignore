@@ -6,6 +6,9 @@
 ^data-raw$
 ^ignore$
 ^README\.Rmd$
+^REVIEW\.md$
+^config\.yml$
+^BROWSER-PORTAL\.md$
 ^\.github$
 ^app.R$
 ^\.cache$

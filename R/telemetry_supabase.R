@@ -2,49 +2,62 @@
 #' Uses HTTP instead of PostgreSQL driver
 #' Auto-detects cloud (Supabase) vs local (SQLite) mode
 
-library(httr2)
-library(jsonlite)
-
 #' Initialize Supabase Telemetry
 #' @param url Supabase project URL.
 #' @param key Supabase service or anon API key.
 init_supabase_telemetry <- function(url, key) {
   options(supabase_telemetry_url = url)
   options(supabase_telemetry_key = key)
-  cat("✓ Supabase telemetry initialized\n")
+  packageStartupMessage("✓ Supabase telemetry initialized")
+}
+
+#' Send one telemetry event to Supabase without blocking the R process
+#'
+#' The POST runs asynchronously on the later event loop, so a slow or
+#' unreachable Supabase never stalls the (single-process) app for other users.
+#' @param body Named list sent as the JSON body.
+#' @noRd
+send_supabase_event <- function(body) {
+  url <- getOption("supabase_telemetry_url")
+  key <- getOption("supabase_telemetry_key")
+  if (is.null(url) || is.null(key)) return(invisible(NULL))
+
+  req <- httr2::request(paste0(url, "/rest/v1/telemetry_events")) |>
+    httr2::req_headers(
+      "apikey" = key,
+      "Authorization" = paste("Bearer", key),
+      "Content-Type" = "application/json",
+      "Prefer" = "return=minimal"
+    ) |>
+    httr2::req_body_json(body)
+
+  tryCatch(
+    promises::catch(httr2::req_perform_promise(req), function(e) {
+      warning("Telemetry send failed (", body$type, "): ", conditionMessage(e), call. = FALSE)
+    }),
+    error = function(e) {
+      warning("Telemetry send failed (", body$type, "): ", conditionMessage(e), call. = FALSE)
+    }
+  )
+  invisible(NULL)
 }
 
 #' Start telemetry session (works in both cloud and local mode)
 start_telemetry_session <- function() {
-  if (getOption("telemetry_mode", "cloud") == "local") {
+  if (telemetry_disabled()) return(invisible(NULL))
+  mode <- getOption("telemetry_mode", "off")
+  if (mode == "local") {
     # Local SQLite mode
     telemetry_obj <- getOption("telemetry_object")
     if (!is.null(telemetry_obj)) {
       telemetry_obj$start_session(track_inputs = FALSE)
     }
-  } else {
-    # Cloud Supabase mode
-    url <- getOption("supabase_telemetry_url")
-    key <- getOption("supabase_telemetry_key")
-    if (is.null(url) || is.null(key)) return(NULL)
-    
-    tryCatch({
-      request(paste0(url, "/rest/v1/telemetry_events")) |>
-        req_headers(
-          "apikey" = key,
-          "Authorization" = paste("Bearer", key),
-          "Content-Type" = "application/json",
-          "Prefer" = "return=minimal"
-        ) |>
-        req_body_json(list(
-          type = "login",
-          timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"),
-          session_id = paste0("session_", as.numeric(Sys.time()))
-        )) |>
-        req_perform()
-    }, error = function(e) {
-      warning("Telemetry session start failed: ", e$message)
-    })
+  } else if (mode == "cloud") {
+    send_supabase_event(list(
+      type = "login",
+      timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"),
+      session_id = paste0("session_", as.numeric(Sys.time()))
+    ))
   }
 }
 
@@ -52,35 +65,20 @@ start_telemetry_session <- function() {
 #' @param event_type Event type label.
 #' @param details Named list of event details.
 log_telemetry_event <- function(event_type, details = list()) {
-  if (getOption("telemetry_mode", "cloud") == "local") {
+  if (telemetry_disabled()) return(invisible(NULL))
+  mode <- getOption("telemetry_mode", "off")
+  if (mode == "local") {
     # Local SQLite mode
     telemetry_obj <- getOption("telemetry_object")
     if (!is.null(telemetry_obj)) {
       telemetry_obj$log_custom_event(event_type, details = details)
     }
-  } else {
-    # Cloud Supabase mode
-    url <- getOption("supabase_telemetry_url")
-    key <- getOption("supabase_telemetry_key")
-    if (is.null(url) || is.null(key)) return(NULL)
-    
-    tryCatch({
-      request(paste0(url, "/rest/v1/telemetry_events")) |>
-        req_headers(
-          "apikey" = key,
-          "Authorization" = paste("Bearer", key),
-          "Content-Type" = "application/json",
-          "Prefer" = "return=minimal"
-        ) |>
-        req_body_json(list(
-          type = event_type,
-          timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"),
-          details = if(length(details) > 0) details else NULL
-        )) |>
-        req_perform()
-    }, error = function(e) {
-      warning("Telemetry log failed (", event_type, "): ", e$message)
-    })
+  } else if (mode == "cloud") {
+    send_supabase_event(list(
+      type = event_type,
+      timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"),
+      details = if (length(details) > 0) details else NULL
+    ))
   }
 }
 
@@ -88,7 +86,11 @@ log_telemetry_event <- function(event_type, details = list()) {
 #' @param from_date Start date (YYYY-MM-DD) for telemetry records.
 #' @param to_date End date (YYYY-MM-DD) for telemetry records.
 read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
-  if (getOption("telemetry_mode", "cloud") == "local") {
+  mode <- getOption("telemetry_mode", "off")
+  if (mode == "off") {
+    return(tibble::tibble(type = character(), timestamp = character(), details = character()))
+  }
+  if (mode == "local") {
     # Local SQLite mode
     telemetry_obj <- getOption("telemetry_object")
     if (is.null(telemetry_obj)) {
@@ -131,13 +133,13 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
           "&offset=", offset
         )
       
-        resp <- request(query_url) |>
-          req_headers(
+        resp <- httr2::request(query_url) |>
+          httr2::req_headers(
             "apikey" = key,
             "Authorization" = paste("Bearer", key)
           ) |>
-          req_perform() |>
-          resp_body_json()
+          httr2::req_perform() |>
+          httr2::resp_body_json()
         
         if (length(resp) == 0) break
         
@@ -165,6 +167,17 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
     })
   }
 }
+#' Telemetry rows, cached for 60 seconds across all sessions
+#'
+#' The App Information tab shows totals and a monthly table, refreshed every
+#' minute. Without this cache each open tab paged through the whole telemetry
+#' table, twice, every minute.
+#' @noRd
+read_telemetry_metrics_cached <- memoise::memoise(
+  function(from_date, to_date) read_telemetry_metrics(from_date, to_date),
+  cache = cachem::cache_mem(max_age = 60)
+)
+
 #' Get monthly telemetry metrics
 #' @param from_date Start date
 #' @param to_date End date
@@ -173,8 +186,8 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
   
 get_monthly_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
    
-  data <- read_telemetry_metrics(from_date, to_date)
- 
+  data <- read_telemetry_metrics_cached(from_date, to_date)
+
   if (nrow(data) == 0) {
     return(tibble::tibble(
       month = character(),

@@ -73,9 +73,14 @@ Imports:
     duckdb,
     dbplyr,
     rlang,
-    memoise
+    memoise,
+    cachem,
+    promises,
+    later,
+    tools
 Remotes:
     traitecoevo/austraits
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    shiny.telemetry
 Config/testthat/edition: 3

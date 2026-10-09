@@ -155,7 +155,7 @@ test_that("parse_filters ignores georeferenced location filters for species data
   expect_equal(result$location$location, "georeferenced")
   expect_equal(result$dataset_type, "species")
 })
-test_that("apply_filters uses grepl instead of %in% for trait_name to avoid Arrow pushdown error", {
+test_that("parse_filters keeps trait features when trait name is empty", {
   parsed <- parse_filters(list(
     dataset_type = "species",
     taxon_type = "all",

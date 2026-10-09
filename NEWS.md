@@ -1,5 +1,18 @@
 # austraits.portal (development version)
 
+## Review fixes (October 2026, see REVIEW.md)
+
+* Taxon filters now match names containing brackets or parentheses; 3,906 of 33,370 taxa (12%) previously returned no rows. DuckDB reads the Parquet files directly instead of through Arrow, so filters use `%in%` rather than regular expressions.
+* Multi-value custom filters work; `dataset_id` filters match whole IDs; free-text filters accept any characters.
+* Both "Apply Filters" buttons work (they shared one id, so clicks were dropped).
+* Taxon View no longer ends the session after "Clear Filters", and falls back gracefully on data builds without `value_range`.
+* Context descriptions written as `<<…>>` are no longer swallowed by the data table.
+* The data table pages and sorts in DuckDB, so any result can be browsed and sorted in full; "Load next 100" is gone.
+* Downloads are built in DuckDB (about 10 s and over 1 GB of memory less per download), and their citations now cover every source rather than a sample.
+* Trait View collects data only when exactly one trait is selected, and only once.
+* "Searches" telemetry counts only Apply clicks and links with filters. Telemetry is sent asynchronously and is off under tests.
+* Deploys wait for R-CMD-check and restart only this app; CI also runs on Linux.
+
 ## Major Changes
 
 * **DuckDB Migration**: Replaced Arrow with DuckDB for 10-100x faster query performance

@@ -103,29 +103,28 @@ observeEvent(input[["filters-dataset_type"]], {
   # Update columns
   updateSelectizeInput(session, "filters-custom_col_1", 
                       choices = cols, 
-                      selected = if (current_col_1 %in% cols) current_col_1 else character(0),
+                      selected = if (isTRUE(current_col_1 %in% cols)) current_col_1 else character(0),
                       server = TRUE)
   updateSelectizeInput(session, "filters-custom_col_2", 
                       choices = cols, 
-                      selected = if (current_col_2 %in% cols) current_col_2 else character(0),
+                      selected = if (isTRUE(current_col_2 %in% cols)) current_col_2 else character(0),
                       server = TRUE)
   updateSelectizeInput(session, "filters-custom_col_3", 
                       choices = cols, 
-                      selected = if (current_col_3 %in% cols) current_col_3 else character(0),
+                      selected = if (isTRUE(current_col_3 %in% cols)) current_col_3 else character(0),
                       server = TRUE)
   
   # Preserve values (if column was preserved)
-  if (current_col_1 %in% cols && !is.null(current_val_1)) {
+  if (isTRUE(current_col_1 %in% cols) && !is.null(current_val_1)) {
     updateSelectizeInput(session, "filters-custom_val_1", selected = current_val_1)
   }
-  if (current_col_2 %in% cols && !is.null(current_val_2)) {
+  if (isTRUE(current_col_2 %in% cols) && !is.null(current_val_2)) {
     updateSelectizeInput(session, "filters-custom_val_2", selected = current_val_2)
   }
-  if (current_col_3 %in% cols && !is.null(current_val_3)) {
+  if (isTRUE(current_col_3 %in% cols) && !is.null(current_val_3)) {
     updateSelectizeInput(session, "filters-custom_val_3", selected = current_val_3)
   }
   
-  Sys.sleep(0.1)
   switching_dataset(FALSE)
 })
   
@@ -144,7 +143,7 @@ observeEvent(input[["filters-dataset_type"]], {
           # ALWAYS use full dataset query, not just loaded 100 rows
           query <- filtered_query_cache()
 
-          if (!is.null(query) && column_name %in% names(query)) {
+          if (!is.null(query) && column_name %in% colnames(query)) {
             # Special handling for dataset_id in species averages
             if (column_name == "dataset_id" && filters()$dataset_type == "species") {
               unique_values <- dropdowns$all_dataset_ids_species

@@ -218,11 +218,14 @@ mod_filters_ui <- function(id) {
       )
     ),
 
+    # A second Apply button, so users who have scrolled down find one. It
+    # needs its own id: buttons sharing an id drop clicks (app_server
+    # observes both).
     actionButton(
-    ns("apply_filters_btn"),
-    "Apply Filters",
-    class = "btn-primary w-100 mb-0",
-    icon = icon("filter")
+      ns("apply_filters_btn_bottom"),
+      "Apply Filters",
+      class = "btn-primary w-100 mb-0",
+      icon = icon("filter")
     ),
 
     actionButton(
@@ -231,7 +234,6 @@ mod_filters_ui <- function(id) {
       class = "btn-warning w-100"
     ),
 
-    uiOutput(ns("rows_info")),
     uiOutput(ns("download_ui"))
   )
 }
@@ -239,11 +241,9 @@ mod_filters_ui <- function(id) {
 #' Filters Server Module
 #'
 #' @param id Shiny module id
-#' @param filtered_database reactiveVal used to store filtered data
 #' @noRd
 mod_filters_server <- function(
   id,
-  filtered_database,
   family_choices,
   genus_choices,
   taxon_name_choices,
@@ -329,7 +329,6 @@ mod_filters_server <- function(
         updateSelectizeInput(session, "custom_val_2", selected = character(0))
         updateSelectizeInput(session, "custom_col_3", selected = character(0))
         updateSelectizeInput(session, "custom_val_3", selected = character(0))
-        filtered_database(NULL)
       })
 
       # Dynamic UI for custom value inputs (dropdown vs text input)
