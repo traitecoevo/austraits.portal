@@ -31,6 +31,7 @@ trait_groups <- NULL
 metatdata <- NULL
 dropdowns <- NULL
 flora_links <- NULL
+taxon_synonyms <- NULL
 generate_taxon_text_cached <- NULL
 
 columns_display <- c(
@@ -209,7 +210,9 @@ load_portal_data <- function(env) {
   # Key the taxon-profile cache by data release and content, so a new data
   # build never serves profiles generated from the previous one
   version <- metadata$hits$hits[[1]]$metadata$version
-  fingerprint <- substr(unname(tools::md5sum(file.path(path, "austraits-species-averages.parquet"))), 1, 8)
+  profile_inputs <- file.path(path, c("austraits-species-averages.parquet", "synonyms.rds"))
+  profile_inputs <- profile_inputs[file.exists(profile_inputs)]
+  fingerprint <- substr(digest_strings(unname(tools::md5sum(profile_inputs))), 1, 8)
   # .cache/ in a checkout (where app.R runs); a temporary directory otherwise,
   # so tests and R CMD check leave nothing behind
   cache_root <- getOption("austraits.portal.cache_dir",
@@ -232,6 +235,10 @@ load_portal_data <- function(env) {
   dropdowns$all_genus <- sort(unique(sub("^[(]", "", dropdowns$all_genus)))
   assign("dropdowns", dropdowns, envir = env)
   assign("flora_links", readRDS(file.path(path, "flora_links.rds")), envir = env)
+  # Optional: built by prepare_synonyms_for_portal(); Taxon View omits the
+  # synonyms section without it
+  synonyms_file <- file.path(path, "synonyms.rds")
+  assign("taxon_synonyms", if (file.exists(synonyms_file)) readRDS(synonyms_file) else NULL, envir = env)
   assign("generate_taxon_text_cached",
          memoise::memoise(generate_taxon_text, cache = memoise::cache_filesystem(cache_dir)),
          envir = env)
@@ -301,4 +308,13 @@ init_telemetry <- function() {
       options(telemetry_mode = "off")
     })
   }
+}
+
+#' Short hash of several hashes, so any input file's change changes the key
+#' @noRd
+digest_strings <- function(x) {
+  f <- tempfile()
+  on.exit(unlink(f))
+  writeLines(x, f)
+  unname(tools::md5sum(f))
 }
