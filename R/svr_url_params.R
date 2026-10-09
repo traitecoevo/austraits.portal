@@ -5,6 +5,11 @@
 #' @param family_choices Reactive for family choices
 #' @param genus_choices Reactive for genus choices
 #' @param taxon_name_choices Reactive for taxon name choices
+#' @param loading_from_url reactiveVal, TRUE while URL values are being applied
+#' @param publish_filter_result Function(parsed_filters, context, log_search)
+#'   from app_server that runs the query and publishes the result
+#' @param filters Reactive filters from mod_filters_server
+#' @param apply_filters_trigger reactiveVal counting applied searches
 #' 
 #' @noRd
 srv_url_params <- function(input, output, session, 
@@ -12,10 +17,7 @@ srv_url_params <- function(input, output, session,
                            genus_choices, 
                            taxon_name_choices,
                            loading_from_url,
-                           filtered_database,
-                           filtered_query_cache,
-                           full_filtered_cache,
-                           current_austraits_display,
+                           publish_filter_result,
                            filters,
                            apply_filters_trigger) {
   
@@ -101,11 +103,10 @@ srv_url_params <- function(input, output, session,
         }
       })
       
-  Sys.sleep(2)
-  loading_from_url(FALSE)
+  # Keep the guard up while the browser applies the updates above, without
+  # blocking the R process (a Sys.sleep() here stalled every user for 2 s)
+  later::later(function() loading_from_url(FALSE), delay = 2)
   url_processed(TRUE)
-
-  start_time <- Sys.time()
 
   parsed_filters <- list(
     dataset_type = "species",
@@ -140,65 +141,24 @@ srv_url_params <- function(input, output, session,
     has_filters = !is.null(query$family) || !is.null(query$genus) || 
                   !is.null(query$taxon_name) || !is.null(query$trait_name)
   )      
-      tryCatch({
-        base_data <- current_austraits_display()
-        filtered_query <- apply_filters(base_data, parsed_filters)
-        
-        if (isTRUE(parsed_filters$location$location == "georeferenced") ||
-            isTRUE(parsed_filters$trait$trait_filter_type == "features")) {
-          filtered_query <- filtered_query |> dplyr::collect()
-        }
+      publish_filter_result(parsed_filters, "Filters from URL", log_search = TRUE)
 
-        cat("[FILTER] Counting total rows...\n")
-        total_rows <- filtered_query |> 
-          dplyr::count() |> 
-          dplyr::collect() |> 
-          dplyr::pull(n)
-        
-        cat(sprintf("[FILTER] Total rows: %s\n", format(total_rows, big.mark = ",")))
-        
-        if (total_rows < 10000) {
-          cat("[FILTER] Loading all rows (under 10k)...\n")
-          filtered_data <- filtered_query |> dplyr::collect()
-        } else {
-          cat("[FILTER] Loading first 100 rows (over 10k)...\n")
-          filtered_data <- filtered_query |> utils::head(100) |> dplyr::collect()
-        }
-        
-        attr(filtered_data, "total_rows") <- total_rows
-        filtered_query_cache(filtered_query)
-        full_filtered_cache(NULL)
-        filtered_database(filtered_data)
+      if (isTRUE(parsed_filters$taxon$taxon_type == "taxon_name") &&
+          length(parsed_filters$taxon$taxon_name) == 1) {
 
-        log_telemetry_event("search", details = list(
-          dataset_type = parsed_filters$dataset_type,
-          trait = parsed_filters$trait$trait_name
-        ))
+        target_taxon <- parsed_filters$taxon$taxon_name
+        taxon_view_unlocked <- reactiveVal(FALSE)
 
-        if (isTRUE(parsed_filters$taxon$taxon_type == "taxon_name") &&
-            length(parsed_filters$taxon$taxon_name) == 1) {
-
-          target_taxon <- parsed_filters$taxon$taxon_name
-          taxon_view_unlocked <- reactiveVal(FALSE)
-
-          observe({
-            if (taxon_view_unlocked()) return()
-            fv <- filters()
-            if (isTRUE(fv$taxon_type == "taxon_name") &&
-                isTRUE(identical(fv$taxon_name, target_taxon))) {
-              taxon_view_unlocked(TRUE)
-              apply_filters_trigger(apply_filters_trigger() + 1)
-            }
-          })
-        }
-        
-        elapsed_total <- as.numeric(Sys.time() - start_time, units = "secs")
-        cat(sprintf("[FILTER] ✅ URL filters applied in %.2f sec\n", elapsed_total))
-        
-      }, error = function(e) {
-        cat("URL filter application error:", e$message, "\n")
-        filtered_database(NULL)
-      })
+        observe({
+          if (taxon_view_unlocked()) return()
+          fv <- filters()
+          if (isTRUE(fv$taxon_type == "taxon_name") &&
+              isTRUE(identical(fv$taxon_name, target_taxon))) {
+            taxon_view_unlocked(TRUE)
+            apply_filters_trigger(apply_filters_trigger() + 1)
+          }
+        })
+      }
     }
   })
 }

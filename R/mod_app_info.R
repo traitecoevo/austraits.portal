@@ -7,7 +7,6 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-library(DT)
 mod_app_info_ui <- function(id){
   ns <- NS(id)
   
@@ -201,7 +200,7 @@ mod_app_info_server <- function(id){
   
   tryCatch({
     # Read all telemetry data from Supabase
-    data <- read_telemetry_metrics("2020-01-01", as.character(Sys.Date() + 1))
+    data <- read_telemetry_metrics_cached("2020-01-01", as.character(Sys.Date() + 1))
     
     if (nrow(data) > 0) {
       # Count by event type

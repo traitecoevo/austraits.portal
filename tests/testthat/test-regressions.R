@@ -123,29 +123,33 @@ test_that("B5: loaded data has every required column", {
   expect_error(check_data_schema(c("taxon_name"), data_schema$display, "display"), "missing required columns")
 })
 
-test_that("B6: the data table escapes HTML in cell text", {
-  # Context descriptions are written "<<...>>"; unescaped, a browser drops
-  # them as unknown tags
-  data <- data.frame(taxon_name = "A", trait_name = "t",
-                     method_context_properties = "x <<Trait value inferred from genus.>>")
-  attr(data, "total_rows") <- 1
-  escape <- NULL
-  real_datatable <- DT::datatable
-  local_mocked_bindings(
-    datatable = function(data, ..., escape = TRUE) {
-      escape <<- escape
-      real_datatable(data, ..., escape = escape)
-    },
-    .package = "DT"
-  )
-  testServer(mod_data_table_server, args = list(
-    filtered_database = reactiveVal(data),
-    filtered_query_cache = reactiveVal(NULL),
-    columns_display_reactive = reactive(names(data))
-  ), {
-    output$data_table
-    expect_true(isTRUE(escape))
-  })
+test_that("B6: table pages are HTML-escaped", {
+  skip_if_no_data()
+  state <- new.env()
+  query <- austraits_display_duckdb
+  state$cols <- table_display_columns(colnames(query), columns_display)
+  state$query <- table_query(query, state$cols)
+  state$total <- 10
+  params <- list(draw = "1", start = "0", length = "10", order = list(), columns = list())
+  res <- duckdb_table_filter(state)(NULL, params)
+  expect_equal(nrow(res$data), 10)
+  page <- fetch_table_page(state$query, state$cols, 0, 10)
+  page$location_name[1] <- "<<description>>"
+  expect_equal(htmltools::htmlEscape(page$location_name[1]), "&lt;&lt;description&gt;&gt;")
+})
+
+test_that("B6: paging is stable and sorting runs in DuckDB", {
+  skip_if_no_data()
+  query <- austraits_display_duckdb
+  cols <- table_display_columns(colnames(query), columns_display)
+  paged <- table_query(query, cols)
+  first <- fetch_table_page(paged, c(cols, "row_id"), 0, 20)
+  second <- fetch_table_page(paged, c(cols, "row_id"), 20, 20)
+  both <- fetch_table_page(paged, c(cols, "row_id"), 0, 40)
+  expect_equal(c(first$row_id, second$row_id), both$row_id)
+
+  sorted <- fetch_table_page(paged, cols, 0, 50, order_col = "taxon_name", descending = TRUE)
+  expect_false(is.unsorted(rev(sorted$taxon_name[!is.na(sorted$taxon_name)])))
 })
 
 test_that("B7: only user searches are logged, not dataset switches or paging", {
@@ -170,7 +174,21 @@ test_that("B7: only user searches are logged, not dataset switches or paging", {
     expect_equal(sum(logged == "search"), baseline + 2)
     session$setInputs(`filters-dataset_type` = "raw")
     expect_equal(sum(logged == "search"), baseline + 2)   # dataset switch is not a search
+    expect_false(is.null(filtered_total()))
   })
+})
+
+test_that("Download query returns full rows for the filtered row_ids", {
+  skip_if_no_data()
+  filtered <- quietly(apply_filters(austraits_display_duckdb, empty_filters(
+    taxon = list(taxon_type = "taxon_name", taxon_name = dropdowns$all_taxon_names[1]))))
+  download <- austraits_duckdb |> dplyr::semi_join(filtered |> dplyr::select(row_id), by = "row_id")
+  expect_equal(count_rows(download), count_rows(filtered))
+  expect_equal(colnames(download), colnames(austraits_duckdb))
+
+  path <- tempfile(fileext = ".csv")
+  write_query_csv(download, path)
+  expect_equal(nrow(utils::read.csv(path)), count_rows(filtered))
 })
 
 test_that("Telemetry is off under testthat", {

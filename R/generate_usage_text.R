@@ -76,12 +76,7 @@ The following datasets contributed data included in the selected search: %s
 #' }
 #'
 #' @export
-export_bibtex_for_data <- function(keys, filename, 
-    refs = 
-        RefManageR::ReadBib(
-        file = paste(data_path, "/sources.bib", sep = ""),
-        check = FALSE, .Encoding = "UTF-8")
-) {
+export_bibtex_for_data <- function(keys, filename, refs = get_sources_bib()) {
   # Get the bibtex for the keys
   refs <- refs[keys]
 

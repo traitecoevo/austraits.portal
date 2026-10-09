@@ -125,7 +125,6 @@ observeEvent(input[["filters-dataset_type"]], {
     updateSelectizeInput(session, "filters-custom_val_3", selected = current_val_3)
   }
   
-  Sys.sleep(0.1)
   switching_dataset(FALSE)
 })
   

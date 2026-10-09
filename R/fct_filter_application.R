@@ -194,3 +194,26 @@ apply_filters <- function(data, parsed_filters) {
 
   return(data)
 }
+
+#' Run a filter query and count its rows
+#'
+#' The one place the app turns filter settings into a result. The query stays
+#' lazy; the data table pages through it in DuckDB.
+#'
+#' @param base_data Lazy DuckDB table for the selected dataset.
+#' @param parsed_filters Parsed filter object from parse_filters().
+#' @return list(query = lazy query, total_rows = integer)
+#' @keywords internal
+#' @noRd
+run_filter_query <- function(base_data, parsed_filters) {
+  start_time <- Sys.time()
+  query <- apply_filters(base_data, parsed_filters)
+  total_rows <- query |>
+    dplyr::count() |>
+    dplyr::collect() |>
+    dplyr::pull(n)
+  cat(sprintf("[FILTER] %s rows (%.2f sec)\n",
+              format(total_rows, big.mark = ","),
+              as.numeric(Sys.time() - start_time, units = "secs")))
+  list(query = query, total_rows = as.numeric(total_rows))
+}

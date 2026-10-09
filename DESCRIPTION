@@ -74,6 +74,9 @@ Imports:
     dbplyr,
     rlang,
     memoise,
+    cachem,
+    promises,
+    later,
     tools
 Remotes:
     traitecoevo/austraits

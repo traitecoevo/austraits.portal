@@ -52,35 +52,50 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
       filters()$dataset_type == "species"
     })
     
-trait_profile <- reactive({
-  # Only compute when Trait View tab is visible
-  req(main_tabs() == "Trait View")
-  
-  start_time <- Sys.time()
-  
-  req(filtered_data())
-  
-  cache_key_trait <- isolate(filters()$trait_name)
-  cache_key_dataset <- isolate(filters()$dataset_type)
-  cache_key_species <- isolate(is_species_avg())
-  cat("\n[TRAIT PROFILE] Starting for trait:", cache_key_trait, "| dataset:", cache_key_dataset, "| is_species:", cache_key_species, "\n")
-  
-  # Collect ALL data for profile generation
-  full_data <- filtered_data() |> dplyr::collect()
-  
-  if (is_species_avg()) {
-    # Add ALL missing columns for species dataset
-    data_with_location <- full_data |>
-      dplyr::mutate(
-        `latitude (deg)` = NA_real_,
-        `longitude (deg)` = NA_real_,
-        # Add value column from mean_value (for plot compatibility)
-        value = if ("mean_value" %in% names(full_data)) mean_value else NA_real_,
-        # Add value_type if missing
-        value_type = if (!"value_type" %in% names(full_data)) "mean" else value_type,
-        # Add unit if missing
-        unit = if (!"unit" %in% names(full_data)) NA_character_ else unit
-      )
+    # The filtered rows for the selected trait, collected once and shared by
+    # the profile, the plot and the map. NULL unless exactly one trait is in
+    # the result: counting distinct traits in DuckDB is cheap, whereas
+    # collecting first cost ~4 s and 1 GB on unfiltered raw data, only to
+    # show "Please select a single trait".
+    trait_data <- reactive({
+      req(main_tabs() == "Trait View")
+      query <- filtered_data()
+      req(query)
+
+      n_traits <- query |>
+        dplyr::summarise(n = dplyr::n_distinct(trait_name)) |>
+        dplyr::collect() |>
+        dplyr::pull(n)
+      if (n_traits != 1) return(NULL)
+
+      start_time <- Sys.time()
+      data <- query |> dplyr::collect()
+      cat("[TRAIT VIEW] Collected", nrow(data), "rows in",
+          round(as.numeric(Sys.time() - start_time, units = "secs"), 3), "seconds\n")
+      data
+    })
+
+    trait_profile <- reactive({
+      req(main_tabs() == "Trait View")
+      full_data <- trait_data()
+
+      if (is.null(full_data)) {
+        return(list(tags$p("Please select a single trait to view."), NULL, "", leaflet::leaflet()))
+      }
+
+      if (is_species_avg()) {
+        # Add ALL missing columns for species dataset
+        data_with_location <- full_data |>
+          dplyr::mutate(
+            `latitude (deg)` = NA_real_,
+            `longitude (deg)` = NA_real_,
+            # Add value column from mean_value (for plot compatibility)
+            value = if ("mean_value" %in% names(full_data)) mean_value else NA_real_,
+            # Add value_type if missing
+            value_type = if (!"value_type" %in% names(full_data)) "mean" else value_type,
+            # Add unit if missing
+            unit = if (!"unit" %in% names(full_data)) NA_character_ else unit
+          )
         
         # Generate full profile (works now with dummy location)
         full_profile <- tryCatch({
@@ -143,9 +158,6 @@ trait_profile <- reactive({
       
       trait_info_with_banner <- tagList(banner, raw_profile[[1]])
       
-      elapsed <- as.numeric(Sys.time() - start_time, units = "secs")
-      cat("[TRAIT PROFILE] Completed in", round(elapsed, 3), "seconds\n")
-      
       return(list(trait_info_with_banner, raw_profile[[2]], raw_profile[[3]], raw_profile[[4]]))
     })
     
@@ -168,10 +180,8 @@ trait_profile <- reactive({
     })
     
     output$trait_histogram_plot <- plotly::renderPlotly({
-      req(filtered_data(), filters()$trait_name)
-      
-      data <- filtered_data() |>
-        dplyr::collect()
+      data <- trait_data()
+      req(data)
       
       # For species averages, use value_mean instead of value
       if (is_species_avg()) {
@@ -184,7 +194,7 @@ trait_profile <- reactive({
       # Min 400px, add 15px per family after first 20
       plot_height <- max(400, 300 + (num_families * 15))
       
-      plot_trait_distribution(data, isolate(filters()$trait_name)) |>
+      plot_trait_distribution(data, data$trait_name[1]) |>
         plotly::ggplotly(tooltip = c("x", "y", "text"), height = plot_height)
     })
     

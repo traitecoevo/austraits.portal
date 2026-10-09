@@ -11,7 +11,10 @@ init_supabase_telemetry <- function(url, key) {
   packageStartupMessage("✓ Supabase telemetry initialized")
 }
 
-#' Send one telemetry event to Supabase
+#' Send one telemetry event to Supabase without blocking the R process
+#'
+#' The POST runs asynchronously on the later event loop, so a slow or
+#' unreachable Supabase never stalls the (single-process) app for other users.
 #' @param body Named list sent as the JSON body.
 #' @noRd
 send_supabase_event <- function(body) {
@@ -19,19 +22,23 @@ send_supabase_event <- function(body) {
   key <- getOption("supabase_telemetry_key")
   if (is.null(url) || is.null(key)) return(invisible(NULL))
 
-  tryCatch({
-    httr2::request(paste0(url, "/rest/v1/telemetry_events")) |>
-      httr2::req_headers(
-        "apikey" = key,
-        "Authorization" = paste("Bearer", key),
-        "Content-Type" = "application/json",
-        "Prefer" = "return=minimal"
-      ) |>
-      httr2::req_body_json(body) |>
-      httr2::req_perform()
-  }, error = function(e) {
-    warning("Telemetry send failed (", body$type, "): ", conditionMessage(e), call. = FALSE)
-  })
+  req <- httr2::request(paste0(url, "/rest/v1/telemetry_events")) |>
+    httr2::req_headers(
+      "apikey" = key,
+      "Authorization" = paste("Bearer", key),
+      "Content-Type" = "application/json",
+      "Prefer" = "return=minimal"
+    ) |>
+    httr2::req_body_json(body)
+
+  tryCatch(
+    promises::catch(httr2::req_perform_promise(req), function(e) {
+      warning("Telemetry send failed (", body$type, "): ", conditionMessage(e), call. = FALSE)
+    }),
+    error = function(e) {
+      warning("Telemetry send failed (", body$type, "): ", conditionMessage(e), call. = FALSE)
+    }
+  )
   invisible(NULL)
 }
 
@@ -160,6 +167,17 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
     })
   }
 }
+#' Telemetry rows, cached for 60 seconds across all sessions
+#'
+#' The App Information tab shows totals and a monthly table, refreshed every
+#' minute. Without this cache each open tab paged through the whole telemetry
+#' table, twice, every minute.
+#' @noRd
+read_telemetry_metrics_cached <- memoise::memoise(
+  function(from_date, to_date) read_telemetry_metrics(from_date, to_date),
+  cache = cachem::cache_mem(max_age = 60)
+)
+
 #' Get monthly telemetry metrics
 #' @param from_date Start date
 #' @param to_date End date
@@ -168,7 +186,7 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
   
 get_monthly_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
    
-  data <- read_telemetry_metrics(from_date, to_date)
+  data <- read_telemetry_metrics_cached(from_date, to_date)
 
   if (nrow(data) == 0) {
     return(tibble::tibble(

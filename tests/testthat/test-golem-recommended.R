@@ -58,7 +58,7 @@ test_that("data loading variables are properly set", {
 test_that("app handles reactive values correctly", {
   testServer(app_server, {
     # Test that reactive values are initialized
-    expect_true(exists("filtered_database"))
+    expect_true(exists("filtered_total"))
     expect_true(exists("filtered_query_cache"))
   })
 })

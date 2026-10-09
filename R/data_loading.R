@@ -234,6 +234,12 @@ load_portal_data <- function(env) {
   invisible(path)
 }
 
+#' Read the sources bibliography (once per process)
+#' @noRd
+get_sources_bib <- memoise::memoise(function(path = data_path) {
+  RefManageR::ReadBib(file = file.path(path, "sources.bib"), check = FALSE, .Encoding = "UTF-8")
+})
+
 #' Is telemetry switched off for this process?
 #'
 #' Off under testthat, Shiny test mode, or `AUSTRAITS_TELEMETRY=off`, so tests

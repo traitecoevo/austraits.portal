@@ -13,3 +13,4 @@
 ^\.vscode$
 ^inst/extdata/austraits/austraits-7\.0\.0-full$
 ^R/_disable_autoload\.R$
+^dev$
