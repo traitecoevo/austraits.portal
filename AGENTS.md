@@ -14,17 +14,13 @@ deployment is deprecated).
   `mod_filters`, `mod_data_table`, `mod_taxon_view`, `mod_trait_view`, `mod_citations`,
   `mod_app_info`), `fct_*` business logic (`fct_filter_parsing`, `fct_filter_application`,
   `fct_prepare_data`), `srv_*` server helpers, and `utils_*` helpers — all under `R/`.
-- **Data layer:** trait data is stored as Parquet and queried via DuckDB/Arrow. Bundled data
-  lives in `inst/extdata/austraits/` — a small `austraits-5.0.0-lite` set ships in the repo; the
-  `austraits-7.0.0-full` set is prepared locally (see README "Data Preparation").
+- **Data layer:** trait data is stored as Parquet and queried by DuckDB, which reads the files directly through `read_parquet()` views. `load_portal_data()` (in `R/data_loading.R`) creates these views and the other data objects when the package loads (`.onLoad()` in `R/zzz.R`), so the connection belongs to the process that serves the app. Don't register Arrow datasets with DuckDB instead: on that path any `%in%` with two or more values fails, and the regex workaround it forced broke on 12% of taxon names (see `REVIEW.md`, B1). Filters use `%in%` for exact matches; the data table pages and sorts in DuckDB (DataTables server-side processing), so results are never loaded into R whole. Bundled data lives in `inst/extdata/austraits/` — a small `austraits-5.0.0-lite` set ships in the repo; the `austraits-7.0.0-full` set is prepared locally (see README "Data Preparation"). `data_schema` lists the columns the code reads, and loading stops if a required one is missing.
 - **Data prep:** `prepare_data_for_portal()` (in `R/fct_prepare_data.R`) flattens the AusTraits
   database, computes species averages, exports Parquet, and caches metadata/dropdowns.
-- **Config:** `config.yml` (via the `config` package); deployment manifest in `manifest.json`.
+- **Config:** `config.yml` (via the `config` package, gitignored and build-ignored: it holds the Supabase key); deployment manifest in `manifest.json`. Telemetry is off under testthat, Shiny test mode, or `AUSTRAITS_TELEMETRY=off`; set that variable when running the app locally so you don't write to the production usage table.
 - **Tests:** `tests/testthat/` (testthat edition 3) + `spelling`; see `tests/TEST_COVERAGE.md`.
 
-Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` /
-`pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source
-`app.R`); `devtools::test()`; `devtools::check()`. Default development branch is `develop`.
+Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` / `pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source `app.R`); `devtools::test()`; `devtools::check()`. The default branch is `master` (`develop` has been merged and deleted). A push to `master` deploys to AWS once R-CMD-check passes on it (`.github/workflows/auto-deploy.yml`). Open review findings and their order of work are in `REVIEW.md`.
 
 > Heads-up: the app needs prepared data files to run — only the `lite` set is in the repo, so a
 > fresh checkout shows the demo subset until you build the full set. The live portal is now served
