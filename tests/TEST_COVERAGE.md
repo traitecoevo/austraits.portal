@@ -4,6 +4,10 @@ This document summarizes the test suite for the AusTraits Portal.
 
 ## Test Files Created
 
+### Regression Tests
+
+**test-regressions.R** - one or more tests per bug in issue #130 (October 2026 review): bracketed taxon names (B1), multi-value and `dataset_id` custom filters (B2), distinct Apply button ids (B3), Taxon View after an empty result (B4), taxon profiles and the data-column check (B5), HTML escaping in the data table (B6), search telemetry (B7), telemetry being off under tests, and Shiny's auto-sourcing of `R/` being disabled.
+
 ### Core Functionality Tests
 
 1. **test-filter-parsing.R** - Filter parsing logic

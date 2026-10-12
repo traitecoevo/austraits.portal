@@ -218,11 +218,14 @@ mod_filters_ui <- function(id) {
       )
     ),
 
+    # A second Apply button, so users who have scrolled down find one. It
+    # needs its own id: buttons sharing an id drop clicks (app_server
+    # observes both).
     actionButton(
-    ns("apply_filters_btn"),
-    "Apply Filters",
-    class = "btn-primary w-100 mb-0",
-    icon = icon("filter")
+      ns("apply_filters_btn_bottom"),
+      "Apply Filters",
+      class = "btn-primary w-100 mb-0",
+      icon = icon("filter")
     ),
 
     actionButton(

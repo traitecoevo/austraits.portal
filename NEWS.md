@@ -1,5 +1,16 @@
 # austraits.portal (development version)
 
+## Correctness fixes (October 2026, issue #130)
+
+* Taxon filters now match names containing brackets or parentheses; 3,906 of 33,370 taxa (12%) previously returned no rows. DuckDB reads the Parquet files directly instead of through Arrow, so filters use `%in%` rather than regular expressions.
+* Multi-value custom filters work; `dataset_id` filters match whole IDs; free-text filters accept any characters.
+* Both "Apply Filters" buttons work (they shared one id, so clicks were dropped).
+* Taxon View no longer ends the session after "Clear Filters", and falls back gracefully on data builds without `value_range`; its cache is keyed by data release.
+* Context descriptions written as `<<…>>` are no longer swallowed by the data table.
+* "Searches" telemetry counts only Apply clicks and links with filters; telemetry is off under tests.
+* The first switch between species averages and raw data now reloads the table.
+* Loading stops with a clear message if the data lacks a column the code reads.
+
 ## Major Changes
 
 * **DuckDB Migration**: Replaced Arrow with DuckDB for 10-100x faster query performance

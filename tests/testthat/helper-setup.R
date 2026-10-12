@@ -42,7 +42,7 @@ create_mock_filter_input <- function(type = "basic") {
 # Skip conditions for tests requiring data
 
 skip_if_no_data <- function() {
-  if (!exists("austraits_display")) {
+  if (is.null(get0("austraits_display_duckdb"))) {
     skip("Test requires austraits_display data to be loaded")
   }
 }

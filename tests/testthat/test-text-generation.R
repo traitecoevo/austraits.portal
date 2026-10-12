@@ -1,7 +1,7 @@
 # Tests for text generation functions
 
 test_that("generate_taxon_text requires valid taxon", {
-  skip_if_not(exists("austraits_display"), "Requires loaded austraits_display data")
+  skip_if_no_data()
   skip_if_not(exists("trait_groups"), "Requires loaded trait_groups data")
   
   # Test would require actual data to be loaded

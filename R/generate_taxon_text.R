@@ -14,14 +14,19 @@
 
 generate_taxon_text <- function(taxon) {
 
-  # Todo -- likely inefficient to collect all the data here. Optimize later.
-  data_taxon <- austraits_display |>
-    dplyr::filter(taxon_name == taxon) |>
+  data_taxon <- austraits_display_duckdb |>
+    dplyr::filter(taxon_name == !!taxon) |>
     dplyr::collect()
 
-  data_taxon_trait_means <- austraits_species_averages |>
-    dplyr::filter(taxon_name == taxon) |>
+  data_taxon_trait_means <- austraits_species_duckdb |>
+    dplyr::filter(taxon_name == !!taxon) |>
     dplyr::collect()
+
+  # Older data builds lack the categorical value summary; fall back to the
+  # most common value rather than failing (load_portal_data() warns)
+  if (!"value_range" %in% names(data_taxon_trait_means)) {
+    data_taxon_trait_means$value_range <- data_taxon_trait_means$value_mean
+  }
 
   taxon_info <- data_taxon |>
     dplyr::select(
@@ -282,41 +287,3 @@ generate_taxon_portal_links <- function(taxon_info) {
   
   return(links)
 }
-
-#' Export BibTeX Entries for Data
-#'
-#' Exports BibTeX entries corresponding to the provided keys to a specified file.
-#'
-#' @param keys A character vector of BibTeX entry keys to export.
-#' @param filename A string specifying the path to the output file where the BibTeX entries will be saved.
-#' @param refs A BibTeX object containing the references. This is typically read from a file.
-#' @return Invisibly returns \code{NULL}. The function is called for its side effect of writing to a file.
-#'
-#' @examples
-#' \dontrun{
-#' export_bibtex_for_data(c("key1", "key2"), "output.bib")
-#' }
-#'
-#' @export
-export_bibtex_for_data <- function(keys, filename, 
-    refs = 
-        RefManageR::ReadBib(
-        file = paste(data_path, "/sources.bib", sep = ""),
-        check = FALSE, .Encoding = "UTF-8")
-) {
-  # Get the bibtex for the keys
-  refs <- refs[keys]
-
-  # Write the bibtex to a file
-  RefManageR::WriteBib(
-    refs,
-    file = filename,
-    .Encoding = "UTF-8",
-    check = FALSE
-  )
-}
-# Memoised version for performance (file-based cache to save RAM on shinyapps.io)
-generate_taxon_text_cached <- memoise::memoise(
-  generate_taxon_text,
-  cache = memoise::cache_filesystem(".cache/taxon_text")
-)

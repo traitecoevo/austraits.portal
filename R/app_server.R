@@ -129,13 +129,13 @@ observeEvent(input[["filters-clear_filters"]], {
     
   }, once = TRUE)
 
-  # Apply filters ONLY when button clicked
-  observeEvent(input[["filters-apply_filters_btn"]], {
+  # Apply filters ONLY when an Apply button is clicked. There is one at the
+  # top and one at the bottom of the sidebar; they need distinct ids, as
+  # Shiny drops a click whose count matches the last value sent for the id.
+  observeEvent(list(input[["filters-apply_filters_btn"]], input[["filters-apply_filters_btn_bottom"]]), {
     apply_filters_trigger(apply_filters_trigger() + 1)
     
     start_time <- Sys.time()
-    req(exists("austraits_display") || exists("austraits_species_display"))
-    if (!exists("austraits_display") && !exists("austraits_species_display")) return()
 
     cat("\n\n[FILTER] Apply button clicked - Start filtering...\n")
     parsed_filters <- parse_filters(filters())
@@ -188,6 +188,12 @@ observeEvent(input[["filters-clear_filters"]], {
       
       elapsed_total <- as.numeric(Sys.time() - start_time, units = "secs")
       cat(sprintf("[FILTER] ✅ COMPLETE in %.2f sec (parse + filter + count + display)\n", elapsed_total))
+
+      # Only user-initiated searches (Apply, or a link with filters) count
+      log_telemetry_event("search", details = list(
+        dataset_type = filters()$dataset_type,
+        trait = filters()$trait_name
+      ))
       
     }, error = function(e) {
       cat("\n!!! FILTERING ERROR !!!\n")
@@ -273,7 +279,8 @@ observeEvent(input[["filters-clear_filters"]], {
       filtered_database(NULL)
     })
     
-  }, ignoreInit = TRUE)
+  }, ignoreInit = FALSE)  # the first run records the starting dataset, so the
+                          # first switch reloads (ignoreInit = TRUE skipped it)
 
   # Data table module
   data_table_outputs <- mod_data_table_server("data_table", filtered_database, filtered_query_cache, current_columns_display)
@@ -281,16 +288,12 @@ observeEvent(input[["filters-clear_filters"]], {
   # download handlers
   srv_download(input, output, session, filtered_database, filtered_query_cache, current_austraits, filters, data_table_outputs, full_filtered_cache)
 
-# Reset pagination whenever filtered data changes (e.g. new filter)
+# Reset pagination whenever filtered data changes (e.g. new filter). Searches
+  # are logged where they happen: loading more rows or switching dataset also
+  # changes filtered_database, and was being counted as a search.
   observeEvent(filtered_database(), {
     req(filtered_database())
     data_table_outputs$set_start(0)
-
-    # Log search event
-    log_telemetry_event("search", details = list(
-    dataset_type = filters()$dataset_type,
-    trait = filters()$trait_name
-  ))
   }, ignoreInit = TRUE)
 
   # Handle loading more data - with throttle to prevent rapid firing
@@ -347,7 +350,7 @@ observeEvent(input[["filters-clear_filters"]], {
   mod_app_info_server("app_info")
 
   # Taxon view module
-  mod_taxon_view_server("taxon_view", filters, filtered_database, reactive(input$main_tabs), apply_filters_trigger)
+  mod_taxon_view_server("taxon_view", filters, reactive(input$main_tabs), apply_filters_trigger)
 
   # Trait view module
   mod_trait_view_server("trait_view", filtered_query_cache, filters, reactive(input$main_tabs))
