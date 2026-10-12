@@ -31,12 +31,8 @@ generate_trait_profile <- function(data_trait) {
   if (nrow(data_geo) > 0) {
     data_geo <- data_geo |>
       mutate(
-        lat_num = sapply(`latitude (deg)`, function(x) {
-          tryCatch(as.numeric(as.character(x)), error = function(e) NA_real_)
-        }),
-        lon_num = sapply(`longitude (deg)`, function(x) {
-          tryCatch(as.numeric(as.character(x)), error = function(e) NA_real_)
-        })
+        lat_num = suppressWarnings(as.numeric(`latitude (deg)`)),
+        lon_num = suppressWarnings(as.numeric(`longitude (deg)`))
       ) |>
       filter(!is.na(lat_num), !is.na(lon_num), 
             lat_num >= -90, lat_num <= 90,

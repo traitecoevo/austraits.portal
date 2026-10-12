@@ -11,8 +11,8 @@ test_that("mod_filters_server returns correct filter structure", {
 
 test_that("mod_data_table_server handles NULL data gracefully", {
   testServer(mod_data_table_server, args = list(
-    filtered_database = reactiveVal(NULL),
     filtered_query_cache = reactiveVal(NULL),
+    filtered_total = reactiveVal(NULL),
     columns_display_reactive = reactive(c("taxon_name", "trait_name"))
   ), {
     # Should not crash with NULL data
@@ -72,8 +72,8 @@ test_that("mod_taxon_view_server handles taxon selection", {
       taxon_type = "taxon_name",
       taxon_name = "Acacia dealbata"
     )),
-    filtered_database = reactiveVal(test_data),
-    current_tab = reactive("Taxon View")
+    current_tab = reactive("Taxon View"),
+    apply_filters_trigger = reactiveVal(1)
   ), {
     # Should handle taxon view without crashing
     expect_silent(output$taxon_text)

@@ -1,5 +1,14 @@
 # austraits.portal (development version)
 
+## Performance (October 2026, issue #130)
+
+* The data table pages and sorts in DuckDB, so any result can be browsed and sorted in full; "Load next 100" is gone. Number-like text columns sort numerically.
+* Downloads are built in DuckDB and the bibliography is read once per process: a 33k-row download went from 13–14 s to about 3 s, and with 10 users at once from 40–58 s to 2–2.5 s. Download citations now cover every source rather than a sample.
+* Trait View collects data only when exactly one trait is selected, and only once.
+* Telemetry is sent asynchronously, and App Information reads it once a minute for all sessions.
+* No more `Sys.sleep()` calls blocking every user (2 s on each link with filters).
+* `dev/loadtest.R` runs a concurrent-user load test with headless browsers.
+
 ## Correctness fixes (October 2026, issue #130)
 
 * Taxon filters now match names containing brackets or parentheses; 3,906 of 33,370 taxa (12%) previously returned no rows. DuckDB reads the Parquet files directly instead of through Arrow, so filters use `%in%` rather than regular expressions.
