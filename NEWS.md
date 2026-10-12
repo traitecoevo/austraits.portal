@@ -16,6 +16,7 @@
 * Multi-value custom filters work; `dataset_id` filters match whole IDs; free-text filters accept any characters.
 * Both "Apply Filters" buttons work (they shared one id, so clicks were dropped).
 * Taxon View no longer ends the session after "Clear Filters", and falls back gracefully on data builds without `value_range`; its cache is keyed by data release.
+* Taxon View lists each taxon's synonyms and misapplied names from the Australian Plant Census, precomputed with APCalign by `prepare_synonyms_for_portal()` (#112).
 * Context descriptions written as `<<…>>` are no longer swallowed by the data table.
 * "Searches" telemetry counts only Apply clicks and links with filters; telemetry is off under tests.
 * The first switch between species averages and raw data now reloads the table.

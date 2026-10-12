@@ -185,6 +185,9 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   
   saveRDS(dropdown_cache, file.path(output_dir, "dropdown_cache.rds"))
   message("✓ Dropdown cache saved")
+
+  # APC synonyms for Taxon View (needs APCalign)
+  prepare_synonyms_for_portal(output_dir)
 }
 
 #' Format flattened database for display

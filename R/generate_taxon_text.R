@@ -119,7 +119,7 @@ generate_taxon_text <- function(taxon) {
 
 **Taxonomy**: %s
 
-**Distribution (APC)**: %s
+%s**Distribution (APC)**: %s
 
 **Profiles**: %s
 
@@ -141,6 +141,7 @@ generate_taxon_text <- function(taxon) {
     taxon,
     taxon_info$family, 
     taxon_info$scientific_name, 
+    format_taxon_synonyms(taxon),
     taxon_info$taxon_distribution,
     sprintf("[%s](%s)", portal_links$source, portal_links$url) |> paste(collapse = ", "),
     data_taxon_summary_dataset |> dplyr::slice(1) |> dplyr::pull(text) |> paste(collapse = ", "), 
@@ -286,4 +287,38 @@ generate_taxon_portal_links <- function(taxon_info) {
     }
   
   return(links)
+}
+
+#' Synonyms section of a taxon profile
+#'
+#' Markdown listing the APC synonyms and misapplied names of a taxon, from the
+#' table built by prepare_synonyms_for_portal() (issue #112). Empty when the
+#' data build has no synonym table.
+#'
+#' @param taxon Taxon name.
+#' @param synonyms Synonym table (defaults to the loaded `taxon_synonyms`).
+#' @return Markdown string, ending in a blank line, or "".
+#' @keywords internal
+#' @noRd
+format_taxon_synonyms <- function(taxon, synonyms = taxon_synonyms) {
+  if (is.null(synonyms)) return("")
+  version <- attr(synonyms, "apc_version")
+  source <- if (is.null(version) || is.na(version)) "APC" else sprintf("APC %s", version)
+  rows <- synonyms[synonyms$taxon_name == taxon, , drop = FALSE]
+
+  section <- function(kind, label) {
+    x <- rows[rows$kind == kind, , drop = FALSE]
+    if (nrow(x) == 0) return(NULL)
+    items <- sprintf("- %s (%s)", x$scientific_name, x$taxonomic_status)
+    # HTML, not markdown, inside <summary>: it is a raw HTML block
+    sprintf("<details> <summary> <strong>%s</strong>: %d (%s) </summary>\n\n%s\n\n</details>\n\n",
+            label, nrow(x), source, paste(items, collapse = "\n"))
+  }
+
+  out <- paste(c(
+    section("synonym", "Synonyms"),
+    section("misapplied", "Misapplied names")
+  ), collapse = "")
+  if (!nzchar(out)) out <- sprintf("**Synonyms**: none listed in the %s\n\n", source)
+  out
 }

@@ -82,5 +82,6 @@ Remotes:
     traitecoevo/austraits
 Suggests: 
     testthat (>= 3.0.0),
-    shiny.telemetry
+    shiny.telemetry,
+    APCalign
 Config/testthat/edition: 3
