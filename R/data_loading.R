@@ -114,7 +114,7 @@ data_schema <- list(
     optional = c("value_range")
   ),
   data = list(
-    required = c("row_id", "source_primary_key"),
+    required = c("row_id", "source_primary_key", "genus"),
     optional = character()
   )
 )
@@ -185,12 +185,16 @@ load_portal_data <- function(env) {
       name, select, DBI::dbQuoteString(con, file.path(path, file))
     ))
   }
+  # A hybrid formula such as "(Dockrillia pugioniformis x ...) x ..." gets the
+  # genus "(Dockrillia" upstream (APCalign takes the name's first word); strip
+  # the bracket so the taxon sits in its genus (issue #113)
+  genus_sql <- "regexp_replace(genus, '^[(]', '') AS genus"
   # Coordinates are stored as text; cast them so location filters are numeric
   view("austraits_display", "austraits-display.parquet",
-       '* REPLACE (TRY_CAST("latitude (deg)" AS DOUBLE) AS "latitude (deg)", TRY_CAST("longitude (deg)" AS DOUBLE) AS "longitude (deg)")')
-  view("austraits_data", "austraits-data.parquet")
+       paste0('* REPLACE (TRY_CAST("latitude (deg)" AS DOUBLE) AS "latitude (deg)", TRY_CAST("longitude (deg)" AS DOUBLE) AS "longitude (deg)", ', genus_sql, ')'))
+  view("austraits_data", "austraits-data.parquet", paste0("* REPLACE (", genus_sql, ")"))
   # The species "display" file is a byte-identical copy, so one view serves both
-  view("austraits_species", "austraits-species-averages.parquet")
+  view("austraits_species", "austraits-species-averages.parquet", paste0("* REPLACE (", genus_sql, ")"))
 
   display <- dplyr::tbl(con, "austraits_display")
   data <- dplyr::tbl(con, "austraits_data")
@@ -224,7 +228,9 @@ load_portal_data <- function(env) {
   assign("trait_definitions", readRDS(file.path(path, "definitions.rds")), envir = env)
   assign("trait_groups", readRDS(file.path(path, "trait_groups.rds")), envir = env)
   assign("metatdata", metadata, envir = env)
-  assign("dropdowns", readRDS(file.path(path, "dropdown_cache.rds")), envir = env)
+  dropdowns <- readRDS(file.path(path, "dropdown_cache.rds"))
+  dropdowns$all_genus <- sort(unique(sub("^[(]", "", dropdowns$all_genus)))
+  assign("dropdowns", dropdowns, envir = env)
   assign("flora_links", readRDS(file.path(path, "flora_links.rds")), envir = env)
   assign("generate_taxon_text_cached",
          memoise::memoise(generate_taxon_text, cache = memoise::cache_filesystem(cache_dir)),

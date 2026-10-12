@@ -12,6 +12,7 @@
 ## Correctness fixes (October 2026, issue #130)
 
 * Taxon filters now match names containing brackets or parentheses; 3,906 of 33,370 taxa (12%) previously returned no rows. DuckDB reads the Parquet files directly instead of through Arrow, so filters use `%in%` rather than regular expressions.
+* Hybrid formulas such as "(Dockrillia pugioniformis x Dockrillia striolata) x Dockrillia pugioniformis" now sit in their genus; the genus dropdown listed both "(Dockrillia" and "Dockrillia" (#113).
 * Multi-value custom filters work; `dataset_id` filters match whole IDs; free-text filters accept any characters.
 * Both "Apply Filters" buttons work (they shared one id, so clicks were dropped).
 * Taxon View no longer ends the session after "Clear Filters", and falls back gracefully on data builds without `value_range`; its cache is keyed by data release.
