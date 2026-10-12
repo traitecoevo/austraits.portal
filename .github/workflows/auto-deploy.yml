@@ -1,11 +1,16 @@
 name: Auto Deploy to AWS
 
+# Deploy only after R-CMD-check has passed on a push to master. (Previously
+# this ran on every push, in parallel with the check.)
 on:
-  push:
+  workflow_run:
+    workflows: [R-CMD-check]
+    types: [completed]
     branches: [master]
 
 jobs:
   deploy:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to AWS
@@ -14,7 +19,12 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          # Deploy the commit that passed the check, and restart only this app:
+          # restarting shiny-server dropped every live session on the server.
+          # Shiny Server starts new sessions on the new code once restart.txt
+          # is touched; existing sessions finish on the old process.
           script: |
             cd /srv/shiny-server/austraits
-            git pull origin master
-            sudo systemctl restart shiny-server
+            git fetch origin master
+            git merge --ff-only ${{ github.event.workflow_run.head_sha }}
+            touch restart.txt

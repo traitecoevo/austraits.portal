@@ -21,3 +21,4 @@ data
 inst/extdata/austraits/austraits-7.0.0-full/*
 inst/telemetry/telemetry.db
 config.yml
+restart.txt
