@@ -167,6 +167,48 @@ read_telemetry_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
     })
   }
 }
+#' Monthly event counts (month, type, n)
+#'
+#' Cloud mode reads the telemetry_monthly view, so the key never needs to
+#' read raw rows. Other modes count the raw rows in R.
+#' @noRd
+read_telemetry_monthly <- function() {
+  empty <- tibble::tibble(month = character(), type = character(), n = numeric())
+  mode <- getOption("telemetry_mode", "off")
+  if (mode == "off") return(empty)
+
+  if (mode == "cloud") {
+    url <- getOption("supabase_telemetry_url")
+    key <- getOption("supabase_telemetry_key")
+    if (is.null(url) || is.null(key)) return(empty)
+    return(tryCatch({
+      resp <- httr2::request(paste0(url, "/rest/v1/telemetry_monthly?select=month,type,n&limit=10000")) |>
+        httr2::req_headers("apikey" = key, "Authorization" = paste("Bearer", key)) |>
+        httr2::req_perform() |>
+        httr2::resp_body_json()
+      if (length(resp) == 0) return(empty)
+      tibble::tibble(
+        month = vapply(resp, function(x) if (is.null(x$month)) NA_character_ else x$month, ""),
+        type  = vapply(resp, function(x) if (is.null(x$type)) NA_character_ else x$type, ""),
+        n     = vapply(resp, function(x) as.numeric(x$n), numeric(1))
+      )
+    }, error = function(e) {
+      warning("Telemetry read failed: ", conditionMessage(e), call. = FALSE)
+      empty
+    }))
+  }
+
+  raw <- read_telemetry_metrics()
+  if (nrow(raw) == 0) return(empty)
+  raw |>
+    dplyr::mutate(month = format(as.Date(timestamp), "%Y-%m")) |>
+    dplyr::count(month, type, name = "n")
+}
+
+read_telemetry_monthly_cached <- memoise::memoise(
+  function() read_telemetry_monthly(),
+  cache = cachem::cache_mem(max_age = 60)
+)
 #' Telemetry rows, cached for 60 seconds across all sessions
 #'
 #' The App Information tab shows totals and a monthly table, refreshed every
@@ -181,36 +223,24 @@ read_telemetry_metrics_cached <- memoise::memoise(
 #' Get monthly telemetry metrics
 #' @param from_date Start date
 #' @param to_date End date
-#get_monthly_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
- # data <- read_telemetry_metrics(from_date, to_date)
   
 get_monthly_metrics <- function(from_date = "2020-01-01", to_date = NULL) {
-   
-  data <- read_telemetry_metrics_cached(from_date, to_date)
+  data <- read_telemetry_monthly_cached()
 
   if (nrow(data) == 0) {
-    return(tibble::tibble(
-      month = character(),
-      logins = numeric(),
-      searches = numeric(),
-      downloads = numeric()
-    ))
+    return(tibble::tibble(month = character(), logins = numeric(),
+                          searches = numeric(), downloads = numeric()))
   }
-  
-  result <- data |>
-    dplyr::mutate(
-      month = format(as.Date(timestamp), "%Y-%m")
-    ) |>
+
+  data |>
     dplyr::group_by(month) |>
     dplyr::summarise(
-      logins = sum(type == "login", na.rm = TRUE),
-      searches = sum(type == "search", na.rm = TRUE),
-      downloads = sum(type == "download", na.rm = TRUE),
+      logins = sum(n[type == "login"], na.rm = TRUE),
+      searches = sum(n[type == "search"], na.rm = TRUE),
+      downloads = sum(n[type == "download"], na.rm = TRUE),
       .groups = "drop"
     ) |>
     dplyr::arrange(dplyr::desc(month))
-  
-   return(result)
 }
 #' Export COUNTER metrics as CSV
 export_counter_csv <- function(from_date = "2020-01-01", to_date = NULL) {
