@@ -200,14 +200,14 @@ mod_app_info_server <- function(id){
   
   tryCatch({
     # Read all telemetry data from Supabase
-    data <- read_telemetry_metrics_cached("2020-01-01", as.character(Sys.Date() + 1))
+    data <- read_telemetry_monthly_cached()
     
     if (nrow(data) > 0) {
       # Count by event type
       list(
-        sessions = sum(data$type == "login", na.rm = TRUE),
-        searches = sum(data$type == "search", na.rm = TRUE),
-        downloads = sum(data$type == "download", na.rm = TRUE)
+        sessions = sum(data$n[data$type == "login"], na.rm = TRUE),
+        searches = sum(data$n[data$type == "search"], na.rm = TRUE),
+        downloads = sum(data$n[data$type == "download"], na.rm = TRUE)
       )
     } else {
       list(sessions = 0, searches = 0, downloads = 0)
