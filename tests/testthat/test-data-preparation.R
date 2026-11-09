@@ -1,13 +1,15 @@
 # Tests for data preparation functions
 
 test_that("prepare_data_for_portal creates required files", {
-  skip("Integration test - requires full data preparation, run manually")  
-  # This is an integration test that would require a full database
-  # Typically run manually during data preparation
+  # The last step (APC synonyms) needs APCalign and an internet connection to load the APC data
+  skip_if_not_installed("APCalign")
+  skip_if_offline()
+  # Runs the whole preparation step on the small lite data set. This catches a missing input file
+  # (for example inst/extdata/austraits/trait_groups_for_portal.csv, which prepare_data_for_portal() reads).
   temp_dir <- tempdir()
   
   # Mock austraits object would be needed here
-  expect_success({
+  expect_no_error({
     austraits:::austraits_5.0.0_lite |>
       prepare_data_for_portal(temp_dir, overwrite = TRUE)
   })
