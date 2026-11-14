@@ -26,7 +26,10 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   message("Flattening AusTraits database...")
   austraits_full_flatten <-
     austraits |>
-    austraits::flatten_database() |>
+    # flatten_database() no longer copies the methods table's reference columns;
+    # the portal cites each dataset by its primary source, so join that first.
+    traits.use::join_methods(vars = c("source_primary_key", "source_primary_citation")) |>
+    traits.use::flatten_database() |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
     # Hybrid formulas starting "(Genus species x ...)" get the genus "(Genus"
     # upstream (APCalign); strip the bracket (issue #113)

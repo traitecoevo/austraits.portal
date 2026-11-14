@@ -66,7 +66,7 @@ The portal is designed to work with two versions of the AusTraits database: a "l
 The lite version is included in the repository at `inst/extdata/austraits/austraits-5.0.0-lite`. To prepare this data for use in the portal, run the following code:
 
 ```{r, eval = FALSE}
-austraits:::austraits_5.0.0_lite |>
+traits.use:::austraits_5.0.0_lite |>
   prepare_data_for_portal("inst/extdata/austraits/austraits-5.0.0-lite", overwrite = TRUE)
 ```
 

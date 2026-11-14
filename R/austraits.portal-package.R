@@ -4,7 +4,6 @@
 #' @import arrow
 #' @import dplyr
 #' @import DT
-#' @import austraits
 #' @importFrom memoise memoise
 "_PACKAGE"
 

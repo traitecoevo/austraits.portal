@@ -99,7 +99,7 @@ The lite version is included in the repository at
 use in the portal, run the following code:
 
 ``` r
-austraits:::austraits_5.0.0_lite |>
+traits.use:::austraits_5.0.0_lite |>
   prepare_data_for_portal("inst/extdata/austraits/austraits-5.0.0-lite", overwrite = TRUE)
 ```
 

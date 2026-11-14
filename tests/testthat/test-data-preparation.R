@@ -12,7 +12,7 @@ test_that("prepare_data_for_portal creates required files", {
   on.exit(unlink(temp_dir, recursive = TRUE), add = TRUE)
 
   expect_no_error({
-    austraits:::austraits_5.0.0_lite |>
+    traits.use::austraits_lite |>
       prepare_data_for_portal(temp_dir, overwrite = TRUE)
   })
 

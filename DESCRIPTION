@@ -37,7 +37,6 @@ Depends:
     R (>= 4.2.0)
 Imports: 
     shiny,
-    austraits,
     traits.use (>= 0.1.1),
     arrow,
     bslib,
@@ -80,7 +79,6 @@ Imports:
     later,
     tools
 Remotes:
-    traitecoevo/austraits,
     traitecoevo/traits.use
 Suggests:
     testthat (>= 3.0.0),
