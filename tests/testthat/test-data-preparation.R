@@ -64,6 +64,11 @@ test_that("join_primary_source() handles both methods-table formats", {
   expect_equal(joined_new$source_primary_key, joined_new$dataset_id)
   expect_equal(joined_new$source_primary_citation, joined_old$source_primary_citation)
   expect_false("dataset_id_citation" %in% names(joined_new))
+
+  # Neither format: say so, rather than fail on a missing column
+  neither <- old
+  neither$methods <- neither$methods |> dplyr::select(-"source_primary_key", -"source_primary_citation")
+  expect_error(join_primary_source(neither), "neither")
 })
 
 test_that("the display table has no reference columns besides the primary citation", {
@@ -76,7 +81,10 @@ test_that("the display table has no reference columns besides the primary citati
   expect_true(all(c("source_primary_key", "source_primary_citation") %in% names(shown)))
   # traits.build's two reference ids: the dataset, and the source each observation came from
   expect_equal(names(shown)[match("dataset_id", names(shown)) + 1], "source_id")
-  expect_equal(shown$source_id, traits.use::austraits_lite$traits$source_id[shown$row_id])
+  raw_source_id <- traits.use::austraits_lite$traits$source_id[shown$row_id]
+  expect_false(anyNA(shown$source_id))
+  expect_equal(shown$source_id[!is.na(raw_source_id)], raw_source_id[!is.na(raw_source_id)])
+  expect_equal(shown$source_id[is.na(raw_source_id)], shown$dataset_id[is.na(raw_source_id)])
 })
 
 test_that("display data prepared before source_id was kept still loads", {

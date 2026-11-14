@@ -208,6 +208,11 @@ join_primary_source <- function(database) {
   if (all(c("source_primary_key", "source_primary_citation") %in% names(database$methods))) {
     return(traits.use::join_methods(database, vars = c("source_primary_key", "source_primary_citation")))
   }
+  if (!"dataset_id_citation" %in% names(database$methods)) {
+    stop("The methods table has neither `source_primary_key`/`source_primary_citation` ",
+         "(traits.build before 2.3) nor `dataset_id_citation` (2.3 and later), ",
+         "so the portal cannot cite each dataset.", call. = FALSE)
+  }
   database <- traits.use::join_sources(database, vars = "dataset_id_citation")
   database$traits <- database$traits |>
     dplyr::mutate(source_primary_key = dataset_id) |>
@@ -244,6 +249,10 @@ format_database_for_display <- function(database) {
       "taxon_name", "taxon_distribution", "taxon_rank":"aligned_name_taxonomic_status", # For trait profile
       "row_id"
     ) |> 
+    # An empty source_id means the dataset's own reference: traits.build 2.3
+    # fills it with the dataset_id, and traits.use's join_sources() reads it so
+    # for older databases
+    dplyr::mutate(source_id = dplyr::coalesce(source_id, dataset_id)) |>
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
     dplyr::relocate("source_id", .after = "dataset_id") |> 
     dplyr::relocate("source_primary_citation", .after = "method_context_properties") |> 

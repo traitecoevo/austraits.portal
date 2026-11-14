@@ -24,7 +24,7 @@ utils::globalVariables(c(
 	"replicates", "req_body_json", "req_headers", "req_perform",
 	"request", "resp_body_json", "row_counter", "row_id", "scaled_by_obs",
 	"scientific_name", "scientific_name_id", "shapes",
-	"source_primary_citation", "source_primary_key", "species_per_family",
+	"source_id", "source_primary_citation", "source_primary_key", "species_per_family",
 	"structure_measured", "taxon_distribution", "taxon_id",
 	"taxon_id_family", "taxon_id_genus", "taxon_name",
 	"taxon_name_alternatives", "taxon_rank", "taxonomic_dataset",
