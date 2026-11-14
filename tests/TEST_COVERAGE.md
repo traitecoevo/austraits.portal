@@ -42,14 +42,13 @@ This document summarizes the test suite for the AusTraits Portal.
 
 ### Visualization Tests
 
-5. **test-plotting.R** - Plot generation functions
-   - `plot_trait_distribution()` - Main plotting dispatcher
-   - `plot_trait_distribution_beeswarm()` - Numerical trait plots
-   - `plot_categorical_trait_distribution()` - Categorical trait plots
-   - Empty data handling
-   - Single value handling
-   - Log scale for wide ranges
-   - Special characters in trait names
+5. **test-plotting.R** - Trait View plots, drawn by `traits.use::plot_trait_distribution()` (the plot functions themselves are tested in traits.use)
+   - Numeric traits by family, with `ggplotly()` tooltips
+   - Bin and range values left out
+   - Negative values kept inside the axis
+   - Species averages plotted from `value_mean`
+   - Single and identical values
+   - Categorical traits
 
 ### Text Generation Tests
 

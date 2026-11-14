@@ -1,5 +1,11 @@
 # austraits.portal (development version)
 
+## Trait plots from traits.use (November 2026, traits.use#21)
+
+* Trait View draws its plot with `traits.use::plot_trait_distribution()`, and the portal's own copies of the plot functions are gone. traits.use is now a dependency, installed from GitHub.
+* Traits with negative values, such as `leaf_delta13C`, now show every value: the old axis limits shrank inwards for negative numbers and hid 1,135 of 5,686 `leaf_delta13C` values (20%).
+* Axis labels read "plant_height (m)" rather than "plant_height  ( m )", and families with equal proportions in categorical plots are ordered alphabetically rather than by row order.
+
 ## Performance (October 2026, issue #130)
 
 * The data table pages and sorts in DuckDB, so any result can be browsed and sorted in full; "Load next 100" is gone. Number-like text columns sort numerically.
