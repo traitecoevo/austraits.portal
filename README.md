@@ -99,12 +99,14 @@ The lite version is included in the repository at
 use in the portal, run the following code:
 
 ``` r
-austraits:::austraits_5.0.0_lite |>
+traits.use:::austraits_5.0.0_lite |>
   prepare_data_for_portal("inst/extdata/austraits/austraits-5.0.0-lite", overwrite = TRUE)
 ```
 
-To prepare the full version of the data,run the following code to
-prepare it for use in the portal
+To prepare the full version of the data, run the following code to
+prepare it for use in the portal. It downloads the release with the
+`austraits` package, which the portal itself no longer needs: install
+it with `remotes::install_github("traitecoevo/austraits")`.
 
 ``` r
 austraits_7.0.0 <-

@@ -26,7 +26,8 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   message("Flattening AusTraits database...")
   austraits_full_flatten <-
     austraits |>
-    austraits::flatten_database() |>
+    join_primary_source() |>
+    traits.use::flatten_database() |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
     # Hybrid formulas starting "(Genus species x ...)" get the genus "(Genus"
     # upstream (APCalign); strip the bracket (issue #113)
@@ -190,6 +191,35 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   prepare_synonyms_for_portal(output_dir)
 }
 
+#' Join each dataset's own reference to the traits table
+#'
+#' @description The portal cites each dataset by its own reference, as
+#'   `source_primary_key` and `source_primary_citation`. `flatten_database()`
+#'   does not add these: databases built with traits.build 2.3 or later drop
+#'   `source_primary_key` (always the `dataset_id` there) and call the citation
+#'   `dataset_id_citation`. Older databases keep both columns in `methods`, and
+#'   there the key can differ from the `dataset_id` (Westoby_2014 cites
+#'   Gleason_2012), so it is taken from `methods` as it stands.
+#' @param database A traits.build database
+#' @return The database, with the two columns added to its traits table
+#' @keywords internal
+#' @noRd
+join_primary_source <- function(database) {
+  if (all(c("source_primary_key", "source_primary_citation") %in% names(database$methods))) {
+    return(traits.use::join_methods(database, vars = c("source_primary_key", "source_primary_citation")))
+  }
+  if (!"dataset_id_citation" %in% names(database$methods)) {
+    stop("The methods table has neither `source_primary_key`/`source_primary_citation` ",
+         "(traits.build before 2.3) nor `dataset_id_citation` (2.3 and later), ",
+         "so the portal cannot cite each dataset.", call. = FALSE)
+  }
+  database <- traits.use::join_sources(database, vars = "dataset_id_citation")
+  database$traits <- database$traits |>
+    dplyr::mutate(source_primary_key = dataset_id) |>
+    dplyr::rename(source_primary_citation = "dataset_id_citation")
+  database
+}
+
 #' Format flattened database for display
 #' 
 #' @param database Flattened traits.build object
@@ -202,12 +232,16 @@ format_database_for_display <- function(database) {
     dplyr::select(
       -c(ends_with("_id")),
       -starts_with("source"),
+      # Reference columns from traits.use's join_sources(); the portal shows
+      # source_primary_citation instead
+      -tidyselect::any_of(c("dataset_id_type", "dataset_id_citation", "secondary_citation")),
       -c("methods",
          "description", 
          "assistants", 
          "dataset_curators", 
          "sampling_strategy"),
       "dataset_id", 
+      "source_id", # The reference each observation was taken from
       "source_primary_citation", 
       "source_primary_key", # For usage text
       "location_id", # For trait profile
@@ -215,7 +249,12 @@ format_database_for_display <- function(database) {
       "taxon_name", "taxon_distribution", "taxon_rank":"aligned_name_taxonomic_status", # For trait profile
       "row_id"
     ) |> 
+    # An empty source_id means the dataset's own reference: traits.build 2.3
+    # fills it with the dataset_id, and traits.use's join_sources() reads it so
+    # for older databases
+    dplyr::mutate(source_id = dplyr::coalesce(source_id, dataset_id)) |>
     dplyr::relocate("dataset_id", .before = "taxon_name") |> 
+    dplyr::relocate("source_id", .after = "dataset_id") |> 
     dplyr::relocate("source_primary_citation", .after = "method_context_properties") |> 
     dplyr::relocate(c("genus", "family"), .after = "taxon_name") |>
     dplyr::arrange(family, taxon_name, trait_name)
