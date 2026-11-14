@@ -35,7 +35,7 @@ taxon_synonyms <- NULL
 generate_taxon_text_cached <- NULL
 
 columns_display <- c(
-  "dataset_id", "taxon_name", "genus", "family", "trait_name", "value", "unit",
+  "dataset_id", "source_id", "taxon_name", "genus", "family", "trait_name", "value", "unit",
   "entity_type", "value_type", "basis_of_value", "replicates", "basis_of_record",
   "life_stage", "collection_date", "measurement_remarks", "original_name",
   "location_name", "latitude (deg)", "longitude (deg)", "location_properties",
@@ -102,11 +102,12 @@ columns_display_species <- c(
 #' @noRd
 data_schema <- list(
   display = list(
-    required = unique(c(columns_display, "source_primary_key", "row_id",
+    required = setdiff(unique(c(columns_display, "source_primary_key", "row_id",
       "taxonomic_status", "taxonomic_dataset", "binomial", "trinomial",
       "scientific_name", "taxon_id", "taxon_id_genus", "taxon_id_family",
-      "scientific_name_id")),
-    optional = character()
+      "scientific_name_id")), "source_id"),
+    # Data prepared before the portal kept source_id lacks it
+    optional = "source_id"
   ),
   species = list(
     required = c("taxon_name", "trait_name", "unit", "value_mean", "value_min",
