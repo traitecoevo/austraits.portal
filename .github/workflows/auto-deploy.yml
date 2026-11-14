@@ -23,8 +23,21 @@ jobs:
           # restarting shiny-server dropped every live session on the server.
           # Shiny Server starts new sessions on the new code once restart.txt
           # is touched; existing sessions finish on the old process.
+          #
+          # app.R runs pkgload::load_all(), which fails if a package in
+          # Imports is missing, so packages the new commit needs are installed
+          # first, from that commit's DESCRIPTION (Remotes included); packages
+          # already installed are left as they are. `set -e` stops the deploy
+          # at the first failure, before the code changes, so a failed install
+          # leaves the old code serving rather than an app that cannot start.
           script: |
+            set -e
             cd /srv/shiny-server/austraits
             git fetch origin master
+            deps=$(mktemp -d)
+            git show ${{ github.event.workflow_run.head_sha }}:DESCRIPTION > "$deps/DESCRIPTION"
+            Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) stop("Install the remotes package on the server")' \
+                    -e 'remotes::install_deps(commandArgs(TRUE)[1], dependencies = NA, upgrade = "never")' "$deps"
+            rm -rf "$deps"
             git merge --ff-only ${{ github.event.workflow_run.head_sha }}
             touch restart.txt

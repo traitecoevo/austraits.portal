@@ -52,9 +52,10 @@ test_that("negative numeric traits keep every value inside the axis", {
 })
 
 test_that("species averages plot from value_mean", {
+  # In the species-averages data, value_type is NA for numeric traits
   avg <- numeric_rows |>
     dplyr::select(-value) |>
-    dplyr::mutate(value_mean = c(80, 95, 120, 101, 150, 210), value_type = "mean")
+    dplyr::mutate(value_mean = c(80, 95, 120, 101, 150, 210), value_type = NA_character_)
   data <- avg |> dplyr::mutate(value = value_mean)
   p <- portal_plot(data)
   expect_s3_class(p, "ggplot")

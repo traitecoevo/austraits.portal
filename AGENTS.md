@@ -21,7 +21,7 @@ deployment is deprecated).
 - **Tests:** `tests/testthat/` (testthat edition 3) + `spelling`; see `tests/TEST_COVERAGE.md`.
 - **Telemetry:** off under testthat, Shiny test mode, or `AUSTRAITS_TELEMETRY=off`. Set that variable when running the app locally, so you don't write to the production usage table.
 
-Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` / `pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source `app.R`); `devtools::test()`; `devtools::check()`. The default branch is `master` (`develop` has been merged and deleted). A push to `master` deploys to AWS once R-CMD-check passes on it (`.github/workflows/auto-deploy.yml`).
+Dev follows the standard R-package workflow plus a Shiny launch step: `devtools::load_all()` / `pkgload::load_all()`, then `shiny::shinyApp(ui = app_ui, server = app_server)` (or just source `app.R`); `devtools::test()`; `devtools::check()`. The default branch is `master` (`develop` has been merged and deleted). A push to `master` deploys to AWS once R-CMD-check passes on it (`.github/workflows/auto-deploy.yml`). The deploy installs packages missing from the server, from the new commit's `DESCRIPTION` (Remotes included), before switching to it; it does not upgrade packages already installed, so a change that needs a newer version of a dependency still needs that package updated on the server by hand. It needs `remotes` installed on the server, and stops without switching if the install fails.
 
 > Heads-up: the app needs prepared data files to run — only the `lite` set is in the repo, so a
 > fresh checkout shows the demo subset until you build the full set. The live portal is now served
