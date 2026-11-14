@@ -194,7 +194,7 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
       # Min 400px, add 15px per family after first 20
       plot_height <- max(400, 300 + (num_families * 15))
       
-      plot_trait_distribution(data, data$trait_name[1]) |>
+      traits.use::plot_trait_distribution(data, data$trait_name[1]) |>
         plotly::ggplotly(tooltip = c("x", "y", "text"), height = plot_height)
     })
     

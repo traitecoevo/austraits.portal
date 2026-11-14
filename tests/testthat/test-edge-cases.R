@@ -14,21 +14,6 @@ test_that("parse_filters handles malformed input", {
   expect_type(result, "list")
 })
 
-test_that("plot functions handle missing columns", {
-  skip_if_not_installed("ggplot2")
-  skip("Plot functions require specific data structure - test with actual data")
-  
-  incomplete_data <- data.frame(
-    taxon_name = "Species A"
-    # Missing other required columns
-  )
-  
-  # Should handle gracefully, not crash
-  expect_error(
-    plot_trait_distribution(incomplete_data, "trait")
-  )
-})
-
 test_that("generate functions handle special characters", {
   taxon_info <- list(
     taxon_name = "Species'with'quotes",
@@ -105,25 +90,6 @@ test_that("text generation handles missing metadata gracefully", {
   
   # Test when metadata is not loaded
   # Should either skip or provide default values
-})
-
-test_that("plotting handles zero variance data", {
-  skip_if_not_installed("ggplot2")
-  
-  # All same value
-  uniform_data <- data.frame(
-    taxon_name = rep("Species A", 10),
-    family = rep("Fabaceae", 10),
-    trait_name = rep("trait", 10),
-    value = rep(10, 10),
-    unit = rep("mm", 10),
-    value_type = rep("mean", 10)
-  )
-  
-  expect_error(
-    plot_trait_distribution_jitter(uniform_data, "trait", "family"),
-    NA
-  )
 })
 
 test_that("functions handle NA values appropriately", {

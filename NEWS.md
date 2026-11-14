@@ -1,5 +1,13 @@
 # austraits.portal (development version)
 
+## Trait plots from traits.use (November 2026, traits.use#21)
+
+* Trait View draws its plot with `traits.use::plot_trait_distribution()`, and the portal's own copies of the plot functions are gone. traits.use (0.1.1 or later) is now a dependency, installed from GitHub.
+* Traits with negative values, such as `leaf_delta13C`, now show every value: the old axis limits shrank inwards for negative numbers and hid 1,135 of 5,686 `leaf_delta13C` values (20%).
+* Axis labels read "plant_height (m)" rather than "plant_height  ( m )", and families with equal proportions in categorical plots are ordered alphabetically rather than by row order.
+* With traits.use#30, categorical plots size each point by the number of taxa with a record of the value, as the "species count" legend says; the portal's version used a fractional total that under-counted taxa whose records disagree. Numeric plots draw `raw` values, the commonest value type, as open circles labelled "Raw" rather than diamonds labelled "Unknown", and the legend lists only the value types present.
+* Deploys install any package the new commit needs before switching to it, so adding a dependency no longer needs a manual install on the server. If the install fails, the deploy stops and the previous version keeps serving.
+
 ## Performance (October 2026, issue #130)
 
 * The data table pages and sorts in DuckDB, so any result can be browsed and sorted in full; "Load next 100" is gone. Number-like text columns sort numerically.

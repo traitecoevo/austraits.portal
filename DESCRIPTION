@@ -38,6 +38,7 @@ Depends:
 Imports: 
     shiny,
     austraits,
+    traits.use (>= 0.1.1),
     arrow,
     bslib,
     bsplus,
@@ -79,8 +80,9 @@ Imports:
     later,
     tools
 Remotes:
-    traitecoevo/austraits
-Suggests: 
+    traitecoevo/austraits,
+    traitecoevo/traits.use
+Suggests:
     testthat (>= 3.0.0),
     shiny.telemetry,
     APCalign
