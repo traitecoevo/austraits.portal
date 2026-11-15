@@ -14,26 +14,29 @@ at
 > (`https://unsw.shinyapps.io/austraits-portal/`) is deprecated.
 
 For programmatic (code-based) access to the same data, use the
-[`austraits`](https://github.com/traitecoevo/austraits) R package.
+[`austraits`](https://github.com/traitecoevo/austraits) R package, which
+builds on [`traits.use`](https://github.com/traitecoevo/traits.use), the
+reader for any traits.build database. The portal itself uses
+`traits.use` too: to prepare the data and to draw the Trait View plots.
 
 ## Using the portal
 
 The portal provides a code-free, point-and-click interface for exploring
 and downloading AusTraits data — no R or programming required. To get
-started, open **<https://app.austraits.org/austraits/>** in a web browser
-and:
+started, open **<https://app.austraits.org/austraits/>** in a web
+browser and:
 
 - **Browse and filter** the data using the controls in the sidebar. You
   can narrow the data by taxonomy (family, genus, species), by trait, by
   geographic location, and with custom filters.
-- **Preview results** in the interactive data table, which updates as you
-  adjust filters. Columns are sortable and the table paginates through
-  matching records.
-- **Explore taxa and traits** via the dedicated Taxon View and Trait View
-  tabs, which show species profiles, trait summaries, trait definitions,
-  distributions, and maps.
-- **Query by URL** — filter states can be shared via links, e.g.
-  `?taxon_name=Eucalyptus+globulus`, `?trait_name=leaf_area`, or
+- **Preview results** in the interactive data table, which updates as
+  you adjust filters. Columns are sortable and the table paginates
+  through matching records.
+- **Explore taxa and traits** via the dedicated Taxon View and Trait
+  View tabs, which show species profiles, trait summaries, trait
+  definitions, distributions, and maps.
+- **Query by URL** — filter states can be shared via links,
+  e.g. `?taxon_name=Eucalyptus+globulus`, `?trait_name=leaf_area`, or
   `?tab=Trait+View`.
 - **Download** the filtered data for your own analysis, along with the
   matching citations shown in the Citations tab.
@@ -54,10 +57,10 @@ data for Australia’s 30,000 plant species.
 The AusTraits Data Portal offers an additional interface to explore and
 download data from the AusTraits database, complementing our primary
 access point, versioned releases on
-[Zenodo](https://zenodo.org/records/15718081), most easily accessed via
-the [`austraits`](https://github.com/traitecoevo/austraits) R package.
-As detailed on Zenodo, AusTraits has been released under an open source
-licence (CC-BY 4.0), enabling re-use by the community.
+[Zenodo](https://doi.org/10.5281/zenodo.3568417), most easily accessed
+via the [`austraits`](https://github.com/traitecoevo/austraits) R
+package. As detailed on Zenodo, AusTraits has been released under an
+open source licence (CC-BY 4.0), enabling re-use by the community.
 
 The database exists because of data submitted by more than 300
 contributors from across Australia and the world. Without their efforts
@@ -105,8 +108,8 @@ traits.use:::austraits_5.0.0_lite |>
 
 To prepare the full version of the data, run the following code to
 prepare it for use in the portal. It downloads the release with the
-`austraits` package, which the portal itself no longer needs: install
-it with `remotes::install_github("traitecoevo/austraits")`.
+`austraits` package, which the portal itself no longer needs: install it
+with `remotes::install_github("traitecoevo/austraits")`.
 
 ``` r
 austraits_7.0.0 <-
@@ -149,7 +152,7 @@ Note that successful installation requires that the `austraits.portal`
 package itself first be installed from GitHub:
 
 ``` r
-remotes::install_github("traitecoevo/austraits.portal@develop")
+remotes::install_github("traitecoevo/austraits.portal")
 ```
 
 ## App Design Overview
@@ -163,36 +166,49 @@ AusTraits database.
 
 #### Core Components
 
-**Data Layer** - **Storage**: Data stored as Parquet files for efficient
-querying - **Query Engine**: DuckDB in-memory database for fast
-filtering and aggregation - **Two Datasets**: - Raw observations
-(individual measurements) - Species averages (aggregated means per
-species) - **Arrow Integration**: Arrow datasets registered with DuckDB
-for zero-copy data access - **Precomputed Metadata**: Cached trait
-definitions, dropdown values, and flora links for fast access (via
-`prepare_data_for_portal`).
+**Data Layer**
 
-**UI Structure** (`app_ui.R`) - **Sidebar**: Filtering controls via
-`mod_filters_ui` - **Main Panel**: Tabbed interface with 5 views: - Data
-Preview (`mod_data_table`) - App Information (`mod_app_info`) - Taxon
-View (`mod_taxon_view`) - Trait View (`mod_trait_view`) - Citations
-(`mod_citations`)
+- **Storage**: Data stored as Parquet files for efficient querying
+- **Query Engine**: DuckDB in-memory database for fast filtering and
+  aggregation
+- **Two Datasets**:
+  - Raw observations (individual measurements)
+  - Species averages (aggregated means per species)
+- **Arrow Integration**: Arrow datasets registered with DuckDB for
+  zero-copy data access
+- **Precomputed Metadata**: Cached trait definitions, dropdown values,
+  and flora links for fast access (via `prepare_data_for_portal`).
+- **Plots**: Trait View’s distribution plots come from
+  `traits.use::plot_trait_distribution()`, the same plots
+  `traits.build`’s dataset reports use.
 
-**Server Logic** (`app_server.R`) - Reactive data flow coordinating
-filters, queries, and display - Debounced filtering to reduce
-computational overhead - Lazy data loading (100 rows initially, load
-more on demand) - Cached computations using `memoise` for performance
+**UI Structure** (`app_ui.R`)
+
+- **Sidebar**: Filtering controls via `mod_filters_ui`
+- **Main Panel**: Tabbed interface with 5 views:
+  - Data Preview (`mod_data_table`)
+  - App Information (`mod_app_info`)
+  - Taxon View (`mod_taxon_view`)
+  - Trait View (`mod_trait_view`)
+  - Citations (`mod_citations`)
+
+**Server Logic** (`app_server.R`)
+
+- Reactive data flow coordinating filters, queries, and display
+- Debounced filtering to reduce computational overhead
+- Lazy data loading (100 rows initially, load more on demand)
+- Cached computations using `memoise` for performance
 
 ### Key Modules
 
-| Module             | Purpose                | Key Features                                   |
-|--------------------|------------------------|------------------------------------------------|
-| **mod_filters**    | User filter controls   | Taxonomy, traits, location, custom filters     |
-| **mod_data_table** | Interactive data table | Sortable, paginated, DT with truncated cells   |
-| **mod_taxon_view** | Taxon profile pages    | Species info, trait summary, external links    |
-| **mod_trait_view** | Trait profile pages    | Trait definitions, distributions, maps         |
-| **mod_citations**  | Citation information   | Dynamic reference generation for filtered data |
-| **mod_app_info**   | Portal documentation   | Usage guide, attribution, telemetry metrics    |
+| Module | Purpose | Key Features |
+|----|----|----|
+| **mod_filters** | User filter controls | Taxonomy, traits, location, custom filters |
+| **mod_data_table** | Interactive data table | Sortable, paginated, DT with truncated cells |
+| **mod_taxon_view** | Taxon profile pages | Species info, trait summary, external links |
+| **mod_trait_view** | Trait profile pages | Trait definitions, distributions, maps |
+| **mod_citations** | Citation information | Dynamic reference generation for filtered data |
+| **mod_app_info** | Portal documentation | Usage guide, attribution, telemetry metrics |
 
 ### Data Processing Pipeline
 
@@ -237,15 +253,21 @@ processes the raw AusTraits database for portal use:
 
 ### Telemetry
 
-Optional analytics tracking via Supabase or local SQLite: - Session
-starts - Search events (when filters applied) - Download events -
-Displayed in real-time on App Information tab
+Optional analytics tracking via Supabase or local SQLite:
+
+- Session starts
+- Search events (when filters applied)
+- Download events
+- Displayed in real-time on App Information tab
 
 ### URL Parameters
 
-The app supports deep linking via URL query parameters: -
-`?taxon_name=Eucalyptus+globulus` - `?trait_name=leaf_area` -
-`?tab=Trait+View` - All filter states can be encoded in URLs for sharing
+The app supports deep linking via URL query parameters:
+
+- `?taxon_name=Eucalyptus+globulus`
+- `?trait_name=leaf_area`
+- `?tab=Trait+View`
+- All filter states can be encoded in URLs for sharing
 
 ## Citation
 
@@ -268,34 +290,40 @@ portal and the underlying AusTraits dataset.
 
 ## AusTraits family
 
-`austraits.portal` is part of the **AusTraits family** of packages maintained by the
-[AusTraits](https://austraits.org) team. See **[austraits.org](https://austraits.org)** for the
-project, the data, and the people behind it.
+`austraits.portal` is part of the **AusTraits family** of packages
+maintained by the [AusTraits](https://austraits.org) team. See
+**[austraits.org](https://austraits.org)** for the project, the data,
+and the people behind it.
 
 Contributing? Issues across the family are tracked on one board,
-[AusTraits #9](https://github.com/orgs/traitecoevo/projects/9), and new issues are auto-added. Please
-read the [issue & labelling guide](https://github.com/traitecoevo/austraits-meta/blob/master/governance/issue-guide.md)
-in [`austraits-meta`](https://github.com/traitecoevo/austraits-meta) — the family's cross-package
-knowledge and governance hub — before filing.
+[AusTraits \#9](https://github.com/orgs/traitecoevo/projects/9), and new
+issues are auto-added. Please read the [issue & labelling
+guide](https://github.com/traitecoevo/austraits-meta/blob/master/governance/issue-guide.md)
+in [`austraits-meta`](https://github.com/traitecoevo/austraits-meta) —
+the family’s cross-package knowledge and governance hub — before filing.
 
 ## Acknowledgements
 
-AusTraits is made possible by contributions from our partner organisations — the
-[University of New South Wales](https://www.unsw.edu.au/),
-[Western Sydney University](https://www.westernsydney.edu.au/),
-[Botanic Gardens of Sydney](https://www.botanicgardens.org.au/),
-[the University of Melbourne](https://www.unimelb.edu.au/),
-the [Atlas of Living Australia](https://www.ala.org.au/), and the Australian Government
-[Department of Climate Change, Energy, the Environment and Water](https://www.dcceew.gov.au) — and
-from our [advisory board, data contributors, and past partners](https://austraits.org/team/team-partners.html).
+AusTraits is made possible by contributions from our partner
+organisations — the [University of New South
+Wales](https://www.unsw.edu.au/), [Western Sydney
+University](https://www.westernsydney.edu.au/), [Botanic Gardens of
+Sydney](https://www.botanicgardens.org.au/), [the University of
+Melbourne](https://www.unimelb.edu.au/), the [Atlas of Living
+Australia](https://www.ala.org.au/), and the Australian Government
+[Department of Climate Change, Energy, the Environment and
+Water](https://www.dcceew.gov.au) — and from our [advisory board, data
+contributors, and past
+partners](https://austraits.org/team/team-partners.html).
 
-AusTraits is a co-investment partnership with the
-[Australian Research Data Commons](https://ardc.edu.au/) (ARDC) through the Planet Research Data
-Commons ([DOI: 10.3565/nyk4-4r91](https://doi.org/10.3565/nyk4-4r91)). The ARDC is enabled by the
-Australian Government's [National Collaborative Research Infrastructure Strategy](https://www.education.gov.au/ncris)
-(NCRIS).
+AusTraits is a co-investment partnership with the [Australian Research
+Data Commons](https://ardc.edu.au/) (ARDC) through the Planet Research
+Data Commons ([DOI:
+10.3565/nyk4-4r91](https://doi.org/10.3565/nyk4-4r91)). The ARDC is
+enabled by the Australian Government’s [National Collaborative Research
+Infrastructure Strategy](https://www.education.gov.au/ncris) (NCRIS).
 
-Development of this portal was supported by a UNSW Research Infrastructure
-Grant. This work received investment
+Development of this portal was supported by a UNSW Research
+Infrastructure Grant. This work received investment
 ([DP720](https://doi.org/10.47486/DP720),
 [DP720A](https://doi.org/10.47486/DP720A)) from the ARDC.
