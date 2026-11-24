@@ -89,7 +89,12 @@ test_that("join_primary_source() handles both methods-table formats", {
 })
 
 test_that("the display table has no reference columns besides the primary citation", {
-  shown <- traits.use::austraits_lite |>
+  # Databases built before traits.build 2.3 leave source_id missing on most
+  # rows; austraits_lite from traits.use 1.0.0 fills it on every row, so
+  # blank some to check that those show the dataset_id
+  database <- traits.use::austraits_lite
+  database$traits$source_id[seq(1, nrow(database$traits), by = 5)] <- NA_character_
+  shown <- database |>
     join_primary_source() |>
     traits.use::flatten_database() |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
@@ -98,7 +103,8 @@ test_that("the display table has no reference columns besides the primary citati
   expect_true(all(c("source_primary_key", "source_primary_citation") %in% names(shown)))
   # traits.build's two reference ids: the dataset, and the source each observation came from
   expect_equal(names(shown)[match("dataset_id", names(shown)) + 1], "source_id")
-  raw_source_id <- traits.use::austraits_lite$traits$source_id[shown$row_id]
+  raw_source_id <- database$traits$source_id[shown$row_id]
+  expect_true(anyNA(raw_source_id))
   expect_false(anyNA(shown$source_id))
   expect_equal(shown$source_id[!is.na(raw_source_id)], raw_source_id[!is.na(raw_source_id)])
   expect_equal(shown$source_id[is.na(raw_source_id)], shown$dataset_id[is.na(raw_source_id)])
