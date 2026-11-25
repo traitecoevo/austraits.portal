@@ -16,11 +16,12 @@
 
 generate_usage_and_citations_text <- function(data) {
 
-  # Extract the version of the package
-  version <- metatdata$hits$hits[[1]]$metadata$version
-  doi <- metatdata$hits$hits[[1]]$metadata$doi
-  date <- metatdata$hits$hits[[1]]$metadata$publication_date
-  concept_doi <- metatdata$hits$hits[[1]]$conceptdoi
+  # The release the portal serves (release.rds, written at data preparation)
+  version <- release$version
+  concept_doi <- release$concept_doi
+  # A development build has no release DOI of its own; cite the concept DOI
+  doi <- if (is.na(release$doi)) concept_doi else release$doi
+  date <- if (is.na(release$publication_date)) format(Sys.Date()) else release$publication_date
 
   keys <- data$source_primary_key |> stringr::str_split(pattern = "; ") |> unlist() |> sort() |> unique()
   # then get the references. Taking these from the sources data frame loaded in data_loading.R instead of data frame, as species means have multiple sources pasted together (so complicated to parse)
@@ -28,7 +29,9 @@ generate_usage_and_citations_text <- function(data) {
 
   usage_text <- 
     sprintf(
-"The AusTraits dataset is available at [doi: %s](http://doi.org/%s). AusTraits data is distributed under the CC BY 4.0 license (<https://creativecommons.org/licenses/by/4.0/>). The data is provided 'as is' without any warranties or guarantees of any kind. The AusTraits database is described in Falster et al. 2021, drawing from many the contributed datasets. Publications using AusTraits data should cite the AusTraits data paper and relevant datasets.
+"**Data:** AusTraits %s, doi: [%s](https://doi.org/%s), from the AusTraits Data Portal on %s.
+
+The AusTraits dataset is available at [doi: %s](http://doi.org/%s). AusTraits data is distributed under the CC BY 4.0 license (<https://creativecommons.org/licenses/by/4.0/>). The data is provided 'as is' without any warranties or guarantees of any kind. The AusTraits database is described in Falster et al. 2021, drawing from many the contributed datasets. Publications using AusTraits data should cite the AusTraits data paper and relevant datasets.
 
 Taxa were aligned against the Australian Plant Census (APC, <https://biodiversity.org.au/nsl/services/search/taxonomy>) using the R package {APCalign} (Wenk et al 2024a), by first, searching for alignments with known names (via exact, then fuzzy matching), and then using known alignments to update taxon names to the currently accepted name. Original taxon names attributed by the data collectors are included. 
 
@@ -49,6 +52,7 @@ The following datasets contributed data included in the selected search: %s
 (subset, for large datasets full list is provided in the download)
 
 %s",
+    version, doi, doi, format(Sys.Date()),  # The release these data come from
     concept_doi, concept_doi,    # First paragraph DOI links
     concept_doi, concept_doi,    # "full dataset" DOI links
     keys |> paste(collapse = ", "),  # Dataset list

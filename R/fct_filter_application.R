@@ -71,17 +71,18 @@ matching_trait_names <- function(trait_groups, parsed_trait) {
   matching_traits
 }
 
-#' Apply all filters to dataset
+#' Build the filter expressions for a set of filters
 #'
-#' @description Applies categorical, location, and custom filters in one pass.
-#'   Exact-match filters use `%in%`, which DuckDB evaluates as an `IN` list
-#'   when the data is read with `read_parquet()` (see `load_portal_data()`).
-#' @param data Base dataset (lazy DuckDB table)
+#' @description The one translation of filter settings into code. The app
+#'   evaluates these expressions in DuckDB ([apply_filters()]), and the R
+#'   script in each download prints them ([recreate_script()]), so the
+#'   script selects the same rows as the portal.
 #' @param parsed_filters Parsed filter object from parse_filters()
-#' @return Filtered dataset (lazy query)
+#' @param columns Column names of the dataset being filtered.
+#' @return A list of expressions, combined with `&`.
 #' @keywords internal
 #' @noRd
-apply_filters <- function(data, parsed_filters) {
+filter_expressions <- function(parsed_filters, columns) {
 
   filter_expressions <- list()
   add_filter <- function(e) filter_expressions[[length(filter_expressions) + 1]] <<- e
@@ -123,7 +124,7 @@ apply_filters <- function(data, parsed_filters) {
   if (!is.null(parsed_filters$location$location) && parsed_filters$location$location != "") {
 
     # Check if geo columns exist (species dataset doesn't have them!)
-    has_geo_cols <- all(c("latitude (deg)", "longitude (deg)") %in% colnames(data))
+    has_geo_cols <- all(c("latitude (deg)", "longitude (deg)") %in% columns)
 
     if (parsed_filters$location$location == "georeferenced" && has_geo_cols) {
       lat_col <- rlang::sym("latitude (deg)")
@@ -176,7 +177,22 @@ apply_filters <- function(data, parsed_filters) {
     }
   }
 
-  # APPLY ALL FILTERS
+  filter_expressions
+}
+
+#' Apply all filters to dataset
+#'
+#' @description Applies categorical, location, and custom filters in one pass.
+#'   Exact-match filters use `%in%`, which DuckDB evaluates as an `IN` list
+#'   when the data is read with `read_parquet()` (see `load_portal_data()`).
+#' @param data Base dataset (lazy DuckDB table)
+#' @param parsed_filters Parsed filter object from parse_filters()
+#' @return Filtered dataset (lazy query)
+#' @keywords internal
+#' @noRd
+apply_filters <- function(data, parsed_filters) {
+
+  filter_expressions <- filter_expressions(parsed_filters, colnames(data))
 
   if (length(filter_expressions) > 0) {
     cat("[FILTER] Applying combined filter expression\n")

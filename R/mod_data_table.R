@@ -48,24 +48,31 @@ table_display_columns <- function(available, columns_display) {
 #' The query the data table pages through
 #'
 #' Selects the display columns (plus `row_id`, used as a sort tie-breaker so
-#' pages never overlap) and, for species averages, appends the unit to the
-#' mean value.
+#' pages never overlap). For species means, `value` shows the observed mean
+#' with its unit, or for a categorical trait the most frequent value
+#' (`value_mode`), so one column reads for both.
 #' @noRd
 table_query <- function(query, cols) {
   available <- colnames(query)
-  if (all(c("value_mean", "unit", "value_min", "value_median", "value_max") %in% available)) {
+  if (is_species_means(available)) {
     query <- query |>
       dplyr::mutate(
-        # value_mean is numeric in older data builds and text in newer ones
-        value_mean = dplyr::if_else(
-          !is.na(unit) & unit != "",
-          paste0(as.character(value_mean), " ", unit),
-          as.character(value_mean)
+        value = dplyr::case_when(
+          type == "categorical" ~ value_mode,
+          !is.na(unit) & unit != "" ~ paste0(as.character(value), " ", unit),
+          TRUE ~ as.character(value)
         )
       )
   }
   keep <- c(cols, intersect("row_id", setdiff(available, cols)))
   query |> dplyr::select(dplyr::all_of(keep))
+}
+
+#' Is this table the published species means?
+#' @param columns Column names.
+#' @noRd
+is_species_means <- function(columns) {
+  all(c("value", "value_mode", "unit", "type") %in% columns)
 }
 
 #' Fetch one page of a lazy query from DuckDB
@@ -88,8 +95,8 @@ fetch_table_page <- function(query, cols, start, length, order_col = NULL, desce
     keys <- sprintf("%s %s NULLS LAST", col_sql, direction)
     # These columns hold numbers stored as text; sort numbers numerically
     # ("99" before "1000"), then any non-numeric values as text
-    if (order_col %in% c("value", "replicates", "value_mean")) {
-      # (value_mean carries a unit suffix, so take the leading number)
+    if (order_col %in% c("value", "replicates")) {
+      # (species-mean values carry a unit suffix, so take the leading number)
       keys <- c(sprintf("TRY_CAST(regexp_extract(CAST(%s AS VARCHAR), '^-?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?') AS DOUBLE) %s NULLS LAST",
                         col_sql, direction), keys)
     }
@@ -191,20 +198,25 @@ mod_data_table_server <- function(id, filtered_query_cache, filtered_total, colu
       template <- fetch_table_page(paged, cols, 0, 0)
 
       thin_cols <- which(!cols %in% c("taxon_name", "trait_name", "genus", "family"))
-      numeric_cols <- which(cols %in% c("value_mean", "value_median", "value_min", "value_max"))
+      # Species means: round for display (downloads keep full precision)
+      numeric_cols <- if (is_species_means(colnames(query))) which(cols %in% c("value", "value_min", "value_max")) else integer()
 
       column_defs <- list(
         list(targets = thin_cols - 1, className = "truncated")
       )
       if (length(numeric_cols) > 0) {
-        # Round a leading number to 2 decimals, keeping any trailing unit
+        # Round a leading number to 3 significant figures (whole numbers
+        # from 100 up), keeping any trailing unit. Fixed decimals would show
+        # small means, such as seed masses, as 0.
         column_defs[[length(column_defs) + 1]] <- list(
           targets = numeric_cols - 1,
           render = DT::JS("function(data, type, row) {
             if (type === 'display' && data != null) {
               var m = String(data).match(/^(-?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?)(.*)$/);
               if (!m) return data;
-              return parseFloat(m[1]).toFixed(2).replace(/\\.?0+$/, '') + m[2];
+              var x = parseFloat(m[1]);
+              var s = Math.abs(x) >= 100 ? x.toFixed(0) : String(Number(x.toPrecision(3)));
+              return s + m[2];
             }
             return data;
           }")
@@ -231,9 +243,15 @@ mod_data_table_server <- function(id, filtered_query_cache, filtered_total, colu
             "function(thead, data, start, end, display) {",
             "  $(thead).find('th').each(function(i) {",
             "    var col = this.textContent.trim();",
-            "    if (col === 'value_range') {",
-            "      $(this).attr('title', 'Min - Median - Max (Unit) for numerical traits');",
-            "    }",
+            "    var tips = {",
+            "      value: 'Numeric traits: the observed mean (geometric, or arithmetic for a trait on a signed scale). Categorical traits: the most frequent value.',",
+            "      value_count: 'Categorical traits: each value with the number of records carrying it.',",
+            "      n_records: 'Number of records used.',",
+            "      n_datasets: 'Number of datasets contributing records.',",
+            "      method: 'How the value was found: geometric, arithmetic, mode or majority.',",
+            "      reliability: 'Provisional class from the evidence behind the value: high, medium or low.'",
+            "    };",
+            "    if (tips[col]) $(this).attr('title', tips[col]);",
             "  });",
             "}"
           ),

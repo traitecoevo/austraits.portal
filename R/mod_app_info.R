@@ -99,7 +99,7 @@ profile_links <- function(github = NULL, orcid = NULL) {
       ),
       
       p(tags$strong("Dataset type \u2014"),
-        "Raw data or Species averages? Raw data has the individual observations submitted by contributors while Species averages presents species-level summary statistics (mean, min, max, median for numeric traits and value summaries for categorical traits). ",
+        "Raw data or Species averages? Raw data has the individual observations submitted by contributors. Species averages are the observed species means published with each AusTraits release: for numeric traits a geometric mean (arithmetic for traits on a signed scale) with the smallest and largest record, for categorical traits the most frequent value and the count of each value, plus the number of records and datasets behind each mean and a provisional reliability class. Subspecies, varieties and forms are rolled up to their species. ",
         "Pick based on the question you're asking."),
       
       p(tags$strong("Taxonomy \u2014"),

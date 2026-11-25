@@ -6,13 +6,16 @@
 #' @param filtered_total reactiveVal holding the query's row count
 #' @param current_austraits Reactive for current full dataset
 #' @param filters Reactive filters from mod_filters_server
+#' @param applied_filters reactiveVal holding the parsed filters behind the
+#'   current result
 #'
 #' @noRd
 srv_download <- function(input, output, session,
                          filtered_query_cache,
                          filtered_total,
                          current_austraits,
-                         filters) {
+                         filters,
+                         applied_filters = reactiveVal(NULL)) {
 
   # DOWNLOAD DATA PREPARATION
 
@@ -64,14 +67,18 @@ srv_download <- function(input, output, session,
   # DOWNLOAD HANDLER
 
   output[["filters-download_data"]] <- downloadHandler(
+    # Every file names the AusTraits release it came from
     filename = function() {
-      paste("austraits-", Sys.Date(), ".zip", sep = "")
+      paste0(download_stem(release, filters()$dataset_type), "-", Sys.Date(), ".zip")
     },
     content = function(file) {
       tmpdir = tempfile(pattern="tempdir", fileext = ".dir")
       dir.create(tmpdir)
       on.exit(unlink(tmpdir, recursive = TRUE), add = TRUE)
-      csv_file <- file.path(tmpdir, "austraits-data.csv")
+      parsed <- applied_filters()
+      dataset_type <- if (is.null(parsed)) filters()$dataset_type else parsed$dataset_type
+      csv_file <- file.path(tmpdir, paste0(download_stem(release, dataset_type), ".csv"))
+      script_file <- file.path(tmpdir, "recreate.R")
       bib_file <- file.path(tmpdir, "sources.bib")
       sources_file <- file.path(tmpdir, "sources.csv")
       html_file <- file.path(tmpdir, "usage.html")
@@ -102,6 +109,12 @@ srv_download <- function(input, output, session,
 
         usage_text_content <- generate_usage_and_citations_text(key_rows)
         htmltools::save_html(usage_text_content, html_file)
+
+        # R code that recreates this download from the same release
+        if (!is.null(parsed)) {
+          recreate_script(parsed, dataset_type, release, colnames(current_austraits())) |>
+            writeLines(script_file)
+        }
       }
 
       # Log download event

@@ -11,6 +11,7 @@
 ^app.R$
 ^\.cache$
 ^\.vscode$
-^inst/extdata/austraits/austraits-7\.0\.0-full$
+^inst/extdata/austraits/austraits-[0-9.]+-full$
+^inst/extdata/austraits/[^/]*\.(rds|json)$
 ^R/_disable_autoload\.R$
 ^dev$

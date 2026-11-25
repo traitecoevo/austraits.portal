@@ -9,6 +9,8 @@ app_server <- function(input, output, session) {
   # pages through the query in DuckDB, so no result is held in R memory.
   filtered_query_cache <- reactiveVal(NULL)
   filtered_total <- reactiveVal(NULL)
+  # The filters behind the current result, for the download's R script
+  applied_filters <- reactiveVal(NULL)
   apply_filters_trigger <- reactiveVal(0)
 
   loading_from_url <- reactiveVal(FALSE)
@@ -68,6 +70,7 @@ app_server <- function(input, output, session) {
       result <- run_filter_query(current_austraits_display(), parsed_filters)
       filtered_query_cache(result$query)
       filtered_total(result$total_rows)
+      applied_filters(parsed_filters)
       if (log_search) {
         log_telemetry_event("search", details = list(
           dataset_type = filters()$dataset_type,
@@ -78,6 +81,7 @@ app_server <- function(input, output, session) {
       cat("[FILTER] Error:", conditionMessage(e), "\n")
       filtered_query_cache(NULL)
       filtered_total(NULL)
+      applied_filters(NULL)
       showNotification(paste("Filtering failed:", conditionMessage(e)),
                        type = "error", duration = 10)
     })
@@ -87,6 +91,7 @@ app_server <- function(input, output, session) {
   observeEvent(input[["filters-clear_filters"]], {
     filtered_query_cache(NULL)
     filtered_total(NULL)
+    applied_filters(NULL)
   })
 
   # Setup filter dropdown updates
@@ -131,7 +136,7 @@ app_server <- function(input, output, session) {
   mod_data_table_server("data_table", filtered_query_cache, filtered_total, current_columns_display)
 
   # download handlers
-  srv_download(input, output, session, filtered_query_cache, filtered_total, current_austraits, filters)
+  srv_download(input, output, session, filtered_query_cache, filtered_total, current_austraits, filters, applied_filters)
 
   # Citations module (only active when tab is selected)
   usage_text_reactive <- mod_citations_server("citations", filtered_query_cache, reactive(input$main_tabs))

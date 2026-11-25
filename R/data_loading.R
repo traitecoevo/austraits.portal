@@ -28,7 +28,7 @@ austraits_species_duckdb <- NULL
 sources <- NULL
 trait_definitions <- NULL
 trait_groups <- NULL
-metatdata <- NULL
+release <- NULL
 dropdowns <- NULL
 flora_links <- NULL
 taxon_synonyms <- NULL
@@ -75,22 +75,28 @@ omit_from_custom_filter <- c(
 # Available columns for custom filter
 custom_filter_columns <- c(controlled_vocab_columns, free_text_columns)
 
-# Custom filter columns for SPECIES AVERAGES (only columns that exist)
+# The species means' own controlled-vocabulary columns: dropdowns and exact
+# matches, offered only for species averages (custom_filter_columns_species)
+controlled_vocab_columns <- c(controlled_vocab_columns, "method", "reliability")
+
+# Custom filter columns for SPECIES AVERAGES (the published means' own
+# columns with a controlled vocabulary, plus taxon columns)
 custom_filter_columns_species <- c(
-  "dataset_id", "value_type", "value_count",
+  "dataset_id", "method", "reliability",
   "taxon_rank", "establishment_means"
-  # Only controlled vocab columns that exist in species avg
 )
 
 # Custom Github hyperlink icon
 target <- bsplus::shiny_iconlink(name = "github")
 target$attribs$href <- "https://github.com/traitecoevo/austraits.portal"
 
-# Columns to display for species averages (different from raw data)
+# Columns to display for species averages: the published observed means'
+# own columns (see the release's observed-means dictionary)
 columns_display_species <- c(
   "family", "genus", "taxon_name", "trait_name",
+  "value", "value_min", "value_max", "value_count",
+  "n_records", "n_datasets", "method", "reliability",
   "dataset_id",
-  "value_mean", "value_range", "replicates",
   "taxon_rank", "taxon_distribution", "establishment_means"
 )
 
@@ -109,11 +115,14 @@ data_schema <- list(
     # Data prepared before the portal kept source_id lacks it
     optional = "source_id"
   ),
+  # The published observed means plus the columns prepare_species_means() adds
   species = list(
-    required = c("taxon_name", "trait_name", "unit", "value_mean", "value_min",
-      "value_max", "value_median", "dataset_id", "source_primary_key", "type",
-      "row_id", "family", "genus"),
-    optional = c("value_range")
+    required = c("taxon_name", "trait_name", "unit", "type", "method", "value",
+      "value_min", "value_max", "value_mode", "value_count", "n_records",
+      "n_datasets", "reliability", "dataset_id", "source_id", "family", "genus",
+      "taxon_rank", "establishment_means", "source_primary_key",
+      "source_primary_citation", "taxon_distribution", "row_id"),
+    optional = character()
   ),
   data = list(
     required = c("row_id", "source_primary_key", "genus"),
@@ -149,7 +158,7 @@ check_data_schema <- function(columns, schema, label) {
 #' installed package copies are used otherwise (e.g. under R CMD check).
 #' @noRd
 portal_data_path <- function() {
-  full <- "extdata/austraits/austraits-7.0.0-full"
+  full <- "extdata/austraits/austraits-8.0.0-full"
   lite <- "extdata/austraits/austraits-5.0.0-lite"
   candidates <- c(
     file.path("inst", full),
@@ -206,11 +215,11 @@ load_portal_data <- function(env) {
   check_data_schema(colnames(species), data_schema$species, "austraits-species-averages.parquet")
   check_data_schema(colnames(data), data_schema$data, "austraits-data.parquet")
 
-  metadata <- readRDS(file.path(path, "metadata.rds"))
+  release_info <- readRDS(file.path(path, "release.rds"))
 
   # Key the taxon-profile cache by data release and content, so a new data
   # build never serves profiles generated from the previous one
-  version <- metadata$hits$hits[[1]]$metadata$version
+  version <- release_info$version
   profile_inputs <- file.path(path, c("austraits-species-averages.parquet", "synonyms.rds"))
   profile_inputs <- profile_inputs[file.exists(profile_inputs)]
   fingerprint <- substr(digest_strings(unname(tools::md5sum(profile_inputs))), 1, 8)
@@ -231,7 +240,7 @@ load_portal_data <- function(env) {
   assign("sources", readRDS(file.path(path, "sources.rds")), envir = env)
   assign("trait_definitions", readRDS(file.path(path, "definitions.rds")), envir = env)
   assign("trait_groups", readRDS(file.path(path, "trait_groups.rds")), envir = env)
-  assign("metatdata", metadata, envir = env)
+  assign("release", release_info, envir = env)
   dropdowns <- readRDS(file.path(path, "dropdown_cache.rds"))
   dropdowns$all_genus <- sort(unique(sub("^[(]", "", dropdowns$all_genus)))
   assign("dropdowns", dropdowns, envir = env)

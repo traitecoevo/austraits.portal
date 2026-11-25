@@ -75,7 +75,7 @@ test_that("export_bibtex_for_data creates valid bibtex file", {
 })
 
 test_that("generate_usage_and_citations_text creates valid HTML", {
-  skip_if_not(exists("metatdata"), "Requires metadata to be loaded")
+  skip_if(is.null(get0("release")), "Requires the release record to be loaded")
   skip_if_not(exists("sources"), "Requires sources to be loaded")
   
   test_data <- data.frame(
@@ -88,8 +88,9 @@ test_that("generate_usage_and_citations_text creates valid HTML", {
   expect_type(result, "character")
   # Should contain HTML
   expect_true(grepl("<", result))
-  # Should mention AusTraits
+  # Should mention AusTraits and name the release
   expect_true(grepl("AusTraits", result, ignore.case = TRUE))
+  expect_true(grepl(paste("AusTraits", release$version), result, fixed = TRUE))
 })
 
 test_that("generate_trait_profile handles valid trait data", {

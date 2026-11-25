@@ -76,9 +76,9 @@ test_that("species columns are appropriate for species dataset", {
   
   expect_type(columns_display_species, "character")
   
-  # Species dataset should have aggregated columns
-  expect_true("value_mean" %in% columns_display_species)
-  expect_true("replicates" %in% columns_display_species)
+  # Species dataset shows the published means' own columns
+  expect_true(all(c("value", "value_count", "n_records", "method", "reliability") %in% columns_display_species))
+  expect_true(all(columns_display_species %in% data_schema$species$required))
   
   # Should not have observation-level columns
   expect_false("latitude (deg)" %in% columns_display_species)
@@ -135,12 +135,12 @@ test_that("data path is correctly set", {
   expect_true(dir.exists(data_path))
 })
 
-test_that("metadata is loaded", {
-  skip_if_not(exists("metatdata"), "Metadata not loaded")
-  
-  expect_type(metatdata, "list")
-  # Check for Zenodo-like structure
-  expect_true("hits" %in% names(metatdata) || length(metatdata) > 0)
+test_that("the release record is loaded", {
+  skip_if(is.null(get0("release")), "Release record not loaded")
+
+  expect_type(release, "list")
+  expect_true(all(c("version", "doi", "concept_doi", "publication_date", "austraits_package") %in% names(release)))
+  expect_match(release$version, "^[0-9]+\\.[0-9]+\\.[0-9]+")
 })
 
 test_that("dropdowns contain actual data", {
@@ -160,8 +160,11 @@ test_that("trait groups match available traits", {
   traits_in_groups <- unique(trait_groups$trait)
   traits_in_definitions <- names(trait_definitions)
   
-  # Most traits in groups should be in definitions
-  overlap <- mean(traits_in_groups %in% traits_in_definitions)
-  expect_true(overlap > 0.8, 
-              info = "Less than 80% of trait group traits found in definitions")
+  # Each trait the data defines should have a group, so trait-feature filters
+  # and Taxon View reach it. (The list follows the current release, so an
+  # older data build, such as the 5.0.0 lite set, lacks some of its traits;
+  # dev/update_trait_groups.R brings it up to date.)
+  overlap <- mean(traits_in_definitions %in% traits_in_groups)
+  expect_true(overlap > 0.95,
+              info = "More than 5% of the data's traits have no trait group; run dev/update_trait_groups.R")
 })
