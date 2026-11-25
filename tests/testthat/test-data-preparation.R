@@ -75,7 +75,25 @@ test_that("prepare_species_means() keeps the published means and adds the portal
     unique(flattened$source_primary_citation[flattened$source_primary_key == id]), ""), collapse = "; "))
   # The portal reads every column it requires
   expect_true(all(data_schema$species$required %in% names(out)))
+  # No dataset is cited as the text "NA"
+  expect_false(any(grepl("(^|; )NA(;|$)", out$source_primary_citation)))
   expect_error(prepare_species_means(means[, c("taxon_name", "trait_name")], database, flattened), "lack columns")
+})
+
+test_that("species means cite each dataset by its own reference key in older builds", {
+  # Before traits.build 2.3 the key could differ from the dataset_id:
+  # Westoby_2014 cites Gleason_2012. The 5.0.0 lite set is such a build.
+  database <- traits.use:::austraits_5.0.0_lite
+  flattened <- database |> join_primary_source() |> traits.use::flatten_database()
+  skip_if_not("Westoby_2014" %in% flattened$dataset_id, "Westoby_2014 not in this lite set")
+  key <- unique(flattened$source_primary_key[flattened$dataset_id == "Westoby_2014"])
+  means <- traits.use::summarise_trait_means(database)
+  out <- prepare_species_means(means, database, flattened)
+  only <- out[out$dataset_id == "Westoby_2014", ]
+  skip_if(nrow(only) == 0, "No single-dataset Westoby_2014 means")
+  expect_true(all(only$source_primary_key == key))
+  expect_false(anyNA(only$source_primary_citation))
+  expect_false(any(grepl("(^|; )NA(;|$)", out$source_primary_citation)))
 })
 
 test_that("portal_release_info() finds the release DOI from the version", {

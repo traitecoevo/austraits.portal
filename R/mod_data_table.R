@@ -59,7 +59,8 @@ table_query <- function(query, cols) {
       dplyr::mutate(
         value = dplyr::case_when(
           type == "categorical" ~ value_mode,
-          !is.na(unit) & unit != "" ~ paste0(as.character(value), " ", unit),
+          # (DuckDB's paste0 skips NULLs, so test value too)
+          !is.na(value) & !is.na(unit) & unit != "" ~ paste0(as.character(value), " ", unit),
           TRUE ~ as.character(value)
         )
       )

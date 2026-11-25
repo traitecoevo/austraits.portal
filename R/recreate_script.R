@@ -81,6 +81,8 @@ recreate_script <- function(parsed_filters, dataset_type, release, columns,
     source_object <- "austraits"
     steps <- c(steps, "  austraits::flatten_database() |>")
     if (needs_citation) {
+      # As join_primary_source() for traits.build 2.3 and later (every release
+      # from 8.0.0); older builds could cite another key from their methods
       steps <- c(steps,
         "  # Each dataset's own reference, as the portal names it",
         "  dplyr::mutate(source_primary_key = dataset_id, source_primary_citation = dataset_id_citation) |>")

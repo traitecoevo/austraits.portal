@@ -123,4 +123,18 @@ test_that("an infraspecific taxon shows its species' means", {
   expect_equal(species_means_name("Grevillea rosmarinifolia subsp. glabella"), "Grevillea rosmarinifolia")
   expect_equal(species_means_name("Eucalyptus saligna"), "Eucalyptus saligna")
   expect_equal(species_means_name("Acacia sp. Foo (A. B 123)"), "Acacia sp. Foo (A. B 123)")
+  # A hybrid formula is not rolled up to its first parent
+  expect_equal(species_means_name("Acacia adoxa var. adoxa x Acacia spondylophylla"),
+               "Acacia adoxa var. adoxa x Acacia spondylophylla")
+})
+
+test_that("a custom filter for the other dataset is not applied", {
+  # Switching dataset re-runs the filters before the inputs drop a custom
+  # filter set for the other dataset
+  stale <- filters_for("species", custom = list(list(column = "source_primary_citation", value = "Falster")))
+  expect_length(filter_expressions(stale, c("taxon_name", "source_primary_citation")), 0)
+  stale_raw <- filters_for("raw", custom = list(list(column = "reliability", value = "high")))
+  expect_length(filter_expressions(stale_raw, c("taxon_name")), 0)
+  kept <- filters_for("species", custom = list(list(column = "reliability", value = "high")))
+  expect_length(filter_expressions(kept, c("taxon_name", "reliability")), 1)
 })

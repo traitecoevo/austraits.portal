@@ -198,8 +198,11 @@ prepare_data_for_portal <- function(austraits, output_dir, means = NULL, release
 #'   (`austraits-<version>-observed-means-dictionary.csv`), and adds only the
 #'   columns the portal needs:
 #'   - `source_primary_key` and `source_primary_citation`: each contributing
-#'     dataset's own reference, `"; "`-joined, for the Citations tab and
-#'     downloads (the raw data cite datasets the same way);
+#'     dataset's own reference key and citation, `"; "`-joined in the order of
+#'     `dataset_id`, for the Citations tab and downloads. They are looked up by
+#'     `dataset_id` in the flattened data, where `join_primary_source()` put
+#'     them: the key is the `dataset_id` for traits.build 2.3 and later, but
+#'     not always before (Westoby_2014 cites Gleason_2012);
 #'   - `taxon_distribution`, from the database's taxa table, for the APC
 #'     distribution filter. A species formed by rolling up infraspecific
 #'     names, with no row of its own in the taxa table, has none;
@@ -212,26 +215,32 @@ prepare_data_for_portal <- function(austraits, output_dir, means = NULL, release
 #' @keywords internal
 #' @noRd
 prepare_species_means <- function(means, database, flattened) {
-  required <- c("taxon_name", "trait_name", "unit", "type", "value", "value_min",
-                "value_max", "value_mode", "value_count", "n_records", "dataset_id",
-                "genus", "family")
+  added <- c("source_primary_key", "source_primary_citation", "taxon_distribution", "row_id")
+  # every column the app requires (data_schema) that this function does not add
+  required <- setdiff(data_schema$species$required, added)
   missing <- setdiff(required, names(means))
   if (length(missing) > 0) {
     stop("The species means lack columns the portal needs: ", paste(missing, collapse = ", "),
          ". Are these the published observed means?", call. = FALSE)
   }
 
+  # Each dataset's reference key and citation, by dataset_id
   citations <- flattened |>
-    dplyr::distinct(source_primary_key, source_primary_citation) |>
-    dplyr::filter(!is.na(source_primary_key))
-  citations <- citations[!duplicated(citations$source_primary_key), ]
+    dplyr::distinct(dataset_id, source_primary_key, source_primary_citation)
+  citations <- citations[!duplicated(citations$dataset_id), ]
 
-  # One citation string per distinct dataset_id combination
+  # One key string and one citation string per distinct dataset_id combination;
+  # a dataset with no citation is left out rather than written as "NA"
   dataset_sets <- unique(means$dataset_id)
-  keys <- strsplit(dataset_sets, "; ", fixed = TRUE)
-  joined_citations <- vapply(keys, function(k) {
-    paste(citations$source_primary_citation[match(k, citations$source_primary_key)], collapse = "; ")
-  }, character(1))
+  ids <- strsplit(dataset_sets, "; ", fixed = TRUE)
+  join_present <- function(x, unique = FALSE) {
+    x <- x[!is.na(x)]
+    if (unique) x <- unique(x)
+    if (length(x)) paste(x, collapse = "; ") else NA_character_
+  }
+  # keys once each (two datasets can cite one key); citations one per dataset
+  joined_keys <- vapply(ids, function(k) join_present(citations$source_primary_key[match(k, citations$dataset_id)], unique = TRUE), character(1))
+  joined_citations <- vapply(ids, function(k) join_present(citations$source_primary_citation[match(k, citations$dataset_id)]), character(1))
 
   distribution <- database$taxa |>
     dplyr::select("taxon_name", "taxon_distribution") |>
@@ -242,7 +251,7 @@ prepare_species_means <- function(means, database, flattened) {
       # Hybrid formulas starting "(Genus species x ...)" get the genus
       # "(Genus" upstream (APCalign); strip the bracket (issue #113)
       genus = stringr::str_remove(genus, "^\\("),
-      source_primary_key = dataset_id,
+      source_primary_key = unname(joined_keys[match(dataset_id, dataset_sets)]),
       source_primary_citation = unname(joined_citations[match(dataset_id, dataset_sets)])
     ) |>
     dplyr::left_join(distribution, by = "taxon_name") |>

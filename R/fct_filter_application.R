@@ -156,8 +156,14 @@ filter_expressions <- function(parsed_filters, columns) {
 
   # 5. CUSTOM FILTERS
 
+  # Only the columns offered for this dataset: switching dataset re-runs the
+  # filters before the inputs drop a custom filter set for the other one, and
+  # a column can exist in both files but be offered for one only
+  # (source_primary_citation is in the species file, for citations)
+  allowed <- if (identical(parsed_filters$dataset_type, "species")) custom_filter_columns_species else custom_filter_columns
   for (custom_filter in parsed_filters$custom) {
     if (is.null(custom_filter)) next
+    if (!is.null(parsed_filters$dataset_type) && !custom_filter$column %in% allowed) next
     column <- custom_filter$column
     values <- custom_filter$value
 

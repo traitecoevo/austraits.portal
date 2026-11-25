@@ -22,12 +22,15 @@ groups <- utils::read.csv(path, colClasses = "character", na.strings = "NA")
 definitions <- database$definitions
 uri <- vapply(definitions, function(x) if (is.null(x$entity_URI)) NA_character_ else x$entity_URI, "")
 
-# Renamed: same URI, new name
-renamed <- !groups$trait %in% names(definitions) & groups$Entity %in% uri
+# Renamed: same URI, new name. Only a real URI that names exactly one trait in
+# the release, and only to a name the list does not already hold (two rows can
+# share a URI, and some carry the placeholder .../traits/NA)
+uri_ok <- uri[!is.na(uri) & !grepl("/NA$", uri) & !uri %in% uri[duplicated(uri)]]
+new_name <- names(uri_ok)[match(groups$Entity, uri_ok)]
+renamed <- !groups$trait %in% names(definitions) & !is.na(new_name) & !new_name %in% groups$trait
 for (i in which(renamed)) {
-  new <- names(uri)[match(groups$Entity[i], uri)]
-  message("renamed: ", groups$trait[i], " -> ", new)
-  groups$trait[i] <- new
+  message("renamed: ", groups$trait[i], " -> ", new_name[i])
+  groups$trait[i] <- new_name[i]
 }
 
 # Dropped: no longer defined

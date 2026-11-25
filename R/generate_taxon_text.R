@@ -19,15 +19,17 @@ generate_taxon_text <- function(taxon) {
     dplyr::collect()
 
   # The published means roll subspecies, varieties and forms up to their
-  # species; an infraspecific taxon shows its species' means
-  means_taxon <- species_means_name(taxon)
+  # species; an infraspecific taxon with no means of its own shows its
+  # species'. A taxon's own means come first: a hybrid formula such as
+  # "Acacia adoxa var. adoxa x Acacia spondylophylla" has its own row.
+  means_taxon <- taxon
   data_taxon_trait_means <- austraits_species_duckdb |>
-    dplyr::filter(taxon_name == !!means_taxon) |>
+    dplyr::filter(taxon_name == !!taxon) |>
     dplyr::collect()
-  if (nrow(data_taxon_trait_means) == 0 && means_taxon != taxon) {
-    means_taxon <- taxon
+  if (nrow(data_taxon_trait_means) == 0 && species_means_name(taxon) != taxon) {
+    means_taxon <- species_means_name(taxon)
     data_taxon_trait_means <- austraits_species_duckdb |>
-      dplyr::filter(taxon_name == !!taxon) |>
+      dplyr::filter(taxon_name == !!means_taxon) |>
       dplyr::collect()
   }
 
@@ -77,8 +79,8 @@ generate_taxon_text <- function(taxon) {
         sprintf("- [%s](%s) (categorical): %s  [sources: %s]", trait_name, Entity, value_count, dataset_id),
         sprintf("- [%s](%s) (numerical, %s mean of %s records): %s %s (%s-%s %s)  [sources: %s]",
           trait_name, Entity, method, n_records,
-          signif(value, 3), dplyr::coalesce(unit, ""),
-          signif(value_min, 3), signif(value_max, 3), dplyr::coalesce(unit, ""),
+          format_sig3(value), dplyr::coalesce(unit, ""),
+          format_sig3(value_min), format_sig3(value_max), dplyr::coalesce(unit, ""),
           dataset_id)
       )) |>
     dplyr::group_by(trait_group_for_portal, core_trait) |>
@@ -332,9 +334,25 @@ format_taxon_synonyms <- function(taxon, synonyms = taxon_synonyms) {
 #' Name under which a taxon's species means are published
 #'
 #' The published means roll subspecies, varieties and forms up to their
-#' species; strip the infraspecific part of the name.
+#' species; strip the infraspecific part of the name. A hybrid formula
+#' (" x ") is kept whole: its parents are not its species.
 #' @param taxon Taxon name.
 #' @noRd
 species_means_name <- function(taxon) {
-  sub(" (subsp\\.|var\\.|f\\.) .*$", "", taxon)
+  ifelse(grepl(" x ", taxon, fixed = TRUE), taxon, sub(" (subsp\\.|var\\.|f\\.) .*$", "", taxon))
+}
+
+#' Format numbers for display: 3 significant figures, whole numbers from 100 up
+#'
+#' The same rule as the data table (`mod_data_table.R`) and the browser portal,
+#' so a mean reads the same everywhere. Fixed decimals would show small means,
+#' such as seed masses, as 0.
+#' @param x Numeric vector.
+#' @noRd
+format_sig3 <- function(x) {
+  vapply(x, function(v) {
+    if (is.na(v)) return("")
+    if (abs(v) >= 100) return(sprintf("%.0f", v))
+    format(signif(v, 3), digits = 3, scientific = FALSE, trim = TRUE, drop0trailing = TRUE)
+  }, character(1), USE.NAMES = FALSE)
 }
