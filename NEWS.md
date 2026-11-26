@@ -9,6 +9,7 @@
 * Small species means no longer show as 0: the table rounds them to 3 significant figures instead of 2 decimals.
 * The trait groups follow 8.0.0 (6 renamed, 32 dropped, 110 added), via the new `dev/update_trait_groups.R`. Four core traits no longer exist in 8.0.0: `leaf_hairs_juvenile_leaves`, `leaf_axil_angle`, `stem_density` and `pollination_system`.
 * The release version and DOI come from the database and Zenodo (`release.rds`), replacing the hand-copied `austraits.json`. traits.use 1.0.1 or later is required.
+* The species table leaves out names that APCalign could not align to the APC (an empty `taxon_rank`, so no family or genus): 3,913 of the 767,333 published means rows in 8.0.0, for example `"Tiny pink herb"`. `recreate.R` drops the same rows. The table now has 763,420 rows.
 
 ## Trait plots from traits.use (November 2026, traits.use#21)
 
