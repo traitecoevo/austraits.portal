@@ -121,7 +121,9 @@ tags$head(
     title = tags$span(
       class = "bslib-page-title navbar-brand",
       tags$img(src = "www/austraits_hex.png", alt = "AusTraits", height = "30"),
-      "AusTraits Data Portal"
+      "AusTraits Data Portal",
+      # The release the portal serves, linked to its DOI
+      portal_version_badge(release)
     ),
 
     # Create a sidebar for the app
@@ -165,5 +167,22 @@ tags$head(
             target)
       )
     )
+  )
+}
+#' Badge naming the AusTraits release the portal serves
+#'
+#' @param release Release record (see `portal_release_info()`), or NULL.
+#' @return A tag linking to the release's DOI, or NULL.
+#' @noRd
+portal_version_badge <- function(release) {
+  if (is.null(release)) return(NULL)
+  label <- sprintf("data: AusTraits %s", release$version)
+  doi <- if (is.na(release$doi)) release$concept_doi else release$doi
+  tags$a(
+    class = "portal-data-version",
+    href = paste0("https://doi.org/", doi), target = "_blank",
+    title = sprintf("AusTraits %s, doi:%s", release$version, doi),
+    style = "font-size: 0.6em; margin-left: 0.8em; color: inherit; opacity: 0.8; text-decoration: none; border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; vertical-align: middle;",
+    label
   )
 }

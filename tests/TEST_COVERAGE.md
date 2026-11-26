@@ -24,10 +24,10 @@ This document summarizes the test suite for the AusTraits Portal.
    - Multiple link handling
    - Edge cases (empty strings, no links)
 
-3. **test-species-means.R** - Species averaging calculations
-   - Numerical trait averaging
-   - Categorical trait summaries
-   - Mixed location and flora data handling
+3. **test-recreate-script.R** - The R script in each download
+   - Runs the script against the database behind the loaded data and checks it selects the portal's rows (raw and species, taxon, trait, feature, APC, bounding-box and custom filters)
+   - The script pins the release DOI and the austraits package tag
+   - Download names carry the release version
    - Statistical calculations (mean, min, max, median)
 
 ### Module Tests
@@ -46,7 +46,7 @@ This document summarizes the test suite for the AusTraits Portal.
    - Numeric traits by family, with `ggplotly()` tooltips
    - Bin and range values left out
    - Negative values kept inside the axis
-   - Species averages plotted from `value_mean`
+   - Species means plotted from `value`, or `value_mode` for categorical traits
    - Single and identical values
    - Categorical traits
 
@@ -138,7 +138,7 @@ This document summarizes the test suite for the AusTraits Portal.
 ### Unit Tests (70%)
 - Filter parsing functions
 - Utility functions
-- Species mean calculations
+- Species means preparation (`prepare_species_means()`, `portal_release_info()`)
 - Text generation
 - Plotting functions
 - Telemetry functions

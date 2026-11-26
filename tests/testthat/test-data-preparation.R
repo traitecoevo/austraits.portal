@@ -11,21 +11,23 @@ test_that("prepare_data_for_portal creates required files", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE), add = TRUE)
 
+  # A fixed release record, so the test needs no internet
+  release <- list(version = "7.0.0.9000", doi = NA_character_, concept_doi = "10.5281/zenodo.3568417",
+                  publication_date = NA_character_, austraits_package = NA_character_)
   expect_no_error({
     traits.use::austraits_lite |>
-      prepare_data_for_portal(temp_dir, overwrite = TRUE)
+      prepare_data_for_portal(temp_dir, release = release, overwrite = TRUE)
   })
 
   # Expected output files
   files <- c(
     "austraits-data.parquet",
     "austraits-display.parquet",
-    "austraits-species-averages-display.parquet",
     "austraits-species-averages.parquet",
     "definitions.rds",
     "dropdown_cache.rds",
     "flora_links.rds",
-    "metadata.rds",
+    "release.rds",
     "sources.bib",
     "sources.rds",
     "trait_groups.rds"
@@ -40,6 +42,79 @@ test_that("prepare_data_for_portal creates required files", {
   cache <- readRDS(file.path(temp_dir, "dropdown_cache.rds"))
   expect_gt(length(cache$all_trait_groupings), 0)
   expect_gt(length(cache$all_keywords), 0)
+
+  # The species table is the means summarise_trait_means() builds (the
+  # function behind the published file), with the portal's columns added
+  means <- traits.use::summarise_trait_means(traits.use::austraits_lite)
+  species <- arrow::read_parquet(file.path(temp_dir, "austraits-species-averages.parquet"))
+  expect_equal(nrow(species), nrow(means))
+  expect_true(all(names(means) %in% names(species)))
+  expect_equal(readRDS(file.path(temp_dir, "release.rds")), release)
+})
+
+test_that("prepare_species_means() keeps the published means and adds the portal's columns", {
+  database <- traits.use::austraits_lite
+  flattened <- database |> join_primary_source() |> traits.use::flatten_database()
+  means <- traits.use::summarise_trait_means(database)
+  out <- prepare_species_means(means, database, flattened)
+
+  expect_equal(nrow(out), nrow(means))
+  expect_equal(out$value, means$value)
+  expect_equal(out$taxon_name, means$taxon_name)
+  expect_true(all(c("source_primary_key", "source_primary_citation", "taxon_distribution", "row_id") %in% names(out)))
+  expect_equal(out$source_primary_key, means$dataset_id)
+  expect_equal(out$row_id, seq_len(nrow(means)))
+  # Each row cites its datasets' own references, in the order of dataset_id
+  expect_false(anyNA(out$source_primary_citation))
+  single <- out[!grepl("; ", out$dataset_id), ][1, ]
+  expect_equal(single$source_primary_citation,
+               unique(flattened$source_primary_citation[flattened$source_primary_key == single$dataset_id]))
+  pair <- out[lengths(strsplit(out$dataset_id, "; ")) == 2, ][1, ]
+  ids <- strsplit(pair$dataset_id, "; ")[[1]]
+  expect_equal(pair$source_primary_citation, paste(vapply(ids, function(id)
+    unique(flattened$source_primary_citation[flattened$source_primary_key == id]), ""), collapse = "; "))
+  # The portal reads every column it requires
+  expect_true(all(data_schema$species$required %in% names(out)))
+  # No dataset is cited as the text "NA"
+  expect_false(any(grepl("(^|; )NA(;|$)", out$source_primary_citation)))
+  expect_error(prepare_species_means(means[, c("taxon_name", "trait_name")], database, flattened), "lack columns")
+})
+
+test_that("species means cite each dataset by its own reference key in older builds", {
+  # Before traits.build 2.3 the key could differ from the dataset_id:
+  # Westoby_2014 cites Gleason_2012. The 5.0.0 lite set is such a build.
+  database <- traits.use:::austraits_5.0.0_lite
+  flattened <- database |> join_primary_source() |> traits.use::flatten_database()
+  skip_if_not("Westoby_2014" %in% flattened$dataset_id, "Westoby_2014 not in this lite set")
+  key <- unique(flattened$source_primary_key[flattened$dataset_id == "Westoby_2014"])
+  means <- traits.use::summarise_trait_means(database)
+  out <- prepare_species_means(means, database, flattened)
+  only <- out[out$dataset_id == "Westoby_2014", ]
+  skip_if(nrow(only) == 0, "No single-dataset Westoby_2014 means")
+  expect_true(all(only$source_primary_key == key))
+  expect_false(anyNA(only$source_primary_citation))
+  expect_false(any(grepl("(^|; )NA(;|$)", out$source_primary_citation)))
+})
+
+test_that("portal_release_info() finds the release DOI from the version", {
+  database <- traits.use::austraits_lite
+  database$build_info$version <- "8.0.0"
+  versions <- data.frame(version = c("8.0.0", "v7.0.0"),
+                         doi = c("10.5281/zenodo.24543275", "10.5281/zenodo.15718081"),
+                         publication_date = as.Date(c("2026-11-26", "2025-06-20")))
+  release <- portal_release_info(database, versions)
+  expect_equal(release$version, "8.0.0")
+  expect_equal(release$doi, "10.5281/zenodo.24543275")
+  expect_equal(release$publication_date, "2026-11-26")
+  expect_equal(release$concept_doi, database$metadata$doi)
+
+  # Versions on Zenodo carry a leading "v" up to 7.0.0
+  database$build_info$version <- "7.0.0"
+  expect_equal(portal_release_info(database, versions)$doi, "10.5281/zenodo.15718081")
+
+  # A development build has no release DOI
+  database$build_info$version <- "8.0.0.9000"
+  expect_true(is.na(portal_release_info(database, versions)$doi))
 })
 
 # austraits_lite in either methods-table format, whichever form traits.use

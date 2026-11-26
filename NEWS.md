@@ -1,5 +1,15 @@
 # austraits.portal (development version)
 
+## AusTraits 8.0.0 and its published species means (November 2026, #140)
+
+* The portal serves AusTraits 8.0.0. Species averages are the observed means published with the release (`austraits-8.0.0-observed-means`), not means the portal computes: `estimate_species_trait_means()` is gone. The table and downloads carry the published columns (`value`, `value_mode`, `value_count`, `n_records`, `n_datasets`, `method`, `reliability`, ...), described in the release's observed-means dictionary.
+* Species means cover all 628 traits with data, not only the core traits. Taxon View lists the other traits in a second section, and an infraspecific taxon shows its species' means (the published means roll subspecies, varieties and forms up to the species).
+* The app names the AusTraits version it serves (a badge linking to the release DOI), and so does every download: the zip and CSV names (`austraits-8.0.0-data`, `austraits-8.0.0-species-means`) and the usage text.
+* Each download includes `recreate.R`, which loads the same release by its DOI with the austraits package (pinned to a tag) and applies the same filters, printed from the code the portal runs.
+* Small species means no longer show as 0: the table rounds them to 3 significant figures instead of 2 decimals.
+* The trait groups follow 8.0.0 (6 renamed, 32 dropped, 110 added), via the new `dev/update_trait_groups.R`. Four core traits no longer exist in 8.0.0: `leaf_hairs_juvenile_leaves`, `leaf_axil_angle`, `stem_density` and `pollination_system`.
+* The release version and DOI come from the database and Zenodo (`release.rds`), replacing the hand-copied `austraits.json`. traits.use 1.0.1 or later is required.
+
 ## Trait plots from traits.use (November 2026, traits.use#21)
 
 * Trait View draws its plot with `traits.use::plot_trait_distribution()`, and the portal's own copies of the plot functions are gone. traits.use (0.1.1 or later) is now a dependency, installed from GitHub.

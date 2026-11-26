@@ -1,13 +1,22 @@
 #' Prepare AusTraits data for the portal
 #'
-#' @description Flattens the AusTraits database, saves definitions and sources, 
-#'   and writes parquet files for data and display
+#' @description Flattens the AusTraits database, saves definitions and sources,
+#'   and writes parquet files for data and display. The species table is the
+#'   observed species means published with the release, with only the columns
+#'   the portal needs to cite and filter it added.
 #' @param austraits The AusTraits database object
 #' @param output_dir Directory to write output files
+#' @param means The release's published observed means, as returned by
+#'   `austraits::load_austraits(version = , means = TRUE)`. If NULL, they are
+#'   computed from `austraits` with `traits.use::summarise_trait_means()`, the
+#'   function that builds the published file (used for the lite set).
+#' @param release The release record from [portal_release_info()]; looked up
+#'   on Zenodo from the database's version if NULL.
 #' @param overwrite Logical; overwrite existing files if TRUE
 #' @keywords internal
 #' @noRd
-prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
+prepare_data_for_portal <- function(austraits, output_dir, means = NULL, release = NULL,
+                                    overwrite = FALSE) {
   # Create output directory if it doesn't exist
   if (!dir.exists(output_dir))
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -21,6 +30,10 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
     message("✓ Data files already exist (use overwrite=TRUE to regenerate)")
     return()
   }
+
+  # Which release this is, and its DOI, for the app text and downloads
+  if (is.null(release)) release <- portal_release_info(austraits)
+  message(sprintf("Preparing AusTraits %s (doi: %s)", release$version, release$doi))
 
   # Flatten the database
   message("Flattening AusTraits database...")
@@ -41,25 +54,21 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
     )
   message("✓ Database flattened")
 
-  # create species means dataset
-  # list of traits to take means for - core traits only
-  message("Computing species averages for core traits...")
+  # Species means: the observed means published with the release
+  if (is.null(means)) {
+    message("No published means given; computing them with traits.use::summarise_trait_means()...")
+    means <- traits.use::summarise_trait_means(austraits)
+  }
+  austraits_species_averages <- prepare_species_means(means, austraits, austraits_full_flatten)
+  message(sprintf("✓ Species means: %s rows, %s traits",
+                  format(nrow(austraits_species_averages), big.mark = ","),
+                  dplyr::n_distinct(austraits_species_averages$trait_name)))
+
   trait_groups <- readr::read_csv(
     system.file("extdata/austraits/trait_groups_for_portal.csv", package = "austraits.portal"),
     show_col_types = FALSE,
     col_types = readr::cols(.default = readr::col_character())
   )
-
-  core_traits <- 
-    trait_groups |>
-    dplyr::filter(!is.na(core_trait)) |>
-    dplyr::pull(trait)
-
-  austraits_species_averages <-
-    austraits_full_flatten |>
-    dplyr::filter(trait_name %in% core_traits) |>    
-    estimate_species_trait_means()
-  message("✓ Species averages computed")
 
   # Save the flattened database
   message("Writing parquet files...")
@@ -71,15 +80,9 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
     format_database_for_display() |>
     arrow::write_parquet(filename_display)
   
-  # Save the species averages dataset
+  # Save the species means
   austraits_species_averages |>
     arrow::write_parquet(file.path(output_dir, "austraits-species-averages.parquet"))
-  
-  # Save the display version of the species averages dataset
-  austraits_species_averages_display <- austraits_species_averages
-    
-  austraits_species_averages_display |>
-    arrow::write_parquet(file.path(output_dir, "austraits-species-averages-display.parquet")) 
   message("✓ Parquet files saved") 
   
   # Saving definitions
@@ -102,12 +105,9 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   saveRDS(trait_groups, file.path(output_dir, "trait_groups.rds"))
   message("✓ Trait groups saved")
   
-  # Save metadata as RDS (faster than JSON)
-  message("Saving metadata...")
-  
-  metatdata <- jsonlite::read_json(system.file("extdata/austraits/austraits.json", package = "austraits.portal"))
-  saveRDS(metatdata, file.path(output_dir, "metadata.rds"))
-  message("✓ Metadata saved")
+  # The release record: version and DOIs shown in the app and in downloads
+  saveRDS(release, file.path(output_dir, "release.rds"))
+  message("✓ Release record saved")
   
   # Combine and save state flora links as single RDS
   message("Consolidating flora links...")
@@ -176,7 +176,7 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
   
   # Precompute species dataset IDs (split semicolon-separated values)
   message("Computing species dataset IDs...")
-  temp_species_ids <- austraits_species_averages_display |> 
+  temp_species_ids <- austraits_species_averages |> 
     dplyr::select(dataset_id) |> 
     dplyr::distinct() |> 
     dplyr::collect() |> 
@@ -189,6 +189,121 @@ prepare_data_for_portal <- function(austraits, output_dir, overwrite = FALSE) {
 
   # APC synonyms for Taxon View (needs APCalign)
   prepare_synonyms_for_portal(output_dir)
+}
+
+#' Prepare the published species means for the portal
+#'
+#' @description Keeps every column of the published observed means, so the
+#'   portal's table and downloads match the release's dictionary
+#'   (`austraits-<version>-observed-means-dictionary.csv`), and adds only the
+#'   columns the portal needs:
+#'   - `source_primary_key` and `source_primary_citation`: each contributing
+#'     dataset's own reference key and citation, `"; "`-joined in the order of
+#'     `dataset_id`, for the Citations tab and downloads. They are looked up by
+#'     `dataset_id` in the flattened data, where `join_primary_source()` put
+#'     them: the key is the `dataset_id` for traits.build 2.3 and later, but
+#'     not always before (Westoby_2014 cites Gleason_2012);
+#'   - `taxon_distribution`, from the database's taxa table, for the APC
+#'     distribution filter. A species formed by rolling up infraspecific
+#'     names, with no row of its own in the taxa table, has none;
+#'   - `row_id`, which pages and downloads rely on.
+#' @param means Published observed means (one row per taxon and trait).
+#' @param database The traits.build database the means were built from.
+#' @param flattened The flattened database, as written to
+#'   `austraits-data.parquet` (for the citations).
+#' @return The means with the added columns.
+#' @keywords internal
+#' @noRd
+prepare_species_means <- function(means, database, flattened) {
+  added <- c("source_primary_key", "source_primary_citation", "taxon_distribution", "row_id")
+  # every column the app requires (data_schema) that this function does not add
+  required <- setdiff(data_schema$species$required, added)
+  missing <- setdiff(required, names(means))
+  if (length(missing) > 0) {
+    stop("The species means lack columns the portal needs: ", paste(missing, collapse = ", "),
+         ". Are these the published observed means?", call. = FALSE)
+  }
+
+  # Each dataset's reference key and citation, by dataset_id
+  citations <- flattened |>
+    dplyr::distinct(dataset_id, source_primary_key, source_primary_citation)
+  citations <- citations[!duplicated(citations$dataset_id), ]
+
+  # One key string and one citation string per distinct dataset_id combination;
+  # a dataset with no citation is left out rather than written as "NA"
+  dataset_sets <- unique(means$dataset_id)
+  ids <- strsplit(dataset_sets, "; ", fixed = TRUE)
+  join_present <- function(x, unique = FALSE) {
+    x <- x[!is.na(x)]
+    if (unique) x <- unique(x)
+    if (length(x)) paste(x, collapse = "; ") else NA_character_
+  }
+  # keys once each (two datasets can cite one key); citations one per dataset
+  joined_keys <- vapply(ids, function(k) join_present(citations$source_primary_key[match(k, citations$dataset_id)], unique = TRUE), character(1))
+  joined_citations <- vapply(ids, function(k) join_present(citations$source_primary_citation[match(k, citations$dataset_id)]), character(1))
+
+  distribution <- database$taxa |>
+    dplyr::select("taxon_name", "taxon_distribution") |>
+    dplyr::distinct(taxon_name, .keep_all = TRUE)
+
+  out <- means |>
+    dplyr::mutate(
+      # Hybrid formulas starting "(Genus species x ...)" get the genus
+      # "(Genus" upstream (APCalign); strip the bracket (issue #113)
+      genus = stringr::str_remove(genus, "^\\("),
+      source_primary_key = unname(joined_keys[match(dataset_id, dataset_sets)]),
+      source_primary_citation = unname(joined_citations[match(dataset_id, dataset_sets)])
+    ) |>
+    dplyr::left_join(distribution, by = "taxon_name") |>
+    dplyr::mutate(row_id = dplyr::row_number())
+
+  stopifnot(nrow(out) == nrow(means))
+  n_no_distribution <- sum(is.na(out$taxon_distribution))
+  if (n_no_distribution > 0) {
+    message(sprintf("  %s of %s species-mean rows have no APC distribution (taxa not in the taxa table, or none recorded)",
+                    format(n_no_distribution, big.mark = ","), format(nrow(out), big.mark = ",")))
+  }
+  out
+}
+
+#' The release record for a database
+#'
+#' @description The version and DOIs the portal shows in its text and writes
+#'   into every download. The version comes from the database itself
+#'   (`build_info$version`); its DOI from the Zenodo versions of the concept
+#'   record. A version with no Zenodo record (a development build such as
+#'   the lite set) gets `doi = NA`.
+#' @param database A traits.build database.
+#' @param versions A table of versions (`version`, `doi`, `publication_date`),
+#'   as returned by `traits.use::list_versions()`; fetched if NULL.
+#' @return A list with `version`, `doi`, `concept_doi`, `publication_date` and
+#'   `austraits_package` (the austraits package tag used to prepare the data,
+#'   or NA).
+#' @keywords internal
+#' @noRd
+portal_release_info <- function(database, versions = NULL) {
+  version <- sub("^v", "", database$build_info$version)
+  concept_doi <- database$metadata$doi
+  if (is.null(versions)) {
+    versions <- tryCatch(traits.use::list_versions(concept_doi), error = function(e) {
+      warning("Could not list the Zenodo versions (", conditionMessage(e), "); the release DOI is left empty",
+              call. = FALSE)
+      NULL
+    })
+  }
+  match <- if (is.null(versions)) integer() else which(sub("^v", "", versions$version) == version)
+  austraits_package <- if (requireNamespace("austraits", quietly = TRUE)) {
+    paste0("v", utils::packageVersion("austraits"))
+  } else {
+    NA_character_
+  }
+  list(
+    version = version,
+    doi = if (length(match) == 1) versions$doi[match] else NA_character_,
+    concept_doi = concept_doi,
+    publication_date = if (length(match) == 1) as.character(versions$publication_date[match]) else NA_character_,
+    austraits_package = austraits_package
+  )
 }
 
 #' Join each dataset's own reference to the traits table

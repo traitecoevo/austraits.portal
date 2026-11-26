@@ -70,21 +70,26 @@ traits.use:::austraits_5.0.0_lite |>
   prepare_data_for_portal("inst/extdata/austraits/austraits-5.0.0-lite", overwrite = TRUE)
 ```
 
-To prepare the full version of the data, run the following code to prepare it for use in the portal. It downloads the release with the `austraits` package, which the portal itself no longer needs: install it with `remotes::install_github("traitecoevo/austraits")`.
+To prepare the full version of a release, load the release and the observed species means published with it, then prepare them. This needs the `austraits` package, which the portal itself does not use: install it with `remotes::install_github("traitecoevo/austraits")` (4.0.1 or later). Set `AUSTRAITS_PORTAL_NO_DATA=true` first, so that loading the package does not try to load portal data that does not exist yet.
 
 ```{r, eval = FALSE}
-austraits_7.0.0 <-
-  austraits::load_austraits(version = "7.0.0", path = "inst/extdata/austraits", update = FALSE)
+Sys.setenv(AUSTRAITS_PORTAL_NO_DATA = "true")
+pkgload::load_all()
 
-# A small fix for Austraits v7.0.0 (to be deleted in future versions) - some datasets have missing source_primary_key values, which causes problems for the portal. This code fills in missing values for the Bryant_2021 dataset, which is the only one affected.
-austraits_7.0.0$methods <- austraits_7.0.0$methods |>
-  mutate(
-    source_primary_key = ifelse(grepl("Bryant_2021", dataset_id), dataset_id, source_primary_key)
-  )
+austraits_8.0.0 <- austraits::load_austraits(version = "8.0.0", path = "inst/extdata/austraits")
+means_8.0.0 <- austraits::load_austraits(version = "8.0.0", path = "inst/extdata/austraits", means = TRUE)
 
-austraits_7.0.0 |>
-  prepare_data_for_portal("inst/extdata/austraits/austraits-7.0.0-full", overwrite = TRUE)
+prepare_data_for_portal(austraits_8.0.0, "inst/extdata/austraits/austraits-8.0.0-full",
+                        means = means_8.0.0, overwrite = TRUE)
 ```
+
+The species table is the published means file, with only the columns the portal needs to cite and filter it added (`prepare_species_means()`). The portal does not compute means itself. The release version and its DOI are looked up on Zenodo and saved in `release.rds`; the app shows them, and every download names them.
+
+At each release:
+
+- bring the trait groups up to date with `Rscript dev/update_trait_groups.R inst/extdata/austraits/austraits-<version>.rds <path to APD checkout>`, which renames, drops and adds traits to match the release and prints each change;
+- change the folder name in `portal_data_path()` (`R/data_loading.R`);
+- before merging, copy the new `austraits-<version>-full/` folder to the server, and update traits.use there if DESCRIPTION asks for a newer one. A push to `master` deploys, and the deploy neither copies data nor upgrades installed packages; without the folder the app falls back to the lite set.
 
 ## Deploying to shinyapps.io (deprecated)
 
@@ -194,7 +199,7 @@ The AusTraits Data Portal is built as a modular Shiny application inspired by th
 The `prepare_data_for_portal()` function (in `fct_prepare_data.R`) processes the raw AusTraits database for portal use:
 
 - Flattens nested database structure
-- Computes species-level averages for core traits
+- Takes the species-level means from the release's published observed means
 - Exports to Parquet format (display and full versions)
 - Generates cached metadata (definitions, sources, trait groups, dropdown values)
 - Pre-processes flora links and state/territory distributions

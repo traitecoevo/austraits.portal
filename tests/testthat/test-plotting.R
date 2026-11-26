@@ -51,15 +51,19 @@ test_that("negative numeric traits keep every value inside the axis", {
   expect_gte(x_range[2], -9.9)
 })
 
-test_that("species averages plot from value_mean", {
-  # In the species-averages data, value_type is NA for numeric traits
+test_that("species means plot from value, or value_mode for categorical traits", {
+  # The published means have no value_type; value is the numeric mean
   avg <- numeric_rows |>
-    dplyr::select(-value) |>
-    dplyr::mutate(value_mean = c(80, 95, 120, 101, 150, 210), value_type = NA_character_)
-  data <- avg |> dplyr::mutate(value = value_mean)
+    dplyr::select(-value, -value_type) |>
+    dplyr::mutate(value = c(80, 95, 120, 101, 150, 210), type = "numerical", value_mode = NA_character_)
+  data <- species_means_for_plot(avg)
+  expect_equal(unique(data$value_type), "mean")
   p <- portal_plot(data)
   expect_s3_class(p, "ggplot")
   expect_equal(sort(p$data$value), c(80, 95, 101, 120, 150, 210))
+
+  categorical <- data.frame(value = NA_real_, type = "categorical", value_mode = c("tree", "shrub"))
+  expect_equal(species_means_for_plot(categorical)$value, c("tree", "shrub"))
 })
 
 test_that("a single value or identical values still plot", {

@@ -18,7 +18,9 @@ data
 *.html
 *.out
 *.swp
-inst/extdata/austraits/austraits-7.0.0-full/*
+inst/extdata/austraits/austraits-*-full/*
+# Version lists cached by austraits::load_austraits()
+inst/extdata/austraits/*.json
 inst/telemetry/telemetry.db
 config.yml
 restart.txt

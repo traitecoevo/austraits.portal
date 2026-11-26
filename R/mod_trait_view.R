@@ -86,15 +86,10 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
       if (is_species_avg()) {
         # Add ALL missing columns for species dataset
         data_with_location <- full_data |>
+          species_means_for_plot() |>
           dplyr::mutate(
             `latitude (deg)` = NA_real_,
-            `longitude (deg)` = NA_real_,
-            # Add value column from mean_value (for plot compatibility)
-            value = if ("mean_value" %in% names(full_data)) mean_value else NA_real_,
-            # Add value_type if missing
-            value_type = if (!"value_type" %in% names(full_data)) "mean" else value_type,
-            # Add unit if missing
-            unit = if (!"unit" %in% names(full_data)) NA_character_ else unit
+            `longitude (deg)` = NA_real_
           )
         
         # Generate full profile (works now with dummy location)
@@ -118,7 +113,7 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
           ),
           tags$p(
             style = "margin: 8px 0 0 0; font-size: 0.9em; color: #424242;",
-            "Showing aggregated species-level means. Location data not available."
+            sprintf("Showing the observed species means published with AusTraits %s. Location data not available.", release$version)
           ),
           tags$p(
             style = "margin: 8px 0 0 0; font-size: 0.85em; color: #616161; font-style: italic;",
@@ -169,7 +164,7 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
       if (is_species_avg()) {
         tagList(
           p("The plot below shows the distribution of species-level mean values for this trait."),
-          p("Each point represents the mean trait value for a species, calculated from all available observations for that species.")
+          p(sprintf("Each point is a species' observed mean, published with AusTraits %s: for a numeric trait, a geometric mean over the dataset \u00d7 location groups of its records (arithmetic for a trait on a signed scale); for a categorical trait, the most frequent value.", release$version))
         )
       } else {
         tagList(
@@ -183,10 +178,9 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
       data <- trait_data()
       req(data)
       
-      # For species averages, use value_mean instead of value
+      # Species means: plot the mean, or the most frequent value
       if (is_species_avg()) {
-        data <- data |>
-          dplyr::mutate(value = value_mean)
+        data <- species_means_for_plot(data)
       }
       
       # Calculate dynamic height based on number of families
@@ -235,3 +229,18 @@ mod_trait_view_server <- function(id, filtered_data, filters, main_tabs){
     
 ## To be copied in the server
 # mod_trait_view_server("trait_view_1")
+
+#' Shape species means for the trait plots
+#'
+#' The plots read `value` and `value_type`. A numeric trait's `value` is
+#' already its observed mean; a categorical trait's is its most frequent
+#' value (`value_mode`).
+#' @param data Collected species-means rows for one trait.
+#' @noRd
+species_means_for_plot <- function(data) {
+  if (nrow(data) > 0 && all(data$type == "categorical")) {
+    data$value <- data$value_mode
+  }
+  data$value_type <- "mean"
+  data
+}

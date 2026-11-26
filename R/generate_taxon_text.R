@@ -18,14 +18,19 @@ generate_taxon_text <- function(taxon) {
     dplyr::filter(taxon_name == !!taxon) |>
     dplyr::collect()
 
+  # The published means roll subspecies, varieties and forms up to their
+  # species; an infraspecific taxon with no means of its own shows its
+  # species'. A taxon's own means come first: a hybrid formula such as
+  # "Acacia adoxa var. adoxa x Acacia spondylophylla" has its own row.
+  means_taxon <- taxon
   data_taxon_trait_means <- austraits_species_duckdb |>
     dplyr::filter(taxon_name == !!taxon) |>
     dplyr::collect()
-
-  # Older data builds lack the categorical value summary; fall back to the
-  # most common value rather than failing (load_portal_data() warns)
-  if (!"value_range" %in% names(data_taxon_trait_means)) {
-    data_taxon_trait_means$value_range <- data_taxon_trait_means$value_mean
+  if (nrow(data_taxon_trait_means) == 0 && species_means_name(taxon) != taxon) {
+    means_taxon <- species_means_name(taxon)
+    data_taxon_trait_means <- austraits_species_duckdb |>
+      dplyr::filter(taxon_name == !!means_taxon) |>
+      dplyr::collect()
   }
 
   taxon_info <- data_taxon |>
@@ -52,34 +57,30 @@ generate_taxon_text <- function(taxon) {
   # Generate links to other portals
   portal_links <- generate_taxon_portal_links(taxon_info)
 
-  # Load trait links and merge with trait means
-  trait_info_all <- 
-    trait_groups |>
+  # Every trait with a mean for the taxon, grouped as in trait_groups; core
+  # traits first, then the others
+  groups <- trait_groups |>
     dplyr::rename(trait_name = trait) |>
-    dplyr::mutate(core_trait = ifelse(!is.na(core_trait) & core_trait == "core_trait", "core", "other")) |>
-    dplyr::left_join(data_taxon_trait_means, by = "trait_name") |>
+    dplyr::select("trait_name", "Entity", "trait_group_for_portal", "core_trait")
+  trait_info_have_data <-
+    data_taxon_trait_means |>
+    dplyr::left_join(groups, by = "trait_name") |>
     dplyr::mutate(
-      data_available = !is.na(type),
-      # Add units from trait_definitions
-      units = sapply(trait_name, function(t) {
-        def <- trait_definitions[[t]]
-        if (!is.null(def) && !is.null(def$units)) def$units else ""
-      })
-    )
-
-  trait_info_na <- trait_info_all |> dplyr::filter(!data_available)
-  
-  # Generate the trait information for display, for those with data
-  trait_info_have_data <- 
-    trait_info_all |> 
-    dplyr::filter(data_available) |> 
-    dplyr::mutate(text = 
-      ifelse(type == "categorical", 
-        sprintf("- [%s](%s) (categorical): %s  [sources: %s]", trait_name, Entity, value_range, dataset_id),
-        sprintf("- [%s](%s) (numerical): %s %s (%s-%s %s)  [sources: %s]", 
-          trait_name, Entity, 
-          round(as.numeric(value_mean), 2), units,
-          round(as.numeric(value_min), 2), round(as.numeric(value_max), 2), units,
+      core_trait = ifelse(!is.na(core_trait) & core_trait == "core_trait", "core", "other"),
+      trait_group_for_portal = dplyr::coalesce(trait_group_for_portal, "other traits"),
+      # Traits missing from trait_groups link to their definition's URI
+      Entity = dplyr::coalesce(Entity, vapply(trait_name, function(t) {
+        uri <- trait_definitions[[t]]$entity_URI
+        if (is.null(uri)) NA_character_ else uri
+      }, character(1)))
+    ) |>
+    dplyr::mutate(text =
+      ifelse(type == "categorical",
+        sprintf("- [%s](%s) (categorical): %s  [sources: %s]", trait_name, Entity, value_count, dataset_id),
+        sprintf("- [%s](%s) (numerical, %s mean of %s records): %s %s (%s-%s %s)  [sources: %s]",
+          trait_name, Entity, method, n_records,
+          format_sig3(value), dplyr::coalesce(unit, ""),
+          format_sig3(value_min), format_sig3(value_max), dplyr::coalesce(unit, ""),
           dataset_id)
       )) |>
     dplyr::group_by(trait_group_for_portal, core_trait) |>
@@ -130,7 +131,9 @@ generate_taxon_text <- function(taxon) {
 
 **Traits by category** (click to expand):<br>
 
-- For categorical traits, the number of records for each value is shown. For numerical traits, the mean and range are shown.<br>
+- Species-level observed means from AusTraits %s. For categorical traits, the number of records for each value is shown. For numerical traits, the mean and range are shown.%s<br>
+
+%s
 
 %s
 
@@ -148,7 +151,12 @@ generate_taxon_text <- function(taxon) {
     dplyr::n_distinct(data_taxon$trait_name),
     nrow(data_taxon),
     dplyr::n_distinct(data_taxon$dataset_id), 
-    trait_info_have_data$core$text2 |> paste(collapse = "\n\n")
+    release$version,
+    if (means_taxon != taxon) sprintf(" Means are for the species *%s*, which includes this taxon's records.", means_taxon) else "",
+    trait_info_have_data$core$text2 |> paste(collapse = "\n\n"),
+    if (length(trait_info_have_data$other$text2) > 0) {
+      paste0("**Other traits** (click to expand):<br>\n\n", paste(trait_info_have_data$other$text2, collapse = "\n\n"))
+    } else ""
     )
 
   sources <- 
@@ -321,4 +329,30 @@ format_taxon_synonyms <- function(taxon, synonyms = taxon_synonyms) {
   ), collapse = "")
   if (!nzchar(out)) out <- sprintf("**Synonyms**: none listed in the %s\n\n", source)
   out
+}
+
+#' Name under which a taxon's species means are published
+#'
+#' The published means roll subspecies, varieties and forms up to their
+#' species; strip the infraspecific part of the name. A hybrid formula
+#' (" x ") is kept whole: its parents are not its species.
+#' @param taxon Taxon name.
+#' @noRd
+species_means_name <- function(taxon) {
+  ifelse(grepl(" x ", taxon, fixed = TRUE), taxon, sub(" (subsp\\.|var\\.|f\\.) .*$", "", taxon))
+}
+
+#' Format numbers for display: 3 significant figures, whole numbers from 100 up
+#'
+#' The same rule as the data table (`mod_data_table.R`) and the browser portal,
+#' so a mean reads the same everywhere. Fixed decimals would show small means,
+#' such as seed masses, as 0.
+#' @param x Numeric vector.
+#' @noRd
+format_sig3 <- function(x) {
+  vapply(x, function(v) {
+    if (is.na(v)) return("")
+    if (abs(v) >= 100) return(sprintf("%.0f", v))
+    format(signif(v, 3), digits = 3, scientific = FALSE, trim = TRUE, drop0trailing = TRUE)
+  }, character(1), USE.NAMES = FALSE)
 }

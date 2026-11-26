@@ -37,7 +37,6 @@ https://w3id.org/APD/traits/trait_0000134,leaf_senesced_Mn_per_dry_mass,leaf,sen
 https://w3id.org/APD/traits/trait_0000136,leaf_senesced_Mo_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,molybdenum atom; senescent; micronutrient; plant litter
 https://w3id.org/APD/traits/trait_0000138,leaf_senesced_N_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,nitrogen atom; senescent; macronutrient; plant litter
 https://w3id.org/APD/traits/trait_0000140,leaf_senesced_Na_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,sodium atom; senescent; micronutrient; plant litter
-https://w3id.org/APD/traits/trait_0000142,leaf_senesced_Ni_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,nickel atom; senescent; plant litter
 https://w3id.org/APD/traits/trait_0000144,leaf_senesced_P_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,phosphorus atom; senescent; macronutrient; plant litter
 https://w3id.org/APD/traits/trait_0000146,leaf_senesced_S_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,sulfur atom; senescent; micronutrient; plant litter
 https://w3id.org/APD/traits/trait_0000152,leaf_senesced_Zn_per_dry_mass,leaf,senesced leaf mineral and ion content trait,nutrient and stable isotope,NA,zinc atom; senescent; micronutrient; plant litter
@@ -74,7 +73,6 @@ https://w3id.org/APD/traits/trait_0000646,bark_S_per_dry_mass,bark,stem mineral 
 https://w3id.org/APD/traits/trait_0000652,bark_Zn_per_dry_mass,bark,stem mineral and ion content trait,nutrient and stable isotope,NA,zinc atom; micronutrient
 https://w3id.org/APD/traits/trait_0000816,root_C_per_dry_mass,root,root mineral and ion content trait,nutrient and stable isotope,NA,carbon atom
 https://w3id.org/APD/traits/trait_0000838,root_N_per_dry_mass,root,root mineral and ion content trait,nutrient and stable isotope,NA,nitrogen atom; macronutrient
-https://w3id.org/APD/traits/trait_0000844,root_P_per_dry_mass,root,root mineral and ion content trait,nutrient and stable isotope,NA,phosphorus atom; macronutrient
 https://w3id.org/APD/traits/trait_0001038,flower_N_per_dry_mass,reproductive shoot system; flower,reproductive shoot system mineral and ion content trait,nutrient and stable isotope,NA,reproduction; nitrogen atom; macronutrient
 https://w3id.org/APD/traits/trait_0001118,fruit_Ca_per_dry_mass,reproductive shoot system; fruit,reproductive shoot system mineral and ion content trait,nutrient and stable isotope,NA,calcium atom; micronutrient; reproduction
 https://w3id.org/APD/traits/trait_0001130,fruit_K_per_dry_mass,reproductive shoot system; fruit,reproductive shoot system mineral and ion content trait,nutrient and stable isotope,NA,potassium atom; macronutrient; reproduction
@@ -108,8 +106,6 @@ https://w3id.org/APD/traits/trait_0002021,leaf_total_non-structural_carbohydrate
 https://w3id.org/APD/traits/trait_0002022,leaf_total_non-structural_carbohydrates_per_mass,leaf,carbohydrate content trait,nutrient and stable isotope,NA,carbohydrate; starch; sugar; non-structural carbohydrates
 https://w3id.org/APD/traits/trait_0002024,leaf_cellulose_per_dry_mass,leaf,carbohydrate content trait,nutrient and stable isotope,NA,amorphous cellulose; carbohydrate
 https://w3id.org/APD/traits/trait_0002025,leaf_starch_per_area,leaf,carbohydrate content trait,nutrient and stable isotope,NA,starch; carbohydrate
-https://w3id.org/APD/traits/trait_0002027,leaf_soluble_starch_per_area,leaf,carbohydrate content trait,nutrient and stable isotope,NA,starch; carbohydrate
-https://w3id.org/APD/traits/trait_0002028,leaf_soluble_starch_per_mass,leaf,carbohydrate content trait,nutrient and stable isotope,NA,starch; carbohydrate
 https://w3id.org/APD/traits/trait_0002031,leaf_soluble_sugars_per_area,leaf,carbohydrate content trait,nutrient and stable isotope,NA,carbohydrate; monosaccharide; disaccharide; sugar
 https://w3id.org/APD/traits/trait_0002032,leaf_soluble_sugars_per_mass,leaf,carbohydrate content trait,nutrient and stable isotope,NA,carbohydrate; monosaccharide; disaccharide; sugar
 https://w3id.org/APD/traits/trait_0002035,leaf_soluble_protein_per_area,leaf,protein content trait,nutrient and stable isotope,NA,protein
@@ -127,12 +123,10 @@ https://w3id.org/APD/traits/trait_0002085,leaf_chlorophyll_B_per_area,leaf,pigme
 https://w3id.org/APD/traits/trait_0002086,leaf_chlorophyll_B_per_dry_mass,leaf,pigment content trait,nutrient and stable isotope,NA,chlorophyll b; chlorophyll; chloroplast
 https://w3id.org/APD/traits/trait_0002087,leaf_chlorophyll_A_B_ratio,leaf,pigment content trait,nutrient and stable isotope,NA,chlorophyll a; chlorophyll b; chlorophyll; chloroplast
 https://w3id.org/APD/traits/trait_0002090,leaf_rubisco_per_leaf_dry_mass,leaf,protein content trait,nutrient and stable isotope,NA,Ribulose-Bisphosphate Carboxylase; chloroplast; protein
-https://w3id.org/APD/traits/trait_0002127,stem_soluble_starch_per_mass,stem,carbohydrate content trait,nutrient and stable isotope,NA,starch; carbohydrate
 https://w3id.org/APD/traits/trait_0002131,stem_soluble_sugars_per_mass,stem,carbohydrate content trait,nutrient and stable isotope,NA,carbohydrate; monosaccharide; disaccharide; sugar
 https://w3id.org/APD/traits/trait_0002224,bark_cellulose_per_dry_mass,bark,carbohydrate content trait,nutrient and stable isotope,NA,amorphous cellulose
 https://w3id.org/APD/traits/trait_0002250,bark_lignin_per_dry_mass,bark,phenolic compound content trait,nutrient and stable isotope,NA,lignin
 https://w3id.org/APD/traits/trait_0002255,bark_tannin_per_dry_mass,bark,phenolic compound content trait,nutrient and stable isotope,NA,tannin; polyphenol
-https://w3id.org/APD/traits/trait_0002327,root_soluble_starch_per_mass,root,carbohydrate content trait,nutrient and stable isotope,NA,starch; carbohydrate
 https://w3id.org/APD/traits/trait_0002331,root_soluble_sugars_per_mass,root,carbohydrate content trait,nutrient and stable isotope,NA,carbohydrate; monosaccharide; disaccharide; sugar
 https://w3id.org/APD/traits/trait_0002534,seed_protein_per_seed_dry_mass,reproductive shoot system; seed,protein content trait,nutrient and stable isotope,NA,"protein; seed weight, seed mass"
 https://w3id.org/APD/traits/trait_0002544,seed_oil_per_seed_dry_mass,reproductive shoot system; seed,lipid content trait,nutrient and stable isotope,NA,"lipid; seed weight, seed mass"
@@ -153,7 +147,6 @@ https://w3id.org/APD/traits/trait_0003053,root_xylem_delta15N,root,stable isotop
 https://w3id.org/APD/traits/trait_0003072,leaf_delta18O,leaf,stable isotope ratio determination,nutrient and stable isotope,NA,stable oxygen isotope ratio; d18O; oxygen-18 atom
 https://w3id.org/APD/traits/trait_0003092,stem_water_delta18O,stem,stable isotope ratio determination,nutrient and stable isotope,NA,stable oxygen isotope ratio; d18O; water; oxygen-18 atom; d18O in water
 https://w3id.org/APD/traits/trait_0010021,plant_width,whole plant,whole plant morphology trait,whole plant morphology,NA,canopy; vegetation
-https://w3id.org/APD/traits/trait_0010022,plant_breadth,whole plant,whole plant morphology trait,whole plant morphology,NA,canopy; vegetation
 https://w3id.org/APD/traits/trait_0010023,plant_height,whole plant; stem,whole plant morphology trait,whole plant morphology,core_trait,canopy; vegetation; vegetative shoot system
 https://w3id.org/APD/traits/trait_0010024,plant_diameter_breast_height,stem; whole plant,stem morphology trait,stem morphology,NA,tree diameter at breast height; vegetation
 https://w3id.org/APD/traits/trait_0010025,stem_count,stem,stem morphology trait,stem morphology,NA,branchiness
@@ -200,11 +193,9 @@ https://w3id.org/APD/traits/trait_0011318,leaf_posture_numeric,leaf,leaf shape t
 https://w3id.org/APD/traits/trait_0011319,leaf_lamina_posture,leaf,leaf shape trait,leaf morphology,core_trait,leaf shape; leaf lamina
 https://w3id.org/APD/traits/trait_0011360,leaf_glaucousness,leaf,leaf morphology trait,leaf morphology,core_trait,epicuticular wax; leaf lamina; waxy
 https://w3id.org/APD/traits/trait_0011361,leaf_hairs_adult_leaves,leaf,leaf morphology trait,leaf morphology,core_trait,leaf pubescence; leaf trichome; leaf lamina; vestiture; hairy; adult vascular leaf; pilosity; trichome
-https://w3id.org/APD/traits/trait_0011362,leaf_hairs_juvenile_leaves,leaf,leaf morphology trait,leaf morphology,core_trait,leaf pubescence; leaf trichome; leaf lamina; vestiture; hairy; juvenile vascular leaf; pilosity; trichome
 https://w3id.org/APD/traits/trait_0011363,leaf_hairs_immature_leaves,leaf,leaf morphology trait,leaf morphology,core_trait,leaf pubescence; leaf trichome; leaf lamina; vestiture; hairy; adult vascular leaf; vascular leaf expansion stage; trichome
 https://w3id.org/APD/traits/trait_0011410,leaf_phyllotaxis,leaf,leaf position trait,leaf morphology,core_trait,phyllotaxy; stem node
 https://w3id.org/APD/traits/trait_0011411,leaf_arrangement,leaf,leaf position trait,leaf morphology,core_trait,stem node; vegetative shoot system; phyllotaxy
-https://w3id.org/APD/traits/trait_0011412,leaf_axil_angle,leaf,leaf position trait,leaf morphology,core_trait,leaf axil; leaf attitude; leaf lamina; leaf angle
 https://w3id.org/APD/traits/trait_0011413,leaf_inclination_angle,leaf,leaf position trait,leaf morphology,core_trait,leaf lamina; solar zenith angle; leaf attitude
 https://w3id.org/APD/traits/trait_0011414,leaf_pendulousness,leaf,leaf position trait,leaf morphology,NA,leaf angle; pendulous
 https://w3id.org/APD/traits/trait_0011510,leaf_cuticle_thickness_abaxial,leaf,portion of plant tissue morphology trait,leaf morphology,NA,plant cuticle; abaxial; leaf lamina
@@ -234,18 +225,14 @@ https://w3id.org/APD/traits/trait_0011710,leaf_transmission,leaf,leaf optical pr
 https://w3id.org/APD/traits/trait_0011711,leaf_absorption,leaf,leaf optical properties trait,leaf morphology,NA,optics; visible light; absorption; photosynthetically active radiation
 https://w3id.org/APD/traits/trait_0011712,leaf_reflectance,leaf,leaf optical properties trait,leaf morphology,NA,optics; visible light; reflection; photosynthetically active radiation
 https://w3id.org/APD/traits/trait_0011713,leaf_reflectance_near_infrared,leaf,leaf optical properties trait,leaf morphology,NA,infrared radiation; optics; reflection; radiation
-https://w3id.org/APD/traits/trait_0011811,stem_cross_sectional_area,stem,stem morphology trait,stem morphology,NA,cross section
-https://w3id.org/APD/traits/trait_0011812,sapwood_cross_sectional_area,stem,stem morphology trait,stem morphology,NA,"sapwood; cross section; wood, secondary xylem"
 https://w3id.org/APD/traits/trait_0011813,branch_terminal_twig_cross_sectional_area,stem,stem morphology trait,stem morphology,NA,branch; cross section
 https://w3id.org/APD/traits/trait_0011814,branch_terminal_twig_length,stem,stem morphology trait,stem morphology,NA,branch
 https://w3id.org/APD/traits/trait_0011815,wood_density,stem,stem morphology trait,stem morphology,core_trait,"wood; wood, secondary xylem; biomass allocation"
-https://w3id.org/APD/traits/trait_0011816,stem_density,stem,stem morphology trait,stem morphology,core_trait,herbaceous; biomass allocation
 https://w3id.org/APD/traits/trait_0011911,huber_value,leaf; stem,stem morphology trait,stem morphology,core_trait,sapwood; biomass allocation
 https://w3id.org/APD/traits/trait_0011912,leaf_mass_to_stem_mass_ratio,leaf; stem; whole plant,leaf mass trait; stem mass trait,leaf morphology,NA,biomass allocation; whole plant stem dry mass; whole plant leaf dry mass
 https://w3id.org/APD/traits/trait_0011913,stem_mass_to_shoot_mass_ratio,leaf; stem; whole plant,leaf mass trait; stem mass trait,leaf morphology,NA,branch; vegetative shoot system; biomass allocation; whole plant stem dry mass; whole plant leaf dry mass
 https://w3id.org/APD/traits/trait_0011914,branch_mass_fraction,stem; whole plant,stem mass trait,stem morphology,NA,branch; biomass allocation; whole plant dry mass
 https://w3id.org/APD/traits/trait_0011915,stem_dry_matter_content,stem,stem mass trait,stem morphology,NA,branch; fresh mass; water
-https://w3id.org/APD/traits/trait_0011916,stem_water_content_per_saturated_mass,stem,stem mass trait,stem morphology,NA,water; water holding capacity; turgor; fresh mass
 https://w3id.org/APD/traits/trait_0011917,stem_mass_fraction,stem; whole plant,stem mass trait,stem morphology,core_trait,biomass allocation; whole plant stem dry mass; whole plant dry mass
 https://w3id.org/APD/traits/trait_0012010,bark_morphology_eucalyptus,bark,bark morphology trait,bark morphology,NA,NA
 https://w3id.org/APD/traits/trait_0012011,bark_thickness,bark,bark morphology trait,bark morphology,NA,NA
@@ -253,7 +240,6 @@ https://w3id.org/APD/traits/trait_0012012,bark_thickness_index,bark; stem,bark m
 https://w3id.org/APD/traits/trait_0012013,bark_density,bark,bark morphology trait,bark morphology,NA,biomass allocation
 https://w3id.org/APD/traits/trait_0012014,bark_dry_mass_per_surface_area,bark,bark morphology trait,bark morphology,NA,biomass allocation
 https://w3id.org/APD/traits/trait_0012015,bark_water_content_per_dry_mass,bark,bark morphology trait,bark morphology,NA,water; bark water content
-https://w3id.org/APD/traits/trait_0012016,bark_water_content_per_saturated_mass,bark,bark morphology trait,bark morphology,NA,water; water holding capacity; turgor; fresh mass
 https://w3id.org/APD/traits/trait_0012111,root_diameter,root,root morphology trait,root morphology,NA,root morphology trait
 https://w3id.org/APD/traits/trait_0012112,root_system_classification,root,root morphology trait,root morphology,NA,root system; root system depth; root branchiness; root texture
 https://w3id.org/APD/traits/trait_0012113,root_fine_root_coarse_root_ratio,root,root morphology trait,root morphology,NA,fine root; root branchiness; coarse root
@@ -332,7 +318,6 @@ https://w3id.org/APD/traits/trait_0012622,diaspore_fleshiness,reproductive shoot
 https://w3id.org/APD/traits/trait_0012623,dispersal_appendage,reproductive shoot system; seed; fruit,seed morphology trait; fruit morphology trait; interspecific interactions trait,seed morphology,NA,"seed dispersal; dispersal; reproduction; biological process involved in symbiotic interaction, symbiosis; appendage"
 https://w3id.org/APD/traits/trait_0012624,dispersal_unit,reproductive shoot system; seed; fruit,seed morphology trait; fruit morphology trait,seed morphology,core_trait,seed dispersal; dispersal; reproduction; spore
 https://w3id.org/APD/traits/trait_0013011,leaf_secondary_vein_angle,leaf,"leaf vein morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,primary leaf vein; secondary leaf vein; leaf lamina; leaf lamina vein; water transport
-https://w3id.org/APD/traits/trait_0013012,leaf_major_vein_density,leaf,"leaf vein morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,leaf lamina vein; primary leaf vein; secondary leaf vein; tertiary leaf vein; water transport
 https://w3id.org/APD/traits/trait_0013013,leaf_total_vein_density,leaf,"leaf vein morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,leaf lamina vein; water transport
 https://w3id.org/APD/traits/trait_0013014,leaf_vein_frequency,leaf,"leaf vein morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,leaf lamina vein; leaf lamina; water transport
 https://w3id.org/APD/traits/trait_0013111,stem_vessel_density,stem,"xylem vessel morphology trait; water transport trait, hydraulic trait; stem morphology trait",stem morphology,core_trait,xylem vessel; cross section; water transport; sapwood
@@ -365,12 +350,10 @@ https://w3id.org/APD/traits/trait_0020222,bark_photosynthetic_status,bark,photos
 https://w3id.org/APD/traits/trait_0020240,leaf_photosynthetic_rate_per_area_ambient,leaf,photosynthetic rate trait,physiology,NA,photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; ambient photosynthetic rate
 https://w3id.org/APD/traits/trait_0020241,leaf_photosynthetic_rate_per_area_maximum,leaf,photosynthetic rate trait,physiology,core_trait,"photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; maximum photosynthetic rate, Amax"
 https://w3id.org/APD/traits/trait_0020242,leaf_photosynthetic_rate_per_area_saturated,leaf,photosynthetic rate trait,physiology,NA,"photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; saturated photosynthetic rate, Asat"
-https://w3id.org/APD/traits/trait_0020243,leaf_photosynthetic_rate_per_dry_mass_ambient,leaf,photosynthetic rate trait,physiology,NA,photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; ambient photosynthetic rate
 https://w3id.org/APD/traits/trait_0020244,leaf_photosynthetic_rate_per_dry_mass_maximum,leaf,photosynthetic rate trait,physiology,core_trait,"photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; maximum photosynthetic rate, Amax"
 https://w3id.org/APD/traits/trait_0020245,leaf_photosynthetic_rate_per_dry_mass_saturated,leaf,photosynthetic rate trait,physiology,NA,"photosynthetic rate; photosystem; photosynthetically active radiation; carbon dioxide; biochemical reaction; saturated photosynthetic rate, Asat"
 https://w3id.org/APD/traits/trait_0020310,leaf_intercellular_CO2_concentration_at_Amax,leaf,carbon dioxide concentration trait,physiology,NA,"intercellular space; carbon dioxide; maximum photosynthetic rate, Amax"
 https://w3id.org/APD/traits/trait_0020311,leaf_intercellular_CO2_concentration_at_Asat,leaf,carbon dioxide concentration trait,physiology,NA,"intercellular space; carbon dioxide; saturated photosynthetic rate, Asat"
-https://w3id.org/APD/traits/trait_0020312,leaf_intercellular_CO2_concentration_at_Aambient,leaf,carbon dioxide concentration trait,physiology,NA,intercellular space; carbon dioxide; ambient photosynthetic rate
 https://w3id.org/APD/traits/trait_0020313,leaf_intercellular_CO2_concentration_to_atmospheric_CO2_concentration_ratio,leaf,carbon dioxide concentration trait,physiology,NA,intercellular space; carbon dioxide; cell; atmospheric carbon dioxide
 https://w3id.org/APD/traits/trait_0020314,leaf_chloroplast_CO2_concentration,leaf,carbon dioxide concentration trait,physiology,NA,carbon dioxide; chloroplast; cell
 https://w3id.org/APD/traits/trait_0020315,atmospheric_CO2_concentration,leaf,carbon dioxide concentration trait,physiology,NA,atmospheric carbon dioxide; carbon dioxide
@@ -399,7 +382,6 @@ https://w3id.org/APD/traits/trait_0020661,leaf_transpiration_per_area_at_Amax,le
 https://w3id.org/APD/traits/trait_0020662,leaf_transpiration_per_area_at_Asat,leaf,transpiration rate trait,physiology,NA,"transpiration; water; stomata; stomatal pore; vapor; saturated photosynthetic rate, Asat"
 https://w3id.org/APD/traits/trait_0020663,leaf_dark_transpiration_per_area,leaf,transpiration rate trait,physiology,NA,transpiration; water; stomata; stomatal pore; vapor; dark
 https://w3id.org/APD/traits/trait_0020664,integrated_plant_transpiration,whole plant; leaf,transpiration rate trait,physiology,NA,transpiration; water; stomata; stomatal pore; vapor
-https://w3id.org/APD/traits/trait_0020665,whole_plant_sapflow,whole plant; leaf,transpiration rate trait,physiology,NA,transpiration; water; stomata; stomatal pore
 https://w3id.org/APD/traits/trait_0020710,leaf_photosynthetic_nitrogen_use_efficiency_maximum,leaf,gas exchange trait; live leaf mineral and ion content trait,physiology,NA,"photosynthetic rate; nitrogen atom; biochemical reaction; maximum photosynthetic rate, Amax"
 https://w3id.org/APD/traits/trait_0020711,leaf_photosynthetic_nitrogen_use_efficiency_saturated,leaf,gas exchange trait; live leaf mineral and ion content trait,physiology,NA,"photosynthetic rate; nitrogen atom; biochemical reaction; saturated photosynthetic rate, Asat"
 https://w3id.org/APD/traits/trait_0020712,leaf_photosynthetic_phosphorus_use_efficiency_maximum,leaf,gas exchange trait; live leaf mineral and ion content trait,physiology,NA,"photosynthetic rate; phosphorus atom; biochemical reaction; maximum photosynthetic rate, Amax"
@@ -413,17 +395,14 @@ https://w3id.org/APD/traits/trait_0021015,sapwood_specific_hydraulic_conductivit
 https://w3id.org/APD/traits/trait_0021016,stem_specific_hydraulic_conductivity,stem,"water transport trait, hydraulic trait",physiology,NA,water transport; water; water potential; gradient; hydraulic conductivity; sapwood; water stress trait
 https://w3id.org/APD/traits/trait_0021017,leaf_specific_hydraulic_conductance,leaf; leaf,"water transport trait, hydraulic trait",physiology,NA,water transport; water; water potential; gradient; hydraulic conductivity; leaf water potential; water stress trait
 https://w3id.org/APD/traits/trait_0021018,leaf_specific_hydraulic_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water transport; water; water potential; gradient; hydraulic conductivity; leaf water potential; water stress trait
-https://w3id.org/APD/traits/trait_0021021,root_hydraulic_conductivity,root,"water transport trait, hydraulic trait",physiology,NA,water transport; water; water potential; gradient; hydraulic conductivity; sapwood; water stress trait
-https://w3id.org/APD/traits/trait_0021022,root_specific_hydraulic_conductivity,root,"water transport trait, hydraulic trait",physiology,NA,water transport; water; water potential; gradient; hydraulic conductivity; sapwood; water stress trait
 https://w3id.org/APD/traits/trait_0021030,water_potential_predawn,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,shoot system; water potential; soil water potential; leaf water potential; water stress trait; dawn
 https://w3id.org/APD/traits/trait_0021031,water_potential_midday,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,shoot system; water potential; leaf water potential; water stress trait; drought tolerance
 https://w3id.org/APD/traits/trait_0021032,stem_sapwood_capacitance,whole plant; stem,"water transport trait, hydraulic trait",physiology,NA,water; turgor; water stress trait; turgor pressure; water holding capacity
 https://w3id.org/APD/traits/trait_0021033,leaf_capacitance,leaf,"water transport trait, hydraulic trait",physiology,NA,water; turgor; water stress trait; turgor pressure; water holding capacity; pressure-volume curve
-https://w3id.org/APD/traits/trait_0021034,root_sapwood_capacitance,root,"water transport trait, hydraulic trait",physiology,NA,water; turgor; water stress trait; turgor pressure; water holding capacity
-https://w3id.org/APD/traits/trait_0021050,leaf_hydraulic_vulnerability,leaf; stem,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; leaf water potential; water stress trait; drought tolerance
-https://w3id.org/APD/traits/trait_0021051,water_potential_12percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
-https://w3id.org/APD/traits/trait_0021052,water_potential_50percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
-https://w3id.org/APD/traits/trait_0021053,water_potential_88percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
+https://w3id.org/APD/traits/trait_0021050,leaf_water_potential_50percent_lost_conductivity,leaf; stem,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; leaf water potential; water stress trait; drought tolerance
+https://w3id.org/APD/traits/trait_0021051,stem_water_potential_12percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
+https://w3id.org/APD/traits/trait_0021052,stem_water_potential_50percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
+https://w3id.org/APD/traits/trait_0021053,stem_water_potential_88percent_lost_conductivity,stem; leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
 https://w3id.org/APD/traits/trait_0021054,hydraulic_safety_margin_50,stem,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
 https://w3id.org/APD/traits/trait_0021055,hydraulic_safety_margin_88,stem,"water transport trait, hydraulic trait",physiology,NA,water potential; xylem; hydraulic conductivity; water stress trait; drought tolerance
 https://w3id.org/APD/traits/trait_0021056,leaf_turgor_loss_point,leaf,"water transport trait, hydraulic trait",physiology,NA,water potential; turgor pressure; leaf water potential; water stress trait; pressure-volume curve; drought tolerance
@@ -463,7 +442,6 @@ https://w3id.org/APD/traits/trait_0030028,root_structure,whole plant; root,inter
 https://w3id.org/APD/traits/trait_0030029,parasitic,whole plant,interspecific interactions trait,life history,core_trait,"parasite; symbiosis; haustorium; energy; nutrient; parasitism; biological process involved in symbiotic interaction, symbiosis"
 https://w3id.org/APD/traits/trait_0030060,sex_type,whole plant; flower,plant structure morphology trait,flower morphology,core_trait,hermaphrodite; phenotypic sex
 https://w3id.org/APD/traits/trait_0030061,pollination_syndrome,reproductive shoot system; flower,floral organ morphology trait; interspecific interactions trait,life history,core_trait,"pollination; mutualism; biological process involved in symbiotic interaction, symbiosis; pollinator; reproduction; symbiosis"
-https://w3id.org/APD/traits/trait_0030062,pollination_system,reproductive shoot system; flower,floral organ morphology trait; interspecific interactions trait,life history,core_trait,"pollination; mutualism; biological process involved in symbiotic interaction, symbiosis; pollinator; reproduction; symbiosis"
 https://w3id.org/APD/traits/trait_0030080,genome_size,whole plant,genetic structure trait,life history,NA,genome size; somatic cell; chromosome
 https://w3id.org/APD/traits/trait_0030081,ploidy,whole plant,genetic structure trait,life history,NA,somatic cell; chromosome; ploidy
 https://w3id.org/APD/traits/trait_0030210,reproductive_maturity,whole plant,plant phenological trait,life history,core_trait,reproduction; flowering stage; maturity
@@ -493,7 +471,6 @@ https://w3id.org/APD/traits/trait_0030514,sprout_depth,whole plant; bud,fire res
 https://w3id.org/APD/traits/trait_0030610,resprouting_capacity,whole plant; bud,fire response trait,fire response,core_trait,disturbance (event); fire; Plant resprout; habitat disturbance; regeneration; shoot system meristem; survival
 https://w3id.org/APD/traits/trait_0030611,resprouting_capacity_proportion_individuals,whole plant; bud,fire response trait,fire response,NA,disturbance (event); fire; Plant resprout; habitat disturbance; regeneration; shoot system meristem; survival
 https://w3id.org/APD/traits/trait_0030612,resprouting_capacity_juvenile,whole plant; bud,fire response trait,fire response,NA,disturbance (event); fire; Plant resprout; habitat disturbance; regeneration; shoot system meristem; survival; juvenile
-https://w3id.org/APD/traits/trait_0030613,resprouting_capacity_time_from_germination,whole plant,fire response trait,fire response,NA,disturbance (event); fire; Plant resprout; habitat disturbance; regeneration; survival
 https://w3id.org/APD/traits/trait_0030614,resprouting_capacity_stem_ratio,whole plant; stem,fire response trait,fire response,NA,fire; Plant resprout; disturbance (event); survival; regeneration
 https://w3id.org/APD/traits/trait_0030615,resprouting_capacity_non_fire_disturbance,whole plant,life history trait,life history,NA,regeneration; shoot system meristem; disturbance (event); Plant resprout; habitat disturbance; environmental condition; survival
 https://w3id.org/APD/traits/trait_0030651,fire_exposure_level,whole plant,fire response trait,fire response,NA,shoot system; fire; habitat disturbance; survival; disturbance (event)
@@ -521,36 +498,137 @@ https://w3id.org/APD/traits/trait_0030815,plant_tolerance_soil_salinity,whole pl
 https://w3id.org/APD/traits/trait_0030816,plant_tolerance_salt,whole plant,chemical stress sensitivity trait; environmental tolerance trait,life history,NA,environmental condition; soil; salinity; salt; resource availability; salt tolerance; survival
 https://w3id.org/APD/traits/trait_0030817,plant_tolerance_calcicole,whole plant,chemical stress sensitivity trait; environmental tolerance trait,life history,NA,environmental condition; calcium sensitivity; soil; pH; growth media pH sensitivity; resource availability
 https://w3id.org/APD/traits/trait_0030818,plant_tolerance_fire,whole plant,fire response trait; plant structure morphology trait,fire response,NA,fire; survival
-https://w3id.org/APD/traits/trait_0010026,climbing_plant_height,whole plant,whole plant morphology trait,whole plant morphology,core_trait,canopy; vegetation; vegetative shoot system
+https://w3id.org/APD/traits/trait_0010026,plant_height_climbing_plant,whole plant,whole plant morphology trait,whole plant morphology,core_trait,canopy; vegetation; vegetative shoot system
 https://w3id.org/APD/traits/trait_0011221,leaflet_count,leaf; leaflet,leaf morphology trait,leaf morphology,NA,leaflet; compound leaf morphology trait; compound leaf
 https://w3id.org/APD/traits/trait_0011222,leaflet_length,leaf; leaflet,leaf size trait,leaf morphology,NA,leaflet; compound leaf morphology trait; compound leaf
 https://w3id.org/APD/traits/trait_0011223,leaflet_width,leaf; leaflet,leaf size trait,leaf morphology,NA,leaflet; compound leaf morphology trait; compound leaf
 https://w3id.org/APD/traits/trait_0011364,leaf_surface_colour,leaf,leaf morphology trait,leaf morphology,NA,leaf lamina; adult vascular leaf
 https://w3id.org/APD/traits/trait_0011365,leaf_surface_reflectivity,leaf,leaf morphology trait,leaf morphology,NA,leaf lamina; adult vascular leaf
-https://w3id.org/APD/traits/trait_0011817,stem_hairs,stem,stem morphology trait,stem morphology,NA,trichome
-https://w3id.org/APD/traits/trait_0012017,bark_colour,bark,bark morphology trait,bark morphology,NA,NA
-https://w3id.org/APD/traits/trait_0012018,bark_texture,bark,bark morphology trait,bark morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012018,bark_ribbon_type,bark,bark morphology trait,bark morphology,NA,NA
 https://w3id.org/APD/traits/trait_0012151,storage_organ_length,root; stem,stem morphology trait; root morphology trait,root morphology,NA,storage organ; energy
 https://w3id.org/APD/traits/trait_0012152,storage_organ_diameter,root; stem,stem morphology trait; root morphology trait,root morphology,NA,storage organ; energy
 https://w3id.org/APD/traits/trait_0012352,inflorescence_length,reproductive shoot system; bud; inflorescence,perianth morphology trait,flower morphology,NA,floral organ morphology trait; flower; reproductive shoot system; inflorescence morphology trait
-https://w3id.org/APD/traits/trait_0012353,inflorescence_diameter,reproductive shoot system; bud; inflorescence,perianth morphology trait,flower morphology,NA,floral organ morphology trait; flower; reproductive shoot system; inflorescence morphology trait
 https://w3id.org/APD/traits/trait_0012354,inflorescence_type,reproductive shoot system; bud; inflorescence,perianth morphology trait,flower morphology,NA,NA
 https://w3id.org/APD/traits/trait_0012485,flower_petal_length,reproductive shoot system; flower,perianth morphology trait,flower morphology,NA,reproduction; petal; corolla; perianth; petal morphology trait
-https://w3id.org/APD/traits/trait_0012520,fruit_surface_texture,reproductive shoot system; fruit,fruit morphology trait,fruit morphology,NA,NA
-https://w3id.org/APD/traits/trait_0012521,fruit_surface_hairs,reproductive shoot system; fruit,fruit morphology trait,fruit morphology,NA,trichome; fruit morphology trait
 https://w3id.org/APD/traits/trait_0012625,seed_colour,reproductive shoot system; seed,seed morphology trait,seed morphology,NA,seed coat
 https://w3id.org/APD/traits/trait_0013121,leaf_vessel_wall_thickness,leaf,"xylem vessel morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,xylem vessel; water transport; hydraulic conductivity
 https://w3id.org/APD/traits/trait_0013122,stem_vessel_wall_thickness,stem,"xylem vessel morphology trait; water transport trait, hydraulic trait; stem morphology trait",stem morphology,NA,xylem vessel; water transport; sapwood; hydraulic conductivity
-https://w3id.org/APD/traits/trait_0013123,leaf_vessel_length,leaf,"xylem vessel morphology trait; water transport trait, hydraulic trait; leaf morphology trait",leaf morphology,NA,xylem vessel; water transport
-https://w3id.org/APD/traits/trait_0013124,stem_vessel_length,stem,"xylem vessel morphology trait; water transport trait, hydraulic trait; stem morphology trait",stem morphology,NA,xylem vessel; water transport; sapwood
 https://w3id.org/APD/traits/trait_0030030,foliage_time,whole plant; leaf,plant phenological trait; environmental tolerance trait,life history,NA,shedability; environmental condition; evergreen; deciduous; plant phenological trait
-https://w3id.org/APD/traits/trait_0030220,establishment_cues,whole plant,plant phenological trait; environmental tolerance trait; fire response trait,life history,NA,NA
 https://w3id.org/APD/traits/trait_0030221,germination_cues,reproductive shoot system; seed,plant phenological trait; environmental tolerance trait; fire response trait,life history,NA,NA
 https://w3id.org/APD/traits/NA,leaf_critical_temperature_minimum,leaf,photosystem performance trait; environmental tolerance trait,life history,NA,NA
 https://w3id.org/APD/traits/NA,leaf_critical_temperature_maximum,leaf,photosystem performance trait; environmental tolerance trait,life history,NA,NA
 https://w3id.org/APD/traits/NA,leaf_maximum_temperature,leaf,photosystem performance trait; environmental tolerance trait,life history,NA,NA
 https://w3id.org/APD/traits/NA,leaf_ice_nucleation_temperature,leaf,environmental tolerance trait,life history,NA,NA
 https://w3id.org/APD/traits/NA,leaf_chlorophyll_content_SPAD,leaf,pigment content trait; environmental tolerance trait,nutrient and stable isotope,NA,NA
-https://w3id.org/APD/traits/NA,leaf_cuticular_conductance,leaf,gas exchange trait,physiology,NA,NA
 https://w3id.org/APD/traits/NA,leaf_conductance_surface_water,leaf,gas exchange trait,physiology,NA,NA
 https://w3id.org/APD/traits/NA,leaf_foliar_water_uptake_rate,leaf,gas exchange trait,physiology,NA,NA
+https://w3id.org/APD/traits/trait_0000718,bark_dead_Ca_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0000730,bark_dead_K_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0000732,bark_dead_Mg_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0000738,bark_dead_N_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0000740,bark_dead_Na_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0000744,bark_dead_P_per_dry_mass,NA,senesced bark mineral and ion content trait,senesced bark mineral and ion content trait,NA,NA
+https://w3id.org/APD/traits/trait_0012019,bark_saturated_water_content_per_dry_mass,NA,bark morphology trait,bark morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030063,breeding_system,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012446,flower_anther_length,NA,androecium morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012435,flower_colour_bee_chroma,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012430,flower_colour_bee_hue,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012436,flower_colour_bee_type,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012428,flower_colour_brightness,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012429,flower_colour_chroma,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012438,flower_corolla_tube_opening,NA,perianth morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030064,flower_dichogamy,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012447,flower_filament_length,NA,androecium morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030226,flower_lifespan,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030069,flower_nectar_production,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030070,flower_nectar_sugar_concentration,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030074,flower_nectar_volume,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012468,flower_perianth_fusion_categorical,NA,perianth morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012474,flower_pollen_ovule_ratio,NA,androecium morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030068,flower_pollinator_reward,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030075,flower_scent_production,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030067,flower_visitor,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012354,flowers_per_inflorescence,NA,floral organ morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012630,fruit_set_proportion,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012356,inflorescence_peduncle_length,NA,perianth morphology trait,flower morphology,NA,NA
+https://w3id.org/APD/traits/trait_0002060,leaf_1_8_cineole_per_dry_mass,NA,metabolite content trait,metabolite content trait,NA,NA
+https://w3id.org/APD/traits/trait_0011320,leaf_apex_shape,NA,leaf shape trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0003016,leaf_cellulose_delta13C,NA,stable isotope ratio determination,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0003076,leaf_cellulose_delta18O,NA,stable isotope ratio determination,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0020669,leaf_conductance_minimum,NA,stomatal process related trait,stomatal process related trait,NA,NA
+https://w3id.org/APD/traits/trait_0011415,leaf_cuticle_thickness,NA,portion of plant tissue morphology trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011367,leaf_epicuticular_wax_crystal_form,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011369,leaf_epicuticular_wax_density,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011368,leaf_epicuticular_wax_density_class,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011370,leaf_epicuticular_wax_tube_diameter,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011371,leaf_epicuticular_wax_tube_length,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0002058,leaf_essential_oil_per_dry_mass,NA,metabolite content trait,metabolite content trait,NA,NA
+https://w3id.org/APD/traits/trait_0011366,leaf_glaucousness_juvenile_leaves,NA,leaf surface morphology trait,leaf surface morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011617,leaf_guard_cell_width,NA,leaf stomatal complex morphology trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0001670,leaf_inorganic_P_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0010030,leaf_length_missing,NA,leaf size trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011224,leaf_length_to_stem_length_ratio,NA,leaf size trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011234,leaf_length_to_width_ratio,NA,leaf size trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0010029,leaf_length_type,NA,leaf size trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0020514,leaf_light_compensation_point,NA,photosynthetic rate trait,physiology,NA,NA
+https://w3id.org/APD/traits/trait_0001667,leaf_lipid_P_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0001671,leaf_metabolite_P_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0000056,leaf_nitrate_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0001668,leaf_nucleic_acid_P_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0011619,leaf_oil_gland_diameter,NA,portion of plant tissue morphology trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0021067,leaf_relative_water_content,NA,"water transport trait, hydraulic trait",physiology,NA,NA
+https://w3id.org/APD/traits/trait_0001669,leaf_residual_P_per_dry_mass,NA,live leaf mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0011269,leaf_saturated_water_content_per_dry_mass,NA,leaf mass trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0002026,leaf_starch_per_dry_mass,NA,carbohydrate content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0011618,leaf_stomatal_complex_type,NA,leaf stomatal complex morphology trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011616,leaf_stomatal_position,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0003093,leaf_water_delta18O,NA,stable isotope ratio determination,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0002057,leaf_wax_per_dry_mass,NA,metabolite content trait,metabolite content trait,NA,NA
+https://w3id.org/APD/traits/trait_0011322,petiole_shape,NA,leaf shape trait,leaf morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030035,plant_canopy_form,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0010034,plant_height_epiphyte,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0010032,plant_height_missing,NA,whole plant morphology trait,whole plant morphology,NA,NA
+https://w3id.org/APD/traits/trait_0010027,plant_height_reproductive,NA,whole plant morphology trait,whole plant morphology,NA,NA
+https://w3id.org/APD/traits/trait_0010031,plant_height_type,NA,whole plant morphology trait,whole plant morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030065,pollination_vector_known,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030066,pollination_vector_possible,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030036,rhizome_form,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0002352,root_phenol_per_dry_mass,NA,phenolic compound content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0000850,root_Si_per_dry_mass,NA,root mineral and ion content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0002325,root_starch_per_dry_mass,NA,carbohydrate content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0012123,root_vascular_anatomy,NA,root system morphology trait,root system morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013125,root_vessel_diameter,NA,xylem vessel morphology trait,xylem vessel morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013126,root_vessel_lumen_fraction,NA,xylem vessel morphology trait,xylem vessel morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0012627,seed_coat_thickness,NA,seed morphology trait,seed morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030421,seed_germination_time_to_50_percent,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012632,seed_ovule_ratio,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0012626,seed_reserve_to_seed_area_ratio,NA,seed morphology trait,seed morphology,NA,NA
+https://w3id.org/APD/traits/trait_0012628,seeds_per_fruit,NA,other,other,NA,NA
+https://w3id.org/APD/traits/trait_0030032,stem_base_form,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030031,stem_branching_form,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0030033,stem_constitution,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0010033,stem_diameter,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0010028,stem_length,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011919,stem_relative_water_content,NA,"water transport trait, hydraulic trait",physiology,NA,NA
+https://w3id.org/APD/traits/trait_0011918,stem_saturated_water_content_per_dry_mass,NA,stem mass trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0002125,stem_starch_per_dry_mass,NA,carbohydrate content trait,nutrient and stable isotope,NA,NA
+https://w3id.org/APD/traits/trait_0013178,stem_vessel_element_length,NA,xylem vessel morphology trait,xylem vessel morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013167,stem_vessel_grouping,NA,xylem vessel morphology trait,xylem vessel morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013168,stem_vessel_perforation_plate_type,NA,xylem vessel morphology trait,xylem vessel morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013177,wood_axial_parenchyma_arrangement,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011818,wood_density_air_dry,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0013183,wood_deposit_frequency,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013180,wood_fibre_diameter,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013179,wood_fibre_length,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013182,wood_fibre_pit_type,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013175,wood_fibre_wall_thickness,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013176,wood_fibre_wall_thickness_categorical,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013172,wood_growth_ring_distinctiveness,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011821,wood_radial_air_dry_shrinkage,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011819,wood_radial_unit_shrinkage,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0013170,wood_ray_cell_longitudinal_count,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013169,wood_ray_cell_type,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0013181,wood_ray_density,NA,vascular tissue morphology trait,vascular tissue morphology trait,NA,NA
+https://w3id.org/APD/traits/trait_0011822,wood_tangential_air_dry_shrinkage,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011820,wood_tangential_unit_shrinkage,NA,stem morphology trait,stem morphology,NA,NA
+https://w3id.org/APD/traits/trait_0011910,xylem_to_leaf_area_ratio,NA,other,other,NA,NA

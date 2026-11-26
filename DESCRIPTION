@@ -32,12 +32,11 @@ Description: Shiny R package to the AusTraits Plant Traits database.
 License: CC BY 4.0 + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends:
     R (>= 4.2.0)
 Imports: 
     shiny,
-    traits.use (>= 0.1.1),
+    traits.use (>= 1.0.1),
     arrow,
     bslib,
     bsplus,
@@ -79,9 +78,12 @@ Imports:
     later,
     tools
 Remotes:
-    traitecoevo/traits.use
+    traitecoevo/traits.use,
+    traitecoevo/austraits
 Suggests:
     testthat (>= 3.0.0),
     shiny.telemetry,
-    APCalign
+    APCalign,
+    austraits (>= 4.0.1)
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
