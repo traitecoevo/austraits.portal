@@ -42,8 +42,28 @@ test_that("prepare_data_for_portal creates required files", {
   expect_gt(length(cache$all_keywords), 0)
 })
 
+# austraits_lite in either methods-table format, whichever form traits.use
+# ships it in (AusTraits 7.0.0 before traits.use 1.0.0, data model 1.4.0 after)
+with_methods_format <- function(database, format) {
+  methods <- database$methods
+  if (format == "old" && !"source_primary_key" %in% names(methods)) {
+    # as AusTraits 7.0.0 had it: a dataset could be keyed by another reference
+    methods <- methods |>
+      dplyr::rename(source_primary_citation = "dataset_id_citation") |>
+      dplyr::mutate(source_primary_key = dplyr::if_else(dataset_id == "Kew_2019_2", "Kew_2019", dataset_id),
+                    .after = "dataset_id")
+  }
+  if (format == "new" && "source_primary_key" %in% names(methods)) {
+    methods <- methods |>
+      dplyr::rename(dataset_id_citation = "source_primary_citation") |>
+      dplyr::select(-"source_primary_key")
+  }
+  database$methods <- methods
+  database
+}
+
 test_that("join_primary_source() handles both methods-table formats", {
-  old <- traits.use::austraits_lite
+  old <- with_methods_format(traits.use::austraits_lite, "old")
 
   # Built before traits.build 2.3: key and citation come from methods as they
   # stand, and the key is not always the dataset_id
@@ -55,10 +75,7 @@ test_that("join_primary_source() handles both methods-table formats", {
 
   # Built with traits.build 2.3 or later: methods has dataset_id_citation and
   # no source_primary_key, which is always the dataset_id there
-  new <- old
-  new$methods <- new$methods |>
-    dplyr::rename(dataset_id_citation = "source_primary_citation") |>
-    dplyr::select(-"source_primary_key")
+  new <- with_methods_format(traits.use::austraits_lite, "new")
   joined_new <- join_primary_source(new)$traits
   expect_equal(nrow(joined_new), nrow(old$traits))
   expect_equal(joined_new$source_primary_key, joined_new$dataset_id)
@@ -72,7 +89,12 @@ test_that("join_primary_source() handles both methods-table formats", {
 })
 
 test_that("the display table has no reference columns besides the primary citation", {
-  shown <- traits.use::austraits_lite |>
+  # Databases built before traits.build 2.3 leave source_id missing on most
+  # rows; austraits_lite from traits.use 1.0.0 fills it on every row, so
+  # blank some to check that those show the dataset_id
+  database <- traits.use::austraits_lite
+  database$traits$source_id[seq(1, nrow(database$traits), by = 5)] <- NA_character_
+  shown <- database |>
     join_primary_source() |>
     traits.use::flatten_database() |>
     dplyr::mutate(row_id = dplyr::row_number()) |>
@@ -81,7 +103,8 @@ test_that("the display table has no reference columns besides the primary citati
   expect_true(all(c("source_primary_key", "source_primary_citation") %in% names(shown)))
   # traits.build's two reference ids: the dataset, and the source each observation came from
   expect_equal(names(shown)[match("dataset_id", names(shown)) + 1], "source_id")
-  raw_source_id <- traits.use::austraits_lite$traits$source_id[shown$row_id]
+  raw_source_id <- database$traits$source_id[shown$row_id]
+  expect_true(anyNA(raw_source_id))
   expect_false(anyNA(shown$source_id))
   expect_equal(shown$source_id[!is.na(raw_source_id)], raw_source_id[!is.na(raw_source_id)])
   expect_equal(shown$source_id[is.na(raw_source_id)], shown$dataset_id[is.na(raw_source_id)])
