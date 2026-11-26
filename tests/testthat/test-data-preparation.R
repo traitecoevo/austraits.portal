@@ -47,7 +47,7 @@ test_that("prepare_data_for_portal creates required files", {
   # function behind the published file), with the portal's columns added
   means <- traits.use::summarise_trait_means(traits.use::austraits_lite)
   species <- arrow::read_parquet(file.path(temp_dir, "austraits-species-averages.parquet"))
-  expect_equal(nrow(species), nrow(means))
+  expect_equal(nrow(species), sum(!is.na(means$taxon_rank)))
   expect_true(all(names(means) %in% names(species)))
   expect_equal(readRDS(file.path(temp_dir, "release.rds")), release)
 })
@@ -56,14 +56,15 @@ test_that("prepare_species_means() keeps the published means and adds the portal
   database <- traits.use::austraits_lite
   flattened <- database |> join_primary_source() |> traits.use::flatten_database()
   means <- traits.use::summarise_trait_means(database)
+  kept <- means[!is.na(means$taxon_rank), ]
   out <- prepare_species_means(means, database, flattened)
 
-  expect_equal(nrow(out), nrow(means))
-  expect_equal(out$value, means$value)
-  expect_equal(out$taxon_name, means$taxon_name)
+  expect_equal(nrow(out), nrow(kept))
+  expect_equal(out$value, kept$value)
+  expect_equal(out$taxon_name, kept$taxon_name)
   expect_true(all(c("source_primary_key", "source_primary_citation", "taxon_distribution", "row_id") %in% names(out)))
-  expect_equal(out$source_primary_key, means$dataset_id)
-  expect_equal(out$row_id, seq_len(nrow(means)))
+  expect_equal(out$source_primary_key, kept$dataset_id)
+  expect_equal(out$row_id, seq_len(nrow(kept)))
   # Each row cites its datasets' own references, in the order of dataset_id
   expect_false(anyNA(out$source_primary_citation))
   single <- out[!grepl("; ", out$dataset_id), ][1, ]
@@ -78,6 +79,29 @@ test_that("prepare_species_means() keeps the published means and adds the portal
   # No dataset is cited as the text "NA"
   expect_false(any(grepl("(^|; )NA(;|$)", out$source_primary_citation)))
   expect_error(prepare_species_means(means[, c("taxon_name", "trait_name")], database, flattened), "lack columns")
+})
+
+test_that("prepare_species_means() leaves out names APCalign could not align to the APC", {
+  database <- traits.use::austraits_lite
+  flattened <- database |> join_primary_source() |> traits.use::flatten_database()
+  means <- traits.use::summarise_trait_means(database)
+  aligned <- means[!is.na(means$taxon_rank), ]
+
+  # Two unmatched names (no rank, no family or genus), first in the table
+  unmatched <- aligned[1:2, ]
+  unmatched$taxon_name <- c("\"Tiny pink herb\"", "Not an APC name")
+  unmatched$taxon_rank <- NA_character_
+  unmatched$family <- NA_character_
+  unmatched$genus <- NA_character_
+  mixed <- rbind(unmatched, means)
+
+  expect_message(out <- prepare_species_means(mixed, database, flattened), "Left out")
+  expect_false(anyNA(out$taxon_rank))
+  expect_false(any(out$taxon_name %in% unmatched$taxon_name))
+  expect_equal(nrow(out), nrow(aligned))
+  expect_equal(out$taxon_name, aligned$taxon_name)
+  # row_id counts the rows that are kept, from 1
+  expect_equal(out$row_id, seq_len(nrow(aligned)))
 })
 
 test_that("species means cite each dataset by its own reference key in older builds", {

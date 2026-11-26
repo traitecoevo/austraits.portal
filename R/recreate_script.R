@@ -45,6 +45,9 @@ recreate_script <- function(parsed_filters, dataset_type, release, columns,
     if (species) {
       "# Species means are the observed means published with the release; see its observed-means dictionary for each column."
     },
+    if (species) {
+      "# Names that APCalign could not align to the APC (empty taxon_rank) are left out, as in the portal."
+    },
     "# The portal's file also carries source_primary_key, source_primary_citation and row_id, which it adds for citations.",
     ""
   )
@@ -69,6 +72,9 @@ recreate_script <- function(parsed_filters, dataset_type, release, columns,
   steps <- character()
   if (species) {
     source_object <- "means"
+    steps <- c(steps,
+      "  # The portal leaves out names APCalign could not align to the APC",
+      "  dplyr::filter(!is.na(taxon_rank)) |>")
     if ("taxon_distribution" %in% used) {
       steps <- c(steps,
         "  # The APC distribution, from the database's taxa table",

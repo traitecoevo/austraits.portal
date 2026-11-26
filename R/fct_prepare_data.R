@@ -211,18 +211,26 @@ prepare_data_for_portal <- function(austraits, output_dir, means = NULL, release
 #' @param database The traits.build database the means were built from.
 #' @param flattened The flattened database, as written to
 #'   `austraits-data.parquet` (for the citations).
-#' @return The means with the added columns.
+#' @return The means with the added columns. Rows whose `taxon_rank` is empty
+#'   are left out: those are names APCalign could not align to the APC, so
+#'   they have no family or genus.
 #' @keywords internal
 #' @noRd
 prepare_species_means <- function(means, database, flattened) {
   added <- c("source_primary_key", "source_primary_citation", "taxon_distribution", "row_id")
   # every column the app requires (data_schema) that this function does not add
-  required <- setdiff(data_schema$species$required, added)
+  required <- union(setdiff(data_schema$species$required, added), "taxon_rank")
   missing <- setdiff(required, names(means))
   if (length(missing) > 0) {
     stop("The species means lack columns the portal needs: ", paste(missing, collapse = ", "),
          ". Are these the published observed means?", call. = FALSE)
   }
+
+  # Names APCalign could not align to the APC have no taxon_rank (nor family or
+  # genus); the portal leaves them out. row_id is numbered after this.
+  aligned <- !is.na(means$taxon_rank)
+  n_unmatched <- sum(!aligned)
+  means <- means[aligned, ]
 
   # Each dataset's reference key and citation, by dataset_id
   citations <- flattened |>
@@ -258,6 +266,10 @@ prepare_species_means <- function(means, database, flattened) {
     dplyr::mutate(row_id = dplyr::row_number())
 
   stopifnot(nrow(out) == nrow(means))
+  if (n_unmatched > 0) {
+    message(sprintf("  Left out %s species-mean rows for names not aligned to the APC (empty taxon_rank)",
+                    format(n_unmatched, big.mark = ",")))
+  }
   n_no_distribution <- sum(is.na(out$taxon_distribution))
   if (n_no_distribution > 0) {
     message(sprintf("  %s of %s species-mean rows have no APC distribution (taxa not in the taxa table, or none recorded)",
